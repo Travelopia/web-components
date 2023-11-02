@@ -13,6 +13,7 @@ vendor
 !.eslintignore
 !.eslintrc.json
 !.gitignore
+!LICENSE
 !package.json
 !package-lock.json
 !tsconfig.json
