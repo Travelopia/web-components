@@ -1,0 +1,34 @@
+tp-modal {
+	display: none;
+	background-color: rgba(#000, 0.5);
+	backdrop-filter: blur(2px);
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+	z-index: 99;
+	max-width: 100%;
+	overflow-y: auto;
+	padding: 20px;
+	box-sizing: border-box;
+
+	&[open] {
+		display: flex;
+	}
+
+	&-close {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+	}
+
+	&-content {
+		display: block;
+		min-width: 0;
+		margin: auto;
+		padding: 20px;
+		background-color: #fff;
+		max-width: 80ch;
+	}
+}

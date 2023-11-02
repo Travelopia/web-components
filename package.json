@@ -1,0 +1,34 @@
+{
+  "name": "web-components",
+  "version": "0.0.1",
+  "description": "Accessible web components for the modern web",
+  "scripts": {
+    "build": "webpack --config ./webpack.config.js --mode production --env=production",
+    "dev": "webpack --config ./webpack.config.js --mode production --env=development --watch",
+    "lint": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Travelopia/web-components.git"
+  },
+  "author": "Travelopia Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Travelopia/web-components/issues"
+  },
+  "homepage": "https://github.com/Travelopia/web-components#readme",
+  "devDependencies": {
+    "@wordpress/eslint-plugin": "^17.1.0",
+    "css-loader": "^6.8.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "postcss-loader": "^7.3.3",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-notifier": "^1.15.0"
+  }
+}

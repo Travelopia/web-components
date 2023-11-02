@@ -1,0 +1,22 @@
+# --- Windows and Mac files
+[Tt]humbs.db
+.DS_Store
+
+# --- Packages
+node_modules
+vendor
+
+# --- Root
+/*
+!.browserslistrc
+!.editorconfig
+!.eslintignore
+!.eslintrc.json
+!.gitignore
+!package.json
+!package-lock.json
+!tsconfig.json
+!webpack.config.js
+
+# --- Components
+!src

@@ -1,0 +1,14 @@
+{
+  "extends": [ "plugin:@wordpress/eslint-plugin/recommended-with-formatting" ],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "import/no-unresolved": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
+}
