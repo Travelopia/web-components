@@ -8,19 +8,11 @@ vendor
 
 # --- Root
 /*
-!.browserslistrc
-!.editorconfig
-!.eslintignore
-!.eslintrc.json
-!.gitignore
-!.npmignore
 !definitions.d.ts
 !LICENSE
 !package.json
-!package-lock.json
 !README.md
-!tsconfig.json
-!webpack.config.js
 
 # --- Components
+!dist
 !src

@@ -1,6 +1,6 @@
 {
-  "name": "web-components",
-  "version": "0.0.1",
+  "name": "@travelopia/web-components",
+  "version": "0.0.8",
   "description": "Accessible web components for the modern web",
   "scripts": {
     "build": "webpack --config ./webpack.config.js --mode production --env=production",
@@ -30,5 +30,11 @@
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-notifier": "^1.15.0"
-  }
+  },
+  "exports": {
+    "./*": "./dist/*",
+    "./definitions.d.ts": "./definitions.d.ts",
+    "./package.json": "./package.json"
+  },
+  "types": "./definitions.d.ts"
 }
