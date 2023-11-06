@@ -22,6 +22,7 @@ export class TPModalElement extends HTMLElement {
 	 */
 	open(): void {
 		this.setAttribute( 'open', 'yes' );
+		this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
 	}
 
 	/**
@@ -29,6 +30,7 @@ export class TPModalElement extends HTMLElement {
 	 */
 	close(): void {
 		this.removeAttribute( 'open' );
+		this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
 	}
 
 	/**
