@@ -12,6 +12,7 @@ vendor
 !.editorconfig
 !.eslintignore
 !.eslintrc.json
+!.github
 !.gitignore
 !.npmignore
 !definitions.d.ts
