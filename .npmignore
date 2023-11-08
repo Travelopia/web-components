@@ -8,7 +8,6 @@ vendor
 
 # --- Root
 /*
-!definitions.d.ts
 !LICENSE
 !package.json
 !README.md

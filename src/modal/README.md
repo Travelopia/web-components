@@ -17,6 +17,15 @@ This is a super minimal modal that is designed to be highly extendable.
 
 Example:
 
+```js
+// Import the component as needed:
+import '@travelopia/web-components/dist/modal';
+import '@travelopia/web-components/dist/modal/style.css';
+
+// TypeScript usage:
+import { TPModalElement, TPModalCloseElement } from '@travelopia/web-components';
+```
+
 ```html
 <tp-modal overlay-click-close="yes">
 	<tp-modal-close>

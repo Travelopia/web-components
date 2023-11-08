@@ -1,7 +1,10 @@
 {
   "name": "@travelopia/web-components",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Accessible web components for the modern web",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "webpack --config ./webpack.config.js --mode production --env=production",
     "dev": "webpack --config ./webpack.config.js --mode production --env=development --watch",
@@ -24,17 +27,11 @@
     "postcss-loader": "^7.3.3",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
-    "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-notifier": "^1.15.0"
   },
-  "exports": {
-    "./*": "./dist/*",
-    "./definitions.d.ts": "./definitions.d.ts",
-    "./package.json": "./package.json"
-  },
-  "types": "./definitions.d.ts"
+  "types": "./dist/declarations.d.ts"
 }
