@@ -33,8 +33,8 @@
 <body>
 	<main>
 		<tp-slider flexible-height="yes" infinite="yes">
-			<tp-slider-arrow direction="previous">&laquo;</tp-slider-arrow>
-			<tp-slider-arrow direction="next">&raquo;</tp-slider-arrow>
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
 			<tp-slider-track>
 				<tp-slider-slides>
 					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
@@ -50,10 +50,10 @@
 				</tp-slider-slides>
 			</tp-slider-track>
 			<tp-slider-nav>
-				<tp-slider-nav-item>1</tp-slider-nav-item>
-				<tp-slider-nav-item>2</tp-slider-nav-item>
-				<tp-slider-nav-item>3</tp-slider-nav-item>
-				<tp-slider-nav-item>4</tp-slider-nav-item>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>4</button></tp-slider-nav-item>
 			</tp-slider-nav>
 			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
 		</tp-slider>
