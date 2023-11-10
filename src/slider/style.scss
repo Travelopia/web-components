@@ -1,0 +1,35 @@
+tp-slider {
+	display: block;
+}
+
+tp-slider-track {
+	display: block;
+	overflow-y: visible;
+	overflow-x: clip;
+	position: relative;
+}
+
+tp-slider-slides {
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+
+	tp-slider:not([resizing="yes"]) & {
+		transition-duration: 0.6s;
+		transition-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+	}
+}
+
+tp-slider-slide {
+	flex: 0 0 100%;
+	scroll-snap-align: start;
+
+	tp-slider[flexible-height="yes"]:not([initialized]) &:not(:first-child) {
+		display: none;
+	}
+}
+
+tp-slider-nav {
+	display: flex;
+	gap: 10px;
+}
