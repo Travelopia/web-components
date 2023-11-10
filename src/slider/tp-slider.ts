@@ -114,6 +114,15 @@ export class TPSliderElement extends HTMLElement {
 		const leftArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="previous"]' );
 		const rightArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="next"]' );
 
+		const slides: NodeListOf<TPSliderSlideElement> | null = this.getSlides();
+		slides?.forEach( ( slide: TPSliderSlideElement, index: number ) => {
+			if ( this.currentSlideIndex - 1 === index ) {
+				slide.setAttribute( 'active', 'yes' );
+			} else {
+				slide.removeAttribute( 'active' );
+			}
+		} );
+
 		if ( sliderNavItems ) {
 			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
 				if ( this.currentSlideIndex - 1 === index ) {
@@ -169,7 +178,7 @@ export class TPSliderElement extends HTMLElement {
 
 	protected handleResize(): void {
 		this.setAttribute( 'resizing', 'yes' );
-		this.slide.bind( this );
+		this.slide();
 		this.removeAttribute( 'resizing' );
 	}
 }
