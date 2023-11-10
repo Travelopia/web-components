@@ -32,7 +32,7 @@ slider.setCurrentSlide( 2 );
 ```
 
 ```html
-<tp-slider flexible-height="yes" infinite="yes">
+<tp-slider flexible-height="yes" infinite="yes" swipe="yes">
 	<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow> <-- There must be a button inside this component
 	<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow> <-- There must be a button inside this component
 	<tp-slider-track>
@@ -57,6 +57,7 @@ slider.setCurrentSlide( 2 );
 |-----------------|----------|--------|--------------------------------------------------------------------------------------------------------|
 | flexible-height | No       | `yes`  | Whether the height of the slider changes depending on the content inside the slides                    |
 | infinite        | No       | `yes`  | Go back to the first slide at the end of all slides, and open the last slide when navigating backwards |
+| swipe           | No       | `yes`  | Whether to add support for swiping gestures on touch devices                                           |
 
 ## Events
 

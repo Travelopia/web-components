@@ -12,6 +12,11 @@ import { TPSliderArrowElement } from './tp-slider-arrow';
  */
 export class TPSliderElement extends HTMLElement {
 	/**
+	 * Properties.
+	 */
+	protected touchStartX: number = 0;
+
+	/**
 	 * Constructor.
 	 */
 	constructor() {
@@ -28,6 +33,8 @@ export class TPSliderElement extends HTMLElement {
 
 		// Event listeners.
 		window.addEventListener( 'resize', this.handleResize.bind( this ) );
+		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
 
 	/**
@@ -270,5 +277,40 @@ export class TPSliderElement extends HTMLElement {
 		setTimeout( function() {
 			_this.removeAttribute( 'resizing' );
 		}, 10 );
+	}
+
+	/**
+	 * Detect touch start event, and store the starting location.
+	 *
+	 * @param {Event} e Touch event.
+	 *
+	 * @protected
+	 */
+	protected handleTouchStart( e: TouchEvent ): void {
+		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
+			this.touchStartX = e.touches[ 0 ].clientX;
+		}
+	}
+
+	/**
+	 * Detect touch end event, and check if it was a left or right swipe.
+	 *
+	 * @param {Event} e Touch event.
+	 *
+	 * @protected
+	 */
+	protected handleTouchEnd( e: TouchEvent ): void {
+		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			return;
+		}
+
+		const touchEndX: number = e.changedTouches[ 0 ].clientX;
+		const swipeDistance: number = touchEndX - this.touchStartX;
+
+		if ( swipeDistance > 0 ) {
+			this.previous();
+		} else if ( swipeDistance < 0 ) {
+			this.next();
+		}
 	}
 }
