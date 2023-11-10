@@ -77,6 +77,7 @@ module.exports = ( env ) => {
 	const buildConfig = {
 		entry: {
 			modal: './src/modal/index.ts',
+			slider: './src/slider/index.ts',
 		},
 		module: {
 			rules: [
