@@ -2,6 +2,7 @@ import { TPSliderSlidesElement } from './tp-slider-slides';
 import { TPSliderSlideElement } from './tp-slider-slide';
 import { TPSliderCountElement } from './tp-slider-count';
 import { TPSliderNavItemElement } from './tp-slider-nav-item';
+import { TPSliderArrowElement } from './tp-slider-arrow';
 
 /**
  * TP Slider.
@@ -17,17 +18,20 @@ export class TPSliderElement extends HTMLElement {
 			this.setAttribute( 'current-slide', '1' );
 		}
 
-		this.updateHeight();
+		this.slide();
 		this.setAttribute( 'initialized', 'yes' );
+
+		window.addEventListener( 'resize', this.handleResize.bind( this ) );
 	}
 
 	static get observedAttributes(): string[] {
-		return [ 'current-slide' ];
+		return [ 'current-slide', 'flexible-height', 'infinite' ];
 	}
 
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		if ( 'current-slide' === name && oldValue !== newValue ) {
 			this.slide();
+			this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
 		}
 
 		this.update();
@@ -58,6 +62,10 @@ export class TPSliderElement extends HTMLElement {
 		const totalSlides: number = this.getTotalSlides();
 
 		if ( this.currentSlideIndex >= totalSlides ) {
+			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
+				this.setCurrentSlide( 1 );
+			}
+
 			return;
 		}
 
@@ -66,6 +74,10 @@ export class TPSliderElement extends HTMLElement {
 
 	previous(): void {
 		if ( this.currentSlideIndex <= 1 ) {
+			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
+				this.setCurrentSlide( this.getTotalSlides() );
+			}
+
 			return;
 		}
 
@@ -85,22 +97,22 @@ export class TPSliderElement extends HTMLElement {
 		this.setAttribute( 'current-slide', index.toString() );
 	}
 
-	slide(): void {
+	protected slide(): void {
+		const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 		const slides: NodeListOf<TPSliderSlideElement> | null = this.getSlides();
-		if ( ! slides ) {
+		if ( ! slidesContainer || ! slides ) {
 			return;
 		}
 
 		this.updateHeight();
-
-		slides[ this.currentSlideIndex - 1 ].scrollIntoView();
-
-		this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
+		slidesContainer.style.left = `-${ this.offsetWidth * ( this.currentSlideIndex - 1 ) }px`;
 	}
 
 	update(): void {
 		const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
 		const sliderCount: TPSliderCountElement | null = this.querySelector( 'tp-slider-count' );
+		const leftArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="previous"]' );
+		const rightArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="next"]' );
 
 		if ( sliderNavItems ) {
 			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
@@ -115,6 +127,23 @@ export class TPSliderElement extends HTMLElement {
 		if ( sliderCount ) {
 			sliderCount.setAttribute( 'current', this.getCurrentSlide().toString() );
 			sliderCount.setAttribute( 'total', this.getTotalSlides().toString() );
+		}
+
+		if ( 'yes' !== this.getAttribute( 'infinite' ) ) {
+			if ( this.getCurrentSlide() === this.getTotalSlides() ) {
+				rightArrow?.setAttribute( 'disabled', 'yes' );
+			} else {
+				rightArrow?.removeAttribute( 'disabled' );
+			}
+
+			if ( 1 === this.getCurrentSlide() ) {
+				leftArrow?.setAttribute( 'disabled', 'yes' );
+			} else {
+				leftArrow?.removeAttribute( 'disabled' );
+			}
+		} else {
+			rightArrow?.removeAttribute( 'disabled' );
+			leftArrow?.removeAttribute( 'disabled' );
 		}
 	}
 
@@ -136,5 +165,11 @@ export class TPSliderElement extends HTMLElement {
 
 		const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
 		slidesContainer.style.height = `${ height }px`;
+	}
+
+	protected handleResize(): void {
+		this.setAttribute( 'resizing', 'yes' );
+		this.slide.bind( this );
+		this.removeAttribute( 'resizing' );
 	}
 }

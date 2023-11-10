@@ -7,7 +7,7 @@ export class TPSliderCountElement extends HTMLElement {
 	}
 
 	get format(): string {
-		return this.getAttribute( 'format' ) ?? '$1 / $2';
+		return this.getAttribute( 'format' ) ?? '$current / $total';
 	}
 
 	set format( format ) {
@@ -21,7 +21,7 @@ export class TPSliderCountElement extends HTMLElement {
 	update(): void {
 		this.innerHTML =
 			this.format
-				.replace( '$1', this.getAttribute( 'current' ) ?? '' )
-				.replace( '$2', this.getAttribute( 'total' ) ?? '' );
+				.replace( '$current', this.getAttribute( 'current' ) ?? '' )
+				.replace( '$total', this.getAttribute( 'total' ) ?? '' );
 	}
 }
