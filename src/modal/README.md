@@ -24,12 +24,17 @@ import '@travelopia/web-components/dist/modal/style.css';
 
 // TypeScript usage:
 import { TPModalElement, TPModalCloseElement } from '@travelopia/web-components';
+
+...
+
+const modal: TPModalElement = document.querySelector( 'tp-modal' );
+modal.open();
 ```
 
 ```html
 <tp-modal overlay-click-close="yes">
 	<tp-modal-close>
-		<button>Close</button> <-- There must be a button inside inside this component.
+		<button>Close</button> <-- There must be a button inside this component.
 	</tp-modal-close>
 	<tp-modal-content>
 		<p>Any modal content here.</p>
@@ -42,3 +47,20 @@ import { TPModalElement, TPModalCloseElement } from '@travelopia/web-components'
 | Attribute            | Required | Values | Notes                                        |
 |----------------------|----------|--------|----------------------------------------------|
 | overlay-click-close  | No       | `yes`  | Closes the modal when the overlay is clicked |
+
+## Events
+
+| Event | Notes                    |
+|-------|--------------------------|
+| open  | When the modal is opened |
+| close | When the modal is closed |
+
+## Methods
+
+### `open`
+
+Open the modal.
+
+### `close`
+
+Close the modal.
