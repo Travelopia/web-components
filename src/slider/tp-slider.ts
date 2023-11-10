@@ -74,21 +74,12 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
-	 * Get all slides.
-	 *
-	 * @return {NodeList | null} All slides.
-	 */
-	getSlides(): NodeListOf<TPSliderSlideElement> | null {
-		return this.querySelectorAll( 'tp-slider-slide' );
-	}
-
-	/**
 	 * Get total number of slides.
 	 *
 	 * @return {number} Total slides.
 	 */
 	getTotalSlides(): number {
-		const slides: NodeListOf<TPSliderSlideElement> | null = this.getSlides();
+		const slides: NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
 		if ( slides ) {
 			return slides.length;
 		}
@@ -164,7 +155,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Get slides.
 		const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
-		const slides: NodeListOf<TPSliderSlideElement> | null = this.getSlides();
+		const slides: NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
 		if ( ! slidesContainer || ! slides ) {
 			return;
 		}
@@ -188,7 +179,7 @@ export class TPSliderElement extends HTMLElement {
 		const rightArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="next"]' );
 
 		// Set active slide.
-		const slides: NodeListOf<TPSliderSlideElement> | null = this.getSlides();
+		const slides: NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
 		slides?.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
 			if ( this.currentSlideIndex - 1 === index ) {
 				slide.setAttribute( 'active', 'yes' );
@@ -251,7 +242,7 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// Get slides.
-		const slides: NodeListOf<TPSliderSlideElement> | null = this.getSlides();
+		const slides: NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
 		if ( ! slides ) {
 			return;
 		}

@@ -67,10 +67,6 @@ slider.setCurrentSlide( 2 );
 
 ## Methods
 
-### `getSlides`
-
-Gets a list of all slide nodes.
-
 ### `next`
 
 Navigate to the next slide.
