@@ -43,7 +43,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'current-slide', 'flexible-height', 'infinite' ];
+		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe' ];
 	}
 
 	/**
