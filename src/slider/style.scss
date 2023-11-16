@@ -34,6 +34,7 @@ tp-slider-nav {
 	gap: 10px;
 }
 
+// Fade in Styles.
 tp-slider[behaviour="fadein"] {
 
 	tp-slider-slides {
@@ -46,9 +47,9 @@ tp-slider[behaviour="fadein"] {
 		top: 0;
 		width: 100%;
 		height: auto;
+		transition: opacity .3s ease;
 		visibility: hidden;
 		opacity: 0;
-		transition: opacity .3s ease;
 	}
 
 	tp-slider-slide[active="yes"] {

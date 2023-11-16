@@ -27,9 +27,6 @@ export class TPSliderElement extends HTMLElement {
 			this.setAttribute( 'current-slide', '1' );
 		}
 
-		// Get the type of slider.
-		console.log( 'this.getAttribute( \'behaviour\' )', this.getAttribute( 'behaviour' ) );
-
 		// Initialize slider.
 		this.slide();
 		this.setAttribute( 'initialized', 'yes' );
