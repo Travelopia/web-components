@@ -18,3 +18,10 @@ Accessible web components for the modern web.
 ### Installation
 
 `npm i @travelopia/web-components`
+
+### Development
+
+* Pull request are welcomed.
+* To start the development server and work locally run: `php -S localhost:3000`.
+* Run npm run dev.
+* Then let's say you want to work on the slider component. Go to [http://localhost:3000/src/slider](http://localhost:3000/src/slider)

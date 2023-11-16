@@ -33,3 +33,26 @@ tp-slider-nav {
 	display: flex;
 	gap: 10px;
 }
+
+tp-slider[behaviour="fadein"] {
+
+	tp-slider-slides {
+		display: block;
+	}
+
+	tp-slider-slide {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: auto;
+		visibility: hidden;
+		opacity: 0;
+		transition: opacity .3s ease;
+	}
+
+	tp-slider-slide[active="yes"] {
+		visibility: visible;
+		opacity: 1;
+	}
+}

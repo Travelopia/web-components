@@ -27,6 +27,9 @@ export class TPSliderElement extends HTMLElement {
 			this.setAttribute( 'current-slide', '1' );
 		}
 
+		// Get the type of slider.
+		console.log( 'this.getAttribute( \'behaviour\' )', this.getAttribute( 'behaviour' ) );
+
 		// Initialize slider.
 		this.slide();
 		this.setAttribute( 'initialized', 'yes' );
@@ -171,7 +174,10 @@ export class TPSliderElement extends HTMLElement {
 		this.updateHeight();
 
 		// Now lets slide!
-		slidesContainer.style.left = `-${ this.offsetWidth * ( this.currentSlideIndex - 1 ) }px`;
+		const behaviour = this.getAttribute( 'behaviour' );
+		if ( 'fadein' !== behaviour ) {
+			slidesContainer.style.left = `-${ this.offsetWidth * ( this.currentSlideIndex - 1 ) }px`;
+		}
 	}
 
 	/**
