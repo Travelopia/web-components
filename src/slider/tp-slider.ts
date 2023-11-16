@@ -171,7 +171,7 @@ export class TPSliderElement extends HTMLElement {
 		this.updateHeight();
 
 		// Now lets slide!
-		const behaviour = this.getAttribute( 'behaviour' );
+		const behaviour = this.getAttribute( 'behaviour' ) || '';
 		if ( 'fadein' !== behaviour ) {
 			slidesContainer.style.left = `-${ this.offsetWidth * ( this.currentSlideIndex - 1 ) }px`;
 		}
