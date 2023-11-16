@@ -47,7 +47,9 @@ tp-slider[behaviour="fadein"] {
 		top: 0;
 		width: 100%;
 		height: auto;
-		transition: opacity .3s ease;
+		transition-property: opacity, visibility;
+		transition-duration: .6s;
+		transition-timing-function: ease;
 		visibility: hidden;
 		opacity: 0;
 	}
