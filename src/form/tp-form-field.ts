@@ -101,9 +101,12 @@ export class TPFormFieldElement extends HTMLElement {
 			errorElement.innerHTML = message;
 			this.appendChild( errorElement );
 		}
+
+		this.dispatchEvent( new CustomEvent( 'validation-error', { bubbles: true } ) );
 	}
 
 	removeErrorMessage(): void {
 		this.querySelector( 'tp-form-error' )?.remove();
+		this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
 	}
 }

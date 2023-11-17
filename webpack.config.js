@@ -26,7 +26,7 @@ class DeclarationBundlerPlugin {
 					const declarationFiles = {};
 					for ( const filename in assets ) {
 						if ( filename.endsWith( '.d.ts' ) ) {
-							if ( ! filename.includes( 'index.d.ts' ) ) {
+							if ( filename.includes( 'tp-' ) ) {
 								declarationFiles[ filename ] = assets[ filename ];
 							}
 							delete assets[ filename ];

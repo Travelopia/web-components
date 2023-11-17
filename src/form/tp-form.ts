@@ -26,8 +26,11 @@ export class TPFormElement extends HTMLElement {
 	}
 
 	validate(): boolean {
+		this.dispatchEvent( new CustomEvent( 'validate', { bubbles: true } ) );
+
 		const fields: NodeListOf<TPFormFieldElement> | null = this.querySelectorAll( 'tp-form-field' );
 		if ( ! fields ) {
+			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
 			return true;
 		}
 
@@ -37,6 +40,12 @@ export class TPFormElement extends HTMLElement {
 				formValid = false;
 			}
 		} );
+
+		if ( formValid ) {
+			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
+		} else {
+			this.dispatchEvent( new CustomEvent( 'validation-error', { bubbles: true } ) );
+		}
 
 		return formValid;
 	}
