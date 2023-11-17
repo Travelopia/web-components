@@ -26,7 +26,7 @@ export const validator: TPFormValidator = {
 		return '' === value || value.length >= minLength;
 	},
 	getErrorMessage: ( field: TPFormFieldElement ): string => {
-		const error: string = getErrorMessage( 'min-length' );
+		const error: string = getErrorMessage( name );
 		const minLength: string = field.getAttribute( 'min-length' ) ?? '';
 
 		return error.replace( '%1', minLength );

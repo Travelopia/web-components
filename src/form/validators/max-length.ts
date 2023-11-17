@@ -26,9 +26,9 @@ export const validator: TPFormValidator = {
 		return '' === value || value.length <= minLength;
 	},
 	getErrorMessage: ( field: TPFormFieldElement ): string => {
-		const error: string = getErrorMessage( 'max-length' );
-		const minLength: string = field.getAttribute( 'max-length' ) ?? '';
+		const error: string = getErrorMessage( name );
+		const maxLength: string = field.getAttribute( 'max-length' ) ?? '';
 
-		return error.replace( '%1', minLength );
+		return error.replace( '%1', maxLength );
 	},
 };

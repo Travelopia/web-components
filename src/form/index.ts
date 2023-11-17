@@ -8,11 +8,13 @@ import './style.scss';
  */
 import { TPFormValidator } from './definitions';
 import * as required from './validators/required';
+import * as email from './validators/email';
 import * as minLength from './validators/min-length';
 import * as maxLength from './validators/max-length';
 
 const validators = [
 	required,
+	email,
 	minLength,
 	maxLength,
 ];
