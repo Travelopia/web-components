@@ -8,6 +8,7 @@ import './style.scss';
  */
 import { RequiredValidator, RequiredValidatorError } from './validators/required';
 import { MinLengthValidator, MinLengthValidatorError } from './validators/min-length';
+import { MaxLengthValidator, MaxLengthValidatorError } from './validators/max-length';
 
 /**
  * Register Validators and Errors.
@@ -15,11 +16,13 @@ import { MinLengthValidator, MinLengthValidatorError } from './validators/min-le
 window.tpFormValidators = {
 	...RequiredValidator,
 	...MinLengthValidator,
+	...MaxLengthValidator,
 };
 
 window.tpFormErrors = {
 	...RequiredValidatorError,
 	...MinLengthValidatorError,
+	...MaxLengthValidatorError,
 };
 
 /**

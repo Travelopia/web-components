@@ -40,14 +40,14 @@ export class TPFormFieldElement extends HTMLElement {
 	}
 
 	update(): void {
-		const { tpFormErrors } = window;
-		if ( ! tpFormErrors ) {
+		const { tpFormValidators } = window;
+		if ( ! tpFormValidators ) {
 			return;
 		}
 
 		const error: string = this.getAttribute( 'error' ) ?? '';
-		if ( '' !== error && error in tpFormErrors && 'string' === typeof tpFormErrors[ error ] ) {
-			this.setErrorMessage( tpFormErrors[ error ] );
+		if ( '' !== error && error in tpFormValidators && 'function' === typeof tpFormValidators[ error ]['getErrorMessage'] ) {
+			this.setErrorMessage( tpFormValidators[ error ]['getErrorMessage']( this ) );
 		} else {
 			this.removeErrorMessage();
 		}
@@ -68,8 +68,8 @@ export class TPFormFieldElement extends HTMLElement {
 		const allAttributes: string[] = this.getAttributeNames();
 
 		allAttributes.every( ( attributeName: string ): boolean => {
-			if ( attributeName in tpFormValidators && 'function' === typeof tpFormValidators[ attributeName ] ) {
-				const isValid: boolean = tpFormValidators[ attributeName ]( this );
+			if ( attributeName in tpFormValidators && 'function' === typeof tpFormValidators[ attributeName ]['validate'] ) {
+				const isValid: boolean = tpFormValidators[ attributeName ]['validate']( this );
 
 				if ( false === isValid ) {
 					valid = false;
