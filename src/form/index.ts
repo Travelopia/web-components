@@ -6,24 +6,29 @@ import './style.scss';
 /**
  * Validators.
  */
-import { RequiredValidator, RequiredValidatorError } from './validators/required';
-import { MinLengthValidator, MinLengthValidatorError } from './validators/min-length';
-import { MaxLengthValidator, MaxLengthValidatorError } from './validators/max-length';
+import { TPFormValidator } from './definitions';
+import * as required from './validators/required';
+import * as minLength from './validators/min-length';
+import * as maxLength from './validators/max-length';
+
+const validators = [
+	required,
+	minLength,
+	maxLength,
+];
 
 /**
  * Register Validators and Errors.
  */
-window.tpFormValidators = {
-	...RequiredValidator,
-	...MinLengthValidator,
-	...MaxLengthValidator,
-};
+window.tpFormValidators = {};
+window.tpFormErrors = {};
 
-window.tpFormErrors = {
-	...RequiredValidatorError,
-	...MinLengthValidatorError,
-	...MaxLengthValidatorError,
-};
+validators.forEach( (
+	{ name, validator, errorMessage }: { name: string, validator: TPFormValidator, errorMessage: string }
+): void => {
+	window.tpFormValidators[ name ] = validator;
+	window.tpFormErrors[ name ] = errorMessage;
+} );
 
 /**
  * Components.

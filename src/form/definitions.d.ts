@@ -1,19 +1,17 @@
 import { TPFormFieldElement } from './tp-form-field';
 
 export interface TPFormValidator {
-	[ key: string ]: {
-		validate: { ( field: TPFormFieldElement ): boolean };
-		getErrorMessage: { ( field: TPFormFieldElement ): string };
-	}
-}
-
-export interface TPFormError {
-	[ key: string ]: string;
+	validate: { ( field: TPFormFieldElement ): boolean };
+	getErrorMessage: { ( field: TPFormFieldElement ): string };
 }
 
 declare global {
 	interface Window {
-		tpFormValidators: TPFormValidator;
-		tpFormErrors: TPFormError;
+		tpFormValidators: {
+			[ key: string ]: TPFormValidator;
+		}
+		tpFormErrors: {
+			[ key: string ]: string;
+		};
 	}
 }
