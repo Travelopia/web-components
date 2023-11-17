@@ -78,6 +78,7 @@ module.exports = ( env ) => {
 		entry: {
 			modal: './src/modal/index.ts',
 			slider: './src/slider/index.ts',
+			form: './src/form/index.ts',
 		},
 		module: {
 			rules: [
