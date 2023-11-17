@@ -1,3 +1,6 @@
+/**
+ * Internal dependencies.
+ */
 import { TPFormFieldElement } from './tp-form-field';
 
 /**
@@ -9,15 +12,26 @@ export class TPFormElement extends HTMLElement {
 	 */
 	protected readonly form: HTMLFormElement | null;
 
+	/**
+	 * Constructor.
+	 */
 	constructor() {
 		super();
 		this.form = this.querySelector( 'form' );
 	}
 
+	/**
+	 * Connected callback.
+	 */
 	connectedCallback(): void {
 		this.form?.addEventListener( 'submit', this.handleFormSubmit.bind( this ) );
 	}
 
+	/**
+	 * Handle form submission.
+	 *
+	 * @param {Event} e Submit event.
+	 */
 	protected handleFormSubmit( e: SubmitEvent ): void {
 		const formValid: boolean = this.validate();
 		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
@@ -25,6 +39,11 @@ export class TPFormElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * Validate the form.
+	 *
+	 * @return {boolean} Whether the form is valid or not.
+	 */
 	validate(): boolean {
 		this.dispatchEvent( new CustomEvent( 'validate', { bubbles: true } ) );
 
@@ -50,6 +69,9 @@ export class TPFormElement extends HTMLElement {
 		return formValid;
 	}
 
+	/**
+	 * Reset form validation.
+	 */
 	resetValidation(): void {
 		const fields: NodeListOf<TPFormFieldElement> | null = this.querySelectorAll( 'tp-form-field' );
 		if ( ! fields ) {
