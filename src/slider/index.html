@@ -32,15 +32,15 @@
 </head>
 <body>
 	<main>
-		<!--Slider with 'fade in' effect-->
-		<tp-slider flexible-height="yes" infinite="yes" swipe="yes" behaviour="fadein">
+		<!--Slider that slides horizontally-->
+		<tp-slider flexible-height="yes" infinite="yes" swipe="yes">
 			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
 			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
 			<tp-slider-track>
 				<tp-slider-slides>
-					<tp-slider-slide><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt=""></tp-slider-slide>
-					<tp-slider-slide><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
-					<tp-slider-slide><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
 					<tp-slider-slide>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -58,16 +58,18 @@
 			</tp-slider-nav>
 			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
 		</tp-slider>
+
 		<br>
-		<!--Slider that slides horizontally-->
-		<tp-slider flexible-height="yes" infinite="yes" swipe="yes">
+
+		<!--Slider with 'fade in' effect-->
+		<tp-slider flexible-height="yes" infinite="yes" swipe="yes" behaviour="fade">
 			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
 			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
 			<tp-slider-track>
 				<tp-slider-slides>
-					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
-					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
-					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt=""></tp-slider-slide>
 					<tp-slider-slide>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>

@@ -21,7 +21,7 @@ Accessible web components for the modern web.
 
 ### Development
 
-* Pull request are welcomed.
-* To start the development server and work locally run: `php -S localhost:3000`.
-* Run npm run dev.
+* Pull requests are welcomed.
+* Start the environment with a local server of your choice, for example: `php -S localhost:3000`.
+* Run `npm run dev`.
 * Then let's say you want to work on the slider component. Go to [http://localhost:3000/src/slider](http://localhost:3000/src/slider)
