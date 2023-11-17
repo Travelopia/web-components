@@ -53,11 +53,12 @@ slider.setCurrentSlide( 2 );
 
 ## Attributes
 
-| Attribute       | Required | Values | Notes                                                                                                  |
-|-----------------|----------|--------|--------------------------------------------------------------------------------------------------------|
-| flexible-height | No       | `yes`  | Whether the height of the slider changes depending on the content inside the slides                    |
-| infinite        | No       | `yes`  | Go back to the first slide at the end of all slides, and open the last slide when navigating backwards |
-| swipe           | No       | `yes`  | Whether to add support for swiping gestures on touch devices                                           |
+| Attribute       | Required | Values          | Notes                                                                                                  |
+|-----------------|----------|-----------------|--------------------------------------------------------------------------------------------------------|
+| flexible-height | No       | `yes`           | Whether the height of the slider changes depending on the content inside the slides                    |
+| infinite        | No       | `yes`           | Go back to the first slide at the end of all slides, and open the last slide when navigating backwards |
+| swipe           | No       | `yes`           | Whether to add support for swiping gestures on touch devices                                           |
+| behaviour       | No       | `fade`, `slide` | The default behaviour is to slide between slides. This can be updated to fade.                         |
 
 ## Events
 
