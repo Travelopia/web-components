@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Tabs</title>
+
+	<link rel="stylesheet" href="../../dist/tabs/style.css" media="all">
+	<script type="module" src="../../dist/tabs/index.js"></script>
+
+</head>
+<body>
+<main>
+	<tp-tabs>
+		<tp-tabs-nav overflow="scroll">
+			<nav>
+				<a href="#tab-1">Tab 1</a>
+				<a href="#tab-2">Tab 2</a>
+				<a href="#tab-3">Tab 3</a>
+				<a href="#tab-4">Tab 4</a>
+			</nav>
+		</tp-tabs-nav>
+		<tp-tab id="#tab-1" open="yes">
+			<p>Content</p>
+		</tp-tab>
+		<tp-tab id="#tab-2">
+			<p>Content</p>
+		</tp-tab>
+		<tp-tab id="#tab-3">
+			<p>Content</p>
+		</tp-tab>
+		<tp-tab id="#tab-4">
+			<p>Content</p>
+		</tp-tab>
+	</tp-tabs>
+</main>
+</body>
+</html>
