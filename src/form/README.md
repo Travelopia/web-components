@@ -26,7 +26,7 @@ import { TPFormElement, TPFormFieldElement, TPFormErrorElement, TPFormSubmitElem
 
 ...
 
-const modal: TPFormElement = document.querySelector( 'tp-form' );
+const form: TPFormElement = document.querySelector( 'tp-form' );
 form.resetValidation();
 ```
 
