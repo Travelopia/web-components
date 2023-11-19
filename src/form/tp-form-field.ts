@@ -1,3 +1,6 @@
+/**
+ * Internal dependencies.
+ */
 import { TPFormErrorElement } from './tp-form-error';
 
 /**
