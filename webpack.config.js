@@ -26,7 +26,7 @@ class DeclarationBundlerPlugin {
 					const declarationFiles = {};
 					for ( const filename in assets ) {
 						if ( filename.endsWith( '.d.ts' ) ) {
-							if ( ! filename.includes( 'index.d.ts' ) ) {
+							if ( filename.includes( 'tp-' ) ) {
 								declarationFiles[ filename ] = assets[ filename ];
 							}
 							delete assets[ filename ];
@@ -78,6 +78,7 @@ module.exports = ( env ) => {
 		entry: {
 			modal: './src/modal/index.ts',
 			slider: './src/slider/index.ts',
+			form: './src/form/index.ts',
 		},
 		module: {
 			rules: [
