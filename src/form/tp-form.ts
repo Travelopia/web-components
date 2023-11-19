@@ -2,6 +2,7 @@
  * Internal dependencies.
  */
 import { TPFormFieldElement } from './tp-form-field';
+import { TPFormSubmitElement } from './tp-form-submit';
 
 /**
  * TP Form.
@@ -36,6 +37,15 @@ export class TPFormElement extends HTMLElement {
 		const formValid: boolean = this.validate();
 		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
 			e.preventDefault();
+		}
+
+		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
+		if ( submit ) {
+			if ( formValid ) {
+				submit.setAttribute( 'submitting', 'yes' );
+			} else {
+				submit.removeAttribute( 'submitting' );
+			}
 		}
 	}
 
@@ -82,5 +92,8 @@ export class TPFormElement extends HTMLElement {
 			field.removeAttribute( 'valid' );
 			field.removeAttribute( 'error' );
 		} );
+
+		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
+		submit?.removeAttribute( 'submitting' );
 	}
 }

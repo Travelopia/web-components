@@ -38,6 +38,7 @@ validators.forEach( (
 import { TPFormElement } from './tp-form';
 import { TPFormFieldElement } from './tp-form-field';
 import { TPFormErrorElement } from './tp-form-error';
+import { TPFormSubmitElement } from './tp-form-submit';
 
 /**
  * Register Components.
@@ -45,4 +46,5 @@ import { TPFormErrorElement } from './tp-form-error';
 customElements.define( 'tp-form', TPFormElement );
 customElements.define( 'tp-form-field', TPFormFieldElement );
 customElements.define( 'tp-form-error', TPFormErrorElement );
+customElements.define( 'tp-form-submit', TPFormSubmitElement );
 
