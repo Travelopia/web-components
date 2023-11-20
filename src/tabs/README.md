@@ -33,18 +33,18 @@ tabs.triggerTabSelection( '#overview' );
 <tp-tabs>
 	<tp-tabs-nav overflow="scroll">
 		<nav>
-			<tp-tab-nav active="true">
+			<tp-tabs-nav-item active="true">
 				<a href="#tab-1">Tab 1</a>
-			</tp-tab-nav>
-			<tp-tab-nav>
+			</tp-tabs-nav-item>
+			<tp-tabs-nav-item>
 				<a href="#tab-2">Tab 2</a>
-			</tp-tab-nav>
-			<tp-tab-nav>
+			</tp-tabs-nav-item>
+			<tp-tabs-nav-item>
 				<a href="#tab-3">Tab 3</a>
-			</tp-tab-nav>
-			<tp-tab-nav>
+			</tp-tabs-nav-item>
+			<tp-tabs-nav-item>
 				<a href="#tab-4">Tab 4</a>
-			</tp-tab-nav>
+			</tp-tabs-nav-item>
 		</nav>
 	</tp-tabs-nav>
 	<tp-tab id="#tab-1" open="yes">

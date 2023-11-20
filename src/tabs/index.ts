@@ -6,15 +6,16 @@ import './style.scss';
 /**
  * Components.
  */
-import { TPTabElement } from './tp-tab';
-import { TPTabs } from './tp-tabs';
-import { TPTabNavElement } from './tp-tab-nav';
+import { TPTabsNavItemElement } from './tp-tabs-nav-item';
 import { TPTabsNavElement } from './tp-tabs-nav';
+import { TPTabsTabElement } from './tp-tabs-tab';
+import { TPTabsElement } from './tp-tabs';
 
 /**
  * Register Components.
  */
-customElements.define( 'tp-tabs', TPTabs );
-customElements.define( 'tp-tab', TPTabElement );
-customElements.define( 'tp-tab-nav', TPTabNavElement );
+
+customElements.define( 'tp-tabs-nav-item', TPTabsNavItemElement );
 customElements.define( 'tp-tabs-nav', TPTabsNavElement );
+customElements.define( 'tp-tabs-tab', TPTabsTabElement );
+customElements.define( 'tp-tabs', TPTabsElement );
