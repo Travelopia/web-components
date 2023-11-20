@@ -1,0 +1,7 @@
+tp-tab {
+	display: none;
+
+	&[open="yes"] {
+		display: block;
+	}
+}

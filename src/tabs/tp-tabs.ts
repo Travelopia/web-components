@@ -30,7 +30,9 @@ export class TPTabs extends HTMLElement {
 		this.tabs = this.querySelectorAll( 'tp-tab' );
 		this.activeTabId = '';
 
+		// Initialize tabs.
 		this.initializeTabs();
+		this.autoScrollToUrlAnchoredId();
 	}
 
 	/**
@@ -84,8 +86,11 @@ export class TPTabs extends HTMLElement {
 			return;
 		}
 
+		// Get the active tab id.
+		this.activeTabId = clickedTabLink.getAttribute( 'href' ) || '';
+
 		// Events.
-		this.triggerTabSelection( clickedTabLink );
+		this.triggerTabSelection( this.activeTabId );
 
 		// Add hash to the url, which is not added by default because of adding `event.preventDefault()'. @TODO handle URL's without trailing slash.
 		window.location.hash = `${ this.activeTabId }`;
@@ -94,49 +99,51 @@ export class TPTabs extends HTMLElement {
 	/**
 	 * Trigger Tab Selection.
 	 *
-	 * @param {HTMLElement} clickedTabLink
+	 * @param {string} activeTabId
 	 *
 	 * @return {void} Null.
 	 */
-	triggerTabSelection( clickedTabLink: HTMLAnchorElement ): void {
+	triggerTabSelection( activeTabId: string ): void {
 		// Check if clicked tab link exist.
-		if ( ! clickedTabLink ) {
+		if ( ! activeTabId ) {
 			// No, bail early.
 			return;
 		}
 
-		// Get the values.
-		this.activeTabId = clickedTabLink.getAttribute( 'href' ) || '';
-		console.log( 'this.activeTabId', this.activeTabId );
-
 		// Events.
-		this.toggleTabLinkAttributes( clickedTabLink );
+		this.toggleTabLinkAttributes( activeTabId );
 		this.toggleTabContentVisibility();
+		this.dispatchEvent( new CustomEvent( 'tp-tab-clicked', {
+			detail: {
+				activeTabId: this.activeTabId,
+			},
+		} ) );
 	}
 
 	/**
 	 * Toggle Tab Link Attributes.
 	 *
-	 * @param {Object} clickedTabLink
+	 * @param {string} activeTabId
 	 * @return {void} Null.
 	 */
-	toggleTabLinkAttributes( clickedTabLink: HTMLAnchorElement ): void {
+	toggleTabLinkAttributes( activeTabId: string ): void {
+		// Get clicked tab link.
+		const clickedTabLink = this.querySelector( `[href="${ activeTabId }"]` );
+
 		// Check if the tab navs exist or clicked.
 		if ( ! this.tabNavs || ! clickedTabLink ) {
 			// No, bail early.
 			return;
 		}
-		console.log( 'this.tabNavs', this.tabNavs );
 
-		// 1. First remove active attribute from all tab links.
+		// 1. First remove active attribute from all nav elements.
 		this.tabNavs.forEach( ( tabNav: TPTabNavElement ) => {
 			// Remove the active attribute.
 			tabNav.removeAttribute( 'active' );
 		} );
 
-		// 2. Then set the 'active' attribute to the clicked tab link's parent.
+		// 2. Then set the 'active' attribute to the clicked nav element ( tab link's parent ).
 		if ( clickedTabLink.parentElement ) {
-			console.log( 'clickedTabLink', clickedTabLink.parentElement );
 			clickedTabLink.parentElement.setAttribute( 'active', 'true' );
 		}
 	}
@@ -169,10 +176,43 @@ export class TPTabs extends HTMLElement {
 			 * remove 'active' attribute to make the respective content visible.
 			 */
 			if ( this.activeTabId === tabId ) {
-				tab.setAttribute( 'active', 'true' );
+				tab.setAttribute( 'open', 'yes' );
 			} else {
-				tab.removeAttribute( 'active' );
+				tab.removeAttribute( 'open' );
 			}
 		} );
+	}
+
+	/**
+	 * Auto Scroll to Anchored URL.
+	 *
+	 * On initial render - let's say user click on an anchored url, shared by someone,
+	 * if the url has the id of one of the tabs, auto scroll to that tab link.
+	 */
+	autoScrollToUrlAnchoredId(): void {
+		// Get currentTabId ( e.g. #itinerary ) from the current URL.
+		const currentTabId: string | string[] = window?.location?.hash ?? '';
+
+		// Check if current tab ID exist.
+		if ( ! currentTabId ) {
+			// No, bail early.
+			return;
+		}
+
+		// Elements.
+		const tabs = this.querySelectorAll( 'tp-tab' );
+		const tabIds:Array<string|null> = [];
+
+		// Tab links index.
+		tabs.forEach( ( tab, index ) => {
+			// Set tab ids.
+			tabIds[ index ] = tab.getAttribute( 'id' );
+		} );
+
+		// If the id in the request url is one of the ids from the tab links, scroll to that tab link.
+		if ( tabIds && tabIds.includes( currentTabId ) ) {
+			this.activeTabId = currentTabId;
+			this.triggerTabSelection( currentTabId );
+		}
 	}
 }

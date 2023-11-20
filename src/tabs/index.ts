@@ -1,4 +1,9 @@
 /**
+ * Styles.
+ */
+import './style.scss';
+
+/**
  * Components.
  */
 import { TPTabElement } from './tp-tab';
