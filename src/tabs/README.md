@@ -64,7 +64,7 @@ tabs.setCurrentTab( 'overview' );
 
 | Attribute   | Required | Values                  | Notes                                               |
 |-------------|----------|-------------------------|-----------------------------------------------------|
-| current-tab | Yes      | <id of the current tab> | This attribute controls which tab is currently open |
+| current-tab | Yes      | (id of the current tab) | This attribute controls which tab is currently open |
 | update-url  | No       | `yes`                    | Whether or not to update the has in the URL         |
 
 ## Events
@@ -75,6 +75,6 @@ tabs.setCurrentTab( 'overview' );
 
 ## Methods
 
-### `triggerTabSelection`
+### `setCurrentTab`
 
 Move to the tab with the given id.
