@@ -10,6 +10,14 @@ import { TPTabsTabElement } from './tp-tabs-tab';
  */
 export class TPTabsElement extends HTMLElement {
 	/**
+	 * Connected callback.
+	 */
+	connectedCallback(): void {
+		this.updateTabFromUrlHash();
+		window.addEventListener( 'hashchange', this.updateTabFromUrlHash.bind( this ) );
+	}
+
+	/**
 	 * Get observed attributes.
 	 *
 	 * @return {Array} List of observed attributes.
@@ -44,6 +52,11 @@ export class TPTabsElement extends HTMLElement {
 		// Get current tab.
 		const currentTab: string = this.getAttribute( 'current-tab' ) ?? '';
 
+		// Check if current tab exists.
+		if ( ! this.querySelector( `tp-tabs-tab[id="${ currentTab }"]` ) ) {
+			return;
+		}
+
 		// Update nav items.
 		const navItems: NodeListOf<TPTabsNavItemElement> = this.querySelectorAll( 'tp-tabs-nav-item' );
 		if ( navItems ) {
@@ -67,5 +80,28 @@ export class TPTabsElement extends HTMLElement {
 				}
 			} );
 		}
+	}
+
+	/**
+	 * Update tab from URL hash.
+	 */
+	updateTabFromUrlHash(): void {
+		if ( 'yes' !== this.getAttribute( 'update-url' ) ) {
+			return;
+		}
+
+		const urlHash: string = window.location.hash;
+		if ( '' !== urlHash ) {
+			this.setAttribute( 'current-tab', urlHash.replace( '#', '' ) );
+		}
+	}
+
+	/**
+	 * Set current tab.
+	 *
+	 * @param {string} tabId Tab ID.
+	 */
+	setCurrentTab( tabId: string = '' ): void {
+		this.setAttribute( 'current-tab', tabId );
 	}
 }
