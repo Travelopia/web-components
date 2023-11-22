@@ -1,0 +1,25 @@
+tp-accordions {
+	display: block;
+}
+
+tp-accordions-expand-all,
+tp-accordions-collapse-all {
+	display: inline-block;
+}
+
+tp-accordions-accordion {
+	display: block;
+}
+
+tp-accordions-accordion-handle {
+	display: block;
+}
+
+tp-accordions-accordion-content {
+	display: block;
+	height: 0;
+	overflow: hidden;
+	transition-property: height;
+	transition-duration: .6s;
+	transition-timing-function: ease;
+}

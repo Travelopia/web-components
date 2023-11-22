@@ -53,6 +53,6 @@ export class TPAccordionsElement extends HTMLElement {
 			if ( 'yes' === this.getAttribute( 'collapse-all' ) ) {
 				accordionElement.removeAttribute( 'open' );
 			}
-		} )
+		} );
 	}
 }

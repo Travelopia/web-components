@@ -3,7 +3,6 @@
  */
 import './style.scss';
 
-
 /**
  * Components.
  */
@@ -13,7 +12,6 @@ import { TPAccordionsAccordionHandleElement } from './tp-accordions-accordion-ha
 import { TPAccordionsCollapseAllElement } from './tp-accordions-collapse-all';
 import { TPAccordionsExpandAllElement } from './tp-accordions-expand-all';
 import { TPAccordionsAccordionElement } from './tp-accordions-accordion';
-
 
 customElements.define( 'tp-accordions', TPAccordionsElement );
 customElements.define( 'tp-accordions-accordion-content', TPAccordionsAccordionContentElement );

@@ -10,15 +10,15 @@ export class TPAccordionsAccordionHandleElement extends HTMLElement {
 
 		this.accordions = this.closest( 'tp-accordions' );
 	}
+
 	connectedCallback() {
-		this.addEventListener( 'click',  () => this.toggle() );
+		this.addEventListener( 'click', () => this.toggle() );
 	}
 
 	/**
 	 * Toggle accordion state.
 	 */
 	toggle() {
-
 		if ( this.accordions ) {
 			this.accordions.setAttribute( 'expand-all', 'no' );
 			this.accordions.setAttribute( 'collapse-all', 'no' );

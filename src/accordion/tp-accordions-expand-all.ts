@@ -5,7 +5,7 @@ import { TPAccordionsElement } from './tp-accordions';
  */
 export class TPAccordionsExpandAllElement extends HTMLElement {
 	connectedCallback() {
-		this.addEventListener( 'click', () => this.expandAllAccordions() )
+		this.addEventListener( 'click', () => this.expandAllAccordions() );
 	}
 
 	expandAllAccordions() {
