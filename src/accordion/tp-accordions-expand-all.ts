@@ -5,10 +5,10 @@ import { TPAccordionsElement } from './tp-accordions';
  */
 export class TPAccordionsExpandAllElement extends HTMLElement {
 	connectedCallback() {
-		this.addEventListener( 'click', () => this.expandAllAccordion() )
+		this.addEventListener( 'click', () => this.expandAllAccordions() )
 	}
 
-	expandAllAccordion() {
+	expandAllAccordions() {
 		const accordions: TPAccordionsElement | null = this.closest( 'tp-accordions' );
 
 		if ( ! accordions ) {
