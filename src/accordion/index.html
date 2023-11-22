@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Accordion</title>
+
+	<link rel="stylesheet" href="../../dist/accordion/style.css" media="all">
+	<script type="module" src="../../dist/accordion/index.js"></script>
+</head>
+<body>
+<main>
+	<tp-accordions expand-all="no" collapse-all="no">
+		<tp-accordions-expand-all>
+			<button>Expand All</button>
+		</tp-accordions-expand-all>
+		<tp-accordions-collapse-all>
+			<button>Collapse All</button>
+		</tp-accordions-collapse-all>
+
+		<tp-accordions-accordion open>
+			<tp-accordions-accordion-handle>
+				<button>Accordion title</button>
+			</tp-accordions-accordion-handle>
+			<tp-accordions-accordion-content>
+				<p>Content</p>
+			</tp-accordions-accordion-content>
+		</tp-accordions-accordion>
+		<tp-accordions-accordion>
+			<tp-accordions-accordion-handle>
+				<button>Accordion title</button>
+			</tp-accordions-accordion-handle>
+			<tp-accordions-accordion-content>
+				<p>Content</p>
+			</tp-accordions-accordion-content>
+		</tp-accordions-accordion>
+	</tp-accordions>
+</main>
+</body>
+</html>

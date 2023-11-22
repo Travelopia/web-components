@@ -80,6 +80,7 @@ module.exports = ( env ) => {
 			slider: './src/slider/index.ts',
 			tabs: './src/tabs/index.ts',
 			form: './src/form/index.ts',
+			accordion: './src/accordion/index.ts',
 		},
 		module: {
 			rules: [
