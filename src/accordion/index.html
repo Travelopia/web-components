@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Accordion</title>
+
+	<link rel="stylesheet" href="../../dist/accordion/style.css" media="all">
+	<script type="module" src="../../dist/accordion/index.js"></script>
+
+	<style>
+		main {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		tp-accordion-item {
+			margin-top: 30px;
+		}
+	</style>
+</head>
+<body>
+<main>
+	<tp-accordion>
+		<tp-accordion-expand-all>
+			<button>Expand All</button>
+		</tp-accordion-expand-all>
+		<tp-accordion-collapse-all>
+			<button>Collapse All</button>
+		</tp-accordion-collapse-all>
+
+		<tp-accordion-item open-by-default="yes">
+			<tp-accordion-handle>
+				<button>Accordion title</button>
+			</tp-accordion-handle>
+			<tp-accordion-content>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</tp-accordion-content>
+		</tp-accordion-item>
+		<tp-accordion-item>
+			<tp-accordion-handle>
+				<button>Accordion title</button>
+			</tp-accordion-handle>
+			<tp-accordion-content>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</tp-accordion-content>
+		</tp-accordion-item>
+		<tp-accordion-item>
+			<tp-accordion-handle>
+				<button>Accordion title</button>
+			</tp-accordion-handle>
+			<tp-accordion-content>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</tp-accordion-content>
+		</tp-accordion-item>
+	</tp-accordion>
+</main>
+</body>
+</html>
