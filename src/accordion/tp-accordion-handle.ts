@@ -8,6 +8,7 @@ export class TPAccordionHandleElement extends HTMLElement {
 	 * Connected callback.
 	 */
 	connectedCallback() {
+		// Add event.
 		this.querySelector( 'button' )?.addEventListener( 'click', () => this.toggle() );
 	}
 
@@ -15,10 +16,13 @@ export class TPAccordionHandleElement extends HTMLElement {
 	 * Toggle accordion state.
 	 */
 	toggle() {
-		const accordions: TPAccordionElement | null = this.closest( 'tp-accordion' );
-		if ( accordions ) {
-			accordions.setAttribute( 'expand-all', 'no' );
-			accordions.setAttribute( 'collapse-all', 'no' );
+		// Get accordion.
+		const accordion: TPAccordionElement | null = this.closest( 'tp-accordion' );
+
+		// Set attributes to accordion.
+		if ( accordion ) {
+			accordion.setAttribute( 'expand-all', 'no' );
+			accordion.setAttribute( 'collapse-all', 'no' );
 		}
 
 		// Toggle accordion item states.

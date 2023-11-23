@@ -24,16 +24,21 @@ export class TPAccordionElement extends HTMLElement {
 	 * @param {string} newValue New value.
 	 */
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		// If old value same as new value, return.
 		if ( oldValue === newValue ) {
+			// Return.
 			return;
 		}
 
+		// Update.
 		this.update();
 
+		// Dispatch custom event when collapse all attribute is set.
 		if ( 'collapse-all' === name ) {
 			this.dispatchEvent( new CustomEvent( 'collapse', { bubbles: true } ) );
 		}
 
+		// Dispatch custom event when expand all attribute is set.
 		if ( 'expand-all' === name ) {
 			this.dispatchEvent( new CustomEvent( 'expand-all', { bubbles: true } ) );
 		}

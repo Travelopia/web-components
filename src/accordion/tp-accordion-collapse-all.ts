@@ -15,15 +15,6 @@ export class TPAccordionCollapseAllElement extends HTMLElement {
 	}
 
 	/**
-	 * Get observed attributes.
-	 *
-	 * @return {Array} List of observed attributes.
-	 */
-	static get observedAttributes(): string[] {
-		return [ 'collapse-all', 'expand-all' ];
-	}
-
-	/**
 	 * Collapse All.
 	 */
 	collapseAll() {
@@ -32,9 +23,11 @@ export class TPAccordionCollapseAllElement extends HTMLElement {
 
 		// If accordion not present, return.
 		if ( ! accordion ) {
+			// Return.
 			return;
 		}
 
+		// Set attributes for expand-all and collapse-all.
 		accordion.setAttribute( 'expand-all', 'no' );
 		accordion.setAttribute( 'collapse-all', 'yes' );
 	}

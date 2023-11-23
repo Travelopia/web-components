@@ -11,6 +11,7 @@ export class TPAccordionExpandAllElement extends HTMLElement {
 	 * Connected callback.
 	 */
 	connectedCallback() {
+		// Event.
 		this.querySelector( 'button' )?.addEventListener( 'click', () => this.expandAll() );
 	}
 
@@ -18,13 +19,17 @@ export class TPAccordionExpandAllElement extends HTMLElement {
 	 * Expand all.
 	 */
 	expandAll() {
-		const accordions: TPAccordionElement | null = this.closest( 'tp-accordion' );
+		// Get accordion.
+		const accordion: TPAccordionElement | null = this.closest( 'tp-accordion' );
 
-		if ( ! accordions ) {
+		// Early return, if accordion not present.
+		if ( ! accordion ) {
+			// Return.
 			return;
 		}
 
-		accordions.setAttribute( 'expand-all', 'yes' );
-		accordions.setAttribute( 'collapse-all', 'no' );
+		// Set attributes for expand-all and collapse-all.
+		accordion.setAttribute( 'expand-all', 'yes' );
+		accordion.setAttribute( 'collapse-all', 'no' );
 	}
 }
