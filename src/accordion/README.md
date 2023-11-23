@@ -21,17 +21,17 @@ import '@travelopia/web-components/dist/accordion';
 import '@travelopia/web-components/dist/accordion/style.css';
 
 // TypeScript usage:
-import { TPAccordionHandleElement } from '@travelopia/web-components';
+import { TPAccordionItemElement } from '@travelopia/web-components';
 
 ...
 
-const accordionHandle: TPAccordionHandleElement = document.querySelector( 'tp-accordion-handle' );
-accordionHandle.open();
-accordionHandle.close();
+const accordionItem: TPAccordionItemElement = document.querySelector( 'tp-accordion-item' );
+accordionItem.open();
+accordionItem.close();
 ```
 
 ```html
-<tp-accordion expand-all="no" collapse-all="no">
+<tp-accordion>
 	<tp-accordion-expand-all>
 		<button>Expand All</button>
 	</tp-accordion-expand-all>
@@ -39,7 +39,7 @@ accordionHandle.close();
 		<button>Collapse All</button>
 	</tp-accordion-collapse-all>
 
-	<tp-accordion-item open="yes">
+	<tp-accordion-item open-by-default="yes">
 		<tp-accordion-handle>
 			<button>Accordion title</button>
 		</tp-accordion-handle>
@@ -68,10 +68,10 @@ accordionHandle.close();
 
 ## Attributes
 
-| Attribute    | Required | Values        | Notes                                                            |
-|--------------|----------|---------------|------------------------------------------------------------------|
-| expand-all   | Yes      | `yes` or `no` | This attribute controls if all accordion items should be open.   |
-| collapse-all | Yes      | `yes` or `no` | This attribute controls if all accordion items should be closed. |
+| Attribute       | Required | Values        | Notes                                                             |
+|-----------------|----------|---------------|-------------------------------------------------------------------|
+| collapse-all    | No       | `yes` | This attribute controls if all accordion items should be closed.  |
+| collapse-all    | No       | `yes` | This attribute controls if all accordion items should be closed.  |
 
 ## Events
 
@@ -83,7 +83,7 @@ accordionHandle.close();
 ## Methods
 
 ### `open`
-### `close`
-
 Open an accordion item.
+
+### `close`
 Close an accordion item.

@@ -1,10 +1,10 @@
 /**
- * Internal Dependency.
+ * Internal dependencies.
  */
 import { TPAccordionItemElement } from './tp-accordion-item';
 
 /**
- * Class TPAccordionElement.
+ * TP Accordion.
  */
 export class TPAccordionElement extends HTMLElement {
 	/**
@@ -24,53 +24,46 @@ export class TPAccordionElement extends HTMLElement {
 	 * @param {string} newValue New value.
 	 */
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
-		// If old value same as new value, return.
 		if ( oldValue === newValue ) {
-			// Return.
 			return;
 		}
 
-		// Update.
 		this.update();
 
-		// Dispatch custom event when collapse all attribute is set.
-		if ( 'collapse-all' === name ) {
-			this.dispatchEvent( new CustomEvent( 'collapse', { bubbles: true } ) );
-		}
-
-		// Dispatch custom event when expand all attribute is set.
-		if ( 'expand-all' === name ) {
-			this.dispatchEvent( new CustomEvent( 'expand-all', { bubbles: true } ) );
+		if ( 'yes' === newValue && ( 'collapse-all' === name || 'expand-all' === name ) ) {
+			this.dispatchEvent( new CustomEvent( name, { bubbles: true } ) );
 		}
 	}
 
 	/**
 	 * Update.
 	 */
-	update() {
-		// Get accordion elements.
-		const accordionElements: NodeListOf<TPAccordionItemElement> = this.querySelectorAll( 'tp-accordion-item' );
-
-		// If accordion elements not present, return.
-		if ( ! accordionElements ) {
+	update(): void {
+		// Get accordion items.
+		const accordionItems: NodeListOf<TPAccordionItemElement> = this.querySelectorAll( 'tp-accordion-item' );
+		if ( ! accordionItems ) {
 			return;
 		}
 
-		// Loop through accordion elements.
-		accordionElements.forEach( ( accordionElement: TPAccordionItemElement ): void => {
-			// If accordion element not present, return.
-			if ( ! accordionElement ) {
-				return;
-			}
+		// Determine action.
+		let action: string = '';
+		if ( 'yes' === this.getAttribute( 'expand-all' ) ) {
+			action = 'expand-all';
+		} else if ( 'yes' === this.getAttribute( 'collapse-all' ) ) {
+			action = 'collapse-all';
+		}
 
-			// Set the attribute for accordion element.
-			if ( 'yes' === this.getAttribute( 'expand-all' ) ) {
-				accordionElement.setAttribute( 'open', 'yes' );
-			}
+		// Check if we have an action.
+		if ( '' === action ) {
+			return;
+		}
 
-			// Remove the attribute for accordion element.
-			if ( 'yes' === this.getAttribute( 'collapse-all' ) ) {
-				accordionElement.removeAttribute( 'open' );
+		// Expand or collapse accordion items.
+		accordionItems.forEach( ( accordionItem: TPAccordionItemElement ): void => {
+			if ( 'expand-all' === action ) {
+				accordionItem.setAttribute( 'open', 'yes' );
+			} else if ( 'collapse-all' === action ) {
+				accordionItem.removeAttribute( 'open' );
 			}
 		} );
 	}

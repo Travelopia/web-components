@@ -1,34 +1,31 @@
 /**
- * TPAccordionCollapseAllElement.
+ * Internal dependencies.
  */
 import { TPAccordionElement } from './tp-accordion';
 
 /**
- * Class TPAccordionCollapseAllElement.
+ * TP Accordion Collapse All.
  */
 export class TPAccordionCollapseAllElement extends HTMLElement {
 	/**
 	 * Connected callback.
 	 */
-	connectedCallback() {
+	connectedCallback(): void {
 		this.querySelector( 'button' )?.addEventListener( 'click', () => this.collapseAll() );
 	}
 
 	/**
 	 * Collapse All.
 	 */
-	collapseAll() {
+	collapseAll(): void {
 		// Get accordion element.
 		const accordion: TPAccordionElement | null = this.closest( 'tp-accordion' );
-
-		// If accordion not present, return.
 		if ( ! accordion ) {
-			// Return.
 			return;
 		}
 
 		// Set attributes for expand-all and collapse-all.
-		accordion.setAttribute( 'expand-all', 'no' );
+		accordion.removeAttribute( 'expand-all' );
 		accordion.setAttribute( 'collapse-all', 'yes' );
 	}
 }

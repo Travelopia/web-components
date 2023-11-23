@@ -1,20 +1,28 @@
 /**
- * TpAccordionsAccordionElement.
+ * Internal dependencies.
  */
 import { TPAccordionContentElement } from './tp-accordion-content';
-import { slideElementDown, slideElementUp } from '../global/utility';
+import { slideElementDown, slideElementUp } from '../utility';
 
 /**
- * Class TPAccordionItemElement.
+ * TP Accordion Item.
  */
 export class TPAccordionItemElement extends HTMLElement {
 	/**
-	 * Observe Attributes.
-	 *
-	 * @return {string[]} Attributes to be observed.
+	 * Connected callbacl.
 	 */
-	static get observedAttributes() {
-		// Return list of observed attributes.
+	connectedCallback(): void {
+		if ( 'yes' === this.getAttribute( 'open-by-default' ) ) {
+			this.setAttribute( 'open', 'yes' );
+		}
+	}
+
+	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
 		return [ 'open' ];
 	}
 
@@ -27,29 +35,41 @@ export class TPAccordionItemElement extends HTMLElement {
 	 * @param {string} oldValue Old Value.
 	 * @param {string} newValue New Value.
 	 */
-	attributeChangedCallback( name: string, oldValue: string, newValue: string ) {
-		// Check if attribute value has changed.
-		if ( oldValue === newValue ) {
-			// Return early if attribute is modified with same value.
+	attributeChangedCallback( name: string, oldValue: string, newValue: string ): void {
+		if ( oldValue === newValue || 'open' !== name ) {
 			return;
 		}
 
-		// Check if this is the active attribute.
-		if ( 'open' === name ) {
-			const content: TPAccordionContentElement | null = this.querySelector( 'tp-accordion-content' );
+		if ( 'yes' === newValue ) {
+			this.open();
+		} else {
+			this.close();
+		}
 
-			// Return early if content not found.
-			if ( ! content ) {
-				// Return early.
-				return;
-			}
+		this.removeAttribute( 'open-by-default' );
+	}
 
-			// Show or hide content based on active argument.
-			if ( ! this.hasAttribute( 'open' ) ) {
-				slideElementUp( content, 600 );
-			} else {
-				slideElementDown( content, 600 );
-			}
+	/**
+	 * Open accordion item.
+	 */
+	open(): void {
+		const content: TPAccordionContentElement | null = this.querySelector( 'tp-accordion-content' );
+		if ( content ) {
+			this.dispatchEvent( new CustomEvent( 'before-open', { bubbles: true } ) );
+			slideElementDown( content, 600 );
+			this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
+		}
+	}
+
+	/**
+	 * Close accordion item.
+	 */
+	close(): void {
+		const content: TPAccordionContentElement | null = this.querySelector( 'tp-accordion-content' );
+		if ( content ) {
+			this.dispatchEvent( new CustomEvent( 'before-close', { bubbles: true } ) );
+			slideElementUp( content, 600 );
+			this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
 		}
 	}
 }

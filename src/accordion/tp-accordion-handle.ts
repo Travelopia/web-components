@@ -1,47 +1,32 @@
-import { TPAccordionElement } from './tp-accordion';
+/**
+ * Internal dependencies.
+ */
+import { TPAccordionItemElement } from './tp-accordion-item';
 
 /**
- * TPAccordionHandleElement.
+ * TP Accordion Handle.
  */
 export class TPAccordionHandleElement extends HTMLElement {
 	/**
 	 * Connected callback.
 	 */
-	connectedCallback() {
-		// Add event.
-		this.querySelector( 'button' )?.addEventListener( 'click', () => this.toggle() );
+	connectedCallback(): void {
+		this.querySelector( 'button' )?.addEventListener( 'click', this.toggle.bind( this ) );
 	}
 
 	/**
-	 * Toggle accordion state.
+	 * Toggle accordion.
 	 */
-	toggle() {
-		// Get accordion.
-		const accordion: TPAccordionElement | null = this.closest( 'tp-accordion' );
-
-		// Set attributes to accordion.
-		if ( accordion ) {
-			accordion.setAttribute( 'expand-all', 'no' );
-			accordion.setAttribute( 'collapse-all', 'no' );
+	toggle(): void {
+		const accordionItem: TPAccordionItemElement | null = this.closest( 'tp-accordion-item' );
+		if ( ! accordionItem ) {
+			return;
 		}
 
-		// Toggle accordion item states.
-		this.closest( 'tp-accordion-item' )?.toggleAttribute( 'open' );
-	}
-
-	/**
-	 * Open accordion.
-	 */
-	open() {
-		// Set the attributes of the accordion to expand it.
-		this.closest( 'tp-accordion-item' )?.setAttribute( 'open', 'yes' );
-	}
-
-	/**
-	 * Close accordion.
-	 */
-	close() {
-		// Set the attributes of the accordion to collapse it.
-		this.closest( 'tp-accordion-item' )?.removeAttribute( 'open' );
+		if ( 'yes' !== accordionItem.getAttribute( 'open' ) ) {
+			accordionItem.setAttribute( 'open', 'yes' );
+		} else {
+			accordionItem.removeAttribute( 'open' );
+		}
 	}
 }

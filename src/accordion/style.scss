@@ -22,4 +22,9 @@ tp-accordion-content {
 	transition-property: height;
 	transition-duration: .6s;
 	transition-timing-function: ease;
+
+	tp-accordion-item[open-by-default="yes"] & {
+		display: block;
+		height: auto;
+	}
 }
