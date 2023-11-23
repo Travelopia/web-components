@@ -1,6 +1,12 @@
-import { TPAccordionsAccordionElement } from './tp-accordions-accordion';
+/**
+ * Internal Dependency.
+ */
+import { TPAccordionItemElement } from './tp-accordion-item';
 
-export class TPAccordionsElement extends HTMLElement {
+/**
+ * Class TPAccordionElement.
+ */
+export class TPAccordionElement extends HTMLElement {
 	/**
 	 * Get observed attributes.
 	 *
@@ -33,23 +39,31 @@ export class TPAccordionsElement extends HTMLElement {
 		}
 	}
 
+	/**
+	 * Update.
+	 */
 	update() {
-		// Get current tab.
-		// const currentAccordionItemIndex: string = this.getAttribute( 'current-open-accordion' ) ?? '';
-		const accordionElements: NodeListOf<TPAccordionsAccordionElement> = this.querySelectorAll( 'tp-accordions-accordion' );
+		// Get accordion elements.
+		const accordionElements: NodeListOf<TPAccordionItemElement> = this.querySelectorAll( 'tp-accordion-item' );
 
+		// If accordion elements not present, return.
 		if ( ! accordionElements ) {
 			return;
 		}
 
-		accordionElements.forEach( ( accordionElement: TPAccordionsAccordionElement ): void => {
+		// Loop through accordion elements.
+		accordionElements.forEach( ( accordionElement: TPAccordionItemElement ): void => {
+			// If accordion element not present, return.
 			if ( ! accordionElement ) {
 				return;
 			}
 
+			// Set the attribute for accordion element.
 			if ( 'yes' === this.getAttribute( 'expand-all' ) ) {
 				accordionElement.setAttribute( 'open', 'yes' );
 			}
+
+			// Remove the attribute for accordion element.
 			if ( 'yes' === this.getAttribute( 'collapse-all' ) ) {
 				accordionElement.removeAttribute( 'open' );
 			}

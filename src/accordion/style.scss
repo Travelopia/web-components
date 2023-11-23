@@ -1,21 +1,21 @@
-tp-accordions {
+tp-accordion {
 	display: block;
 }
 
-tp-accordions-expand-all,
-tp-accordions-collapse-all {
+tp-accordion-expand-all,
+tp-accordion-collapse-all {
 	display: inline-block;
 }
 
-tp-accordions-accordion {
+tp-accordion-item {
 	display: block;
 }
 
-tp-accordions-accordion-handle {
+tp-accordion-handle {
 	display: block;
 }
 
-tp-accordions-accordion-content {
+tp-accordion-content {
 	display: block;
 	height: 0;
 	overflow: hidden;

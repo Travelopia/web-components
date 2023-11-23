@@ -6,16 +6,19 @@ import './style.scss';
 /**
  * Components.
  */
-import { TPAccordionsElement } from './tp-accordions';
-import { TPAccordionsAccordionContentElement } from './tp-accordions-accordion-content';
-import { TPAccordionsAccordionHandleElement } from './tp-accordions-accordion-handle';
-import { TPAccordionsCollapseAllElement } from './tp-accordions-collapse-all';
-import { TPAccordionsExpandAllElement } from './tp-accordions-expand-all';
-import { TPAccordionsAccordionElement } from './tp-accordions-accordion';
+import { TPAccordionElement } from './tp-accordion';
+import { TPAccordionContentElement } from './tp-accordion-content';
+import { TPAccordionHandleElement } from './tp-accordion-handle';
+import { TPAccordionCollapseAllElement } from './tp-accordion-collapse-all';
+import { TPAccordionExpandAllElement } from './tp-accordion-expand-all';
+import { TPAccordionItemElement } from './tp-accordion-item';
 
-customElements.define( 'tp-accordions', TPAccordionsElement );
-customElements.define( 'tp-accordions-accordion-content', TPAccordionsAccordionContentElement );
-customElements.define( 'tp-accordions-accordion-handle', TPAccordionsAccordionHandleElement );
-customElements.define( 'tp-accordions-collapse-all', TPAccordionsCollapseAllElement );
-customElements.define( 'tp-accordions-expand-all', TPAccordionsExpandAllElement );
-customElements.define( 'tp-accordions-accordion', TPAccordionsAccordionElement );
+/**
+ * Initialize.
+ */
+customElements.define( 'tp-accordion', TPAccordionElement );
+customElements.define( 'tp-accordion-content', TPAccordionContentElement );
+customElements.define( 'tp-accordion-handle', TPAccordionHandleElement );
+customElements.define( 'tp-accordion-collapse-all', TPAccordionCollapseAllElement );
+customElements.define( 'tp-accordion-expand-all', TPAccordionExpandAllElement );
+customElements.define( 'tp-accordion-item', TPAccordionItemElement );

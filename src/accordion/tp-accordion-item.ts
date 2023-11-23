@@ -1,18 +1,13 @@
 /**
  * TpAccordionsAccordionElement.
  */
-import { TPAccordionsAccordionContentElement } from './tp-accordions-accordion-content';
+import { TPAccordionContentElement } from './tp-accordion-content';
 import { slideElementDown, slideElementUp } from '../global/utility';
 
-export class TPAccordionsAccordionElement extends HTMLElement {
-	private content: TPAccordionsAccordionContentElement | null;
-
-	constructor() {
-		super();
-
-		this.content = this.querySelector( 'tp-accordions-accordion-content' );
-	}
-
+/**
+ * Class TPAccordionItemElement.
+ */
+export class TPAccordionItemElement extends HTMLElement {
 	/**
 	 * Observe Attributes.
 	 *
@@ -41,17 +36,19 @@ export class TPAccordionsAccordionElement extends HTMLElement {
 
 		// Check if this is the active attribute.
 		if ( 'open' === name ) {
+			const content: TPAccordionContentElement | null = this.querySelector( 'tp-accordion-content' );
+
 			// Return early if content not found.
-			if ( ! this.content ) {
+			if ( ! content ) {
 				// Return early.
 				return;
 			}
 
 			// Show or hide content based on active argument.
 			if ( ! this.hasAttribute( 'open' ) ) {
-				slideElementUp( this.content, 600 );
+				slideElementUp( content, 600 );
 			} else {
-				slideElementDown( this.content, 600 );
+				slideElementDown( content, 600 );
 			}
 		}
 	}
