@@ -1,4 +1,7 @@
-import {TPMultiSelectElement} from "./tp-multi-select";
+/**
+ * Internal dependencies.
+ */
+import { TPMultiSelectElement } from './tp-multi-select';
 
 /**
  * TP Multi Select Field.

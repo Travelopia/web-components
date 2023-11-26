@@ -15,25 +15,59 @@ export class TPMultiSelectElement extends HTMLElement {
 	connectedCallback(): void {
 		// Events.
 		document.addEventListener( 'click', this.handleDocumentClick.bind( this ) );
-		this.addEventListener( 'selected', () => this.updateValue() );
-		this.addEventListener( 'un-selected', () => this.updateValue() );
-		this.addEventListener( 'change', () => this.handleChange() );
+		this.addEventListener( 'change', this.update.bind( this ) );
 
-		// Listen for changes to the options.
+		// Listen for dynamic changes to the option values.
 		const options: TPMultiSelectOptionsElement | null = this.querySelector( 'tp-multi-select-options' );
 		if ( options ) {
 			const mutationObserver: MutationObserver = new MutationObserver( this.update.bind( this ) );
 			mutationObserver.observe( options, { childList: true, subtree: true } );
 		}
 
-		// Update component.
-		this.update();
+		// Initialize component.
+		this.initialize();
+	}
+
+	/**
+	 * Set the value of this component.
+	 *
+	 * @param {Array} value Value.
+	 */
+	set value( value: string[] ) {
+		if ( ! value || ! Array.isArray( value ) ) {
+			return;
+		}
+
+		const styledOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
+		styledOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
+			if ( value.includes( option.getAttribute( 'value' ) ?? '' ) ) {
+				option.setAttribute( 'selected', 'selected' );
+			} else {
+				option.removeAttribute( 'selected' );
+			}
+		} );
+
+		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
+	}
+
+	/**
+	 * Get the value of this component.
+	 *
+	 * @return {Array} Value of this component.
+	 */
+	get value(): string[] {
+		const value: string[] = [];
+
+		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option[selected]' );
+		selectedOptions?.forEach( ( option: HTMLOptionElement ) => value.push( option.value ) );
+
+		return value;
 	}
 
 	/**
 	 * Update the value of the select field.
 	 */
-	updateValue(): void {
+	protected updateFormFieldValue(): void {
 		// Get options.
 		const styledSelectedOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( `tp-multi-select-option` );
 		const selectFieldOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option' );
@@ -68,15 +102,17 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		// Dispatch events.
 		this.querySelector( 'select' )?.dispatchEvent( new Event( 'change' ) );
-		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 
 	/**
-	 * Handle value changed.
+	 * Update component and sub-components.
 	 */
-	handleChange(): void {
+	update(): void {
+		// First, update field value.
+		this.updateFormFieldValue();
+
 		// Get value.
-		const value: string[] = this.getValue();
+		const value: string[] = this.value;
 
 		// Toggle selected attribute.
 		if ( 0 !== value.length ) {
@@ -97,18 +133,6 @@ export class TPMultiSelectElement extends HTMLElement {
 	}
 
 	/**
-	 * Get value.
-	 */
-	getValue(): string[] {
-		const value: string[] = [];
-
-		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option[selected]' );
-		selectedOptions?.forEach( ( option: HTMLOptionElement ) => value.push( option.value ) );
-
-		return value;
-	}
-
-	/**
 	 * Handle clicking the document.
 	 *
 	 * @param {Event} e Event.
@@ -120,9 +144,9 @@ export class TPMultiSelectElement extends HTMLElement {
 	}
 
 	/**
-	 * Update component.
+	 * Initialize component.
 	 */
-	update(): void {
+	initialize(): void {
 		// Get options.
 		const options: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
 		if ( ! options ) {
@@ -133,6 +157,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		let selectElement: HTMLSelectElement | null = this.querySelector( 'select' );
 		if ( ! selectElement ) {
 			selectElement = document.createElement( 'select' );
+			selectElement.setAttribute( 'name', this.getAttribute( 'name' ) ?? '' );
 			selectElement.setAttribute( 'multiple', 'multiple' );
 			this.append( selectElement );
 		} else {
@@ -157,19 +182,49 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.setAttribute( 'selected', 'yes' );
 		} );
-		this.dispatchEvent( new CustomEvent( 'selected', { bubbles: true } ) );
+
+		this.dispatchEvent( new CustomEvent( 'select', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
+	}
+
+	/**
+	 * Select all values.
+	 */
+	selectAll(): void {
+		const styledOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
+		styledOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
+			option.setAttribute( 'selected', 'yes' );
+		} );
+
+		this.dispatchEvent( new CustomEvent( 'select-all', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 
 	/**
 	 * Un-select a value.
 	 *
-	 * @param {string} value Value to un-select.
+	 * @param {string} value Value to unselect.
 	 */
 	unSelect( value: string = '' ): void {
 		const styledSelectedOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( `tp-multi-select-option[value="${ value }"]` );
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.removeAttribute( 'selected' );
 		} );
-		this.dispatchEvent( new CustomEvent( 'un-selected', { bubbles: true } ) );
+
+		this.dispatchEvent( new CustomEvent( 'unselect', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
+	}
+
+	/**
+	 * Un-select all values.
+	 */
+	unSelectAll(): void {
+		const styledSelectedOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
+		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
+			option.removeAttribute( 'selected' );
+		} );
+
+		this.dispatchEvent( new CustomEvent( 'unselect-all', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 }
