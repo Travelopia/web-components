@@ -1,0 +1,45 @@
+tp-multi-select {
+	display: block;
+	position: relative;
+
+	select {
+		visibility: hidden;
+		position: absolute;
+	}
+}
+
+tp-multi-select-field {
+	display: block;
+}
+
+tp-multi-select-options {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+
+	tp-multi-select[open="yes"] & {
+		display: block;
+	}
+}
+
+tp-multi-select-option {
+	display: block;
+}
+
+tp-multi-select-placeholder {
+	display: block;
+
+	tp-multi-select[selected="yes"] & {
+		display: none;
+	}
+}
+
+tp-multi-select-status {
+	display: none;
+
+	tp-multi-select[selected="yes"] & {
+		display: block;
+	}
+}

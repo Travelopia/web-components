@@ -81,6 +81,7 @@ module.exports = ( env ) => {
 			tabs: './src/tabs/index.ts',
 			form: './src/form/index.ts',
 			accordion: './src/accordion/index.ts',
+			'multi-select': './src/multi-select/index.ts',
 		},
 		module: {
 			rules: [
