@@ -9,7 +9,8 @@ tp-multi-select {
 }
 
 tp-multi-select-field {
-	display: block;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 tp-multi-select-options {
@@ -52,6 +53,14 @@ tp-multi-select-status {
 
 tp-multi-select-search {
 
-	input[type="search"] {
+	input {
+		box-sizing: border-box;
+		border: 0;
+		outline: none;
+		min-width: 3ch;
 	}
+}
+
+tp-multi-select-pills {
+	display: inline-block;
 }
