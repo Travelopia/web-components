@@ -4,6 +4,7 @@
 import { TPMultiSelectOptionElement } from './tp-multi-select-option';
 import { TPMultiSelectStatusElement } from './tp-multi-select-status';
 import { TPMultiSelectOptionsElement } from './tp-multi-select-options';
+import { TPMultiSelectSearchElement } from './tp-multi-select-search';
 
 /**
  * TP Multi Select.
@@ -129,6 +130,12 @@ export class TPMultiSelectElement extends HTMLElement {
 			} else {
 				status.removeAttribute( 'total' );
 			}
+		}
+
+		// Clear search field.
+		const search: TPMultiSelectSearchElement | null = this.querySelector( 'tp-multi-select-search' );
+		if ( search ) {
+			search.clear();
 		}
 	}
 

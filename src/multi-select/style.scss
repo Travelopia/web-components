@@ -19,6 +19,7 @@ tp-multi-select-options {
 	left: 0;
 	right: 0;
 	background-color: #fff;
+	z-index: 2;
 
 	tp-multi-select[open="yes"] & {
 		display: block;
@@ -27,6 +28,10 @@ tp-multi-select-options {
 
 tp-multi-select-option {
 	display: block;
+
+	&[hidden="yes"] {
+		display: none;
+	}
 }
 
 tp-multi-select-placeholder {
@@ -42,5 +47,11 @@ tp-multi-select-status {
 
 	tp-multi-select[selected="yes"] & {
 		display: block;
+	}
+}
+
+tp-multi-select-search {
+
+	input[type="search"] {
 	}
 }
