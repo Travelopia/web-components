@@ -35,7 +35,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		// Listen for dynamic changes to the option values.
 		const options: TPMultiSelectOptionsElement | null = this.querySelector( 'tp-multi-select-options' );
 		if ( options ) {
-			const mutationObserver: MutationObserver = new MutationObserver( this.update.bind( this ) );
+			const mutationObserver: MutationObserver = new MutationObserver( this.initialize.bind( this ) );
 			mutationObserver.observe( options, { childList: true, subtree: true } );
 		}
 
