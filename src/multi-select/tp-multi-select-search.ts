@@ -1,7 +1,9 @@
 /**
  * Internal dependencies.
  */
+import { TPMultiSelectElement } from './tp-multi-select';
 import { TPMultiSelectOptionElement } from './tp-multi-select-option';
+import { TPMultiSelectPillElement } from './tp-multi-select-pill';
 
 /**
  * TP Multi Select Search.
@@ -19,16 +21,20 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
 		input.addEventListener( 'change', this.handleSearchChange.bind( this ) );
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
+		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
 	}
 
 	/**
 	 * Handle search field value changed.
+	 *
+	 * @param {Event} e Keyboard event.
 	 */
-	protected handleSearchChange(): void {
+	protected handleSearchChange( e: Event ): void {
 		// Get search field and options.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		const search: HTMLInputElement | null = this.querySelector( 'input' );
 		const options: NodeListOf<TPMultiSelectOptionElement> | undefined = this.closest( 'tp-multi-select' )?.querySelectorAll( 'tp-multi-select-option' );
-		if ( ! search || ! options ) {
+		if ( ! multiSelect || ! search || ! options ) {
 			return;
 		}
 
@@ -46,7 +52,26 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 			search.removeAttribute( 'style' );
 		} else {
 			search.style.width = `${ search.value.length + 2 }ch`;
-			this.closest( 'tp-multi-select' )?.setAttribute( 'open', 'yes' );
+			multiSelect.setAttribute( 'open', 'yes' );
+		}
+
+		// Determine keys.
+		if ( 'key' in e ) {
+			switch ( e.key ) {
+				case 'ArrowDown':
+					multiSelect.setAttribute( 'open', 'yes' );
+					break;
+				case 'Backspace':
+					if ( 0 === search.value.length ) {
+						const pill: TPMultiSelectPillElement | null = multiSelect.querySelector( 'tp-multi-select-pill:last-of-type' );
+						if ( pill ) {
+							pill.removePill( null );
+						}
+					}
+					break;
+				default:
+					multiSelect.currentlyHighlightedOption = -1;
+			}
 		}
 	}
 
@@ -68,8 +93,11 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		const search: HTMLInputElement | null = this.querySelector( 'input' );
 		if ( search ) {
 			search.value = '';
-			this.closest( 'tp-multi-select' )?.removeAttribute( 'open' );
 			search.dispatchEvent( new Event( 'change' ) );
+
+			if ( 'yes' === this.getAttribute( 'close-on-select' ) ) {
+				this.closest( 'tp-multi-select' )?.removeAttribute( 'open' );
+			}
 		}
 	}
 

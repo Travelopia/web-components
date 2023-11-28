@@ -19,7 +19,7 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 	 *
 	 * @param {Event} e Click event.
 	 */
-	toggle( e: Event ): void {
+	toggle( e: Event | null ): void {
 		e?.preventDefault();
 		e?.stopPropagation();
 

@@ -47,6 +47,10 @@
 		tp-multi-select-option[selected="yes"]::after {
 			content: " ✓";
 		}
+
+		tp-multi-select-option[highlighted="yes"] {
+			background-color: #efefef;
+		}
 	</style>
 </head>
 <body>
@@ -67,7 +71,7 @@
 		<tp-multi-select name="names2[]">
 			<tp-multi-select-field>
 				<tp-multi-select-pills></tp-multi-select-pills>
-				<tp-multi-select-search>
+				<tp-multi-select-search close-on-select="yes">
 					<input placeholder="Select...">
 				</tp-multi-select-search>
 			</tp-multi-select-field>

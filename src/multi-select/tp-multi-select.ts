@@ -11,6 +11,20 @@ import { TPMultiSelectSearchElement } from './tp-multi-select-search';
  */
 export class TPMultiSelectElement extends HTMLElement {
 	/**
+	 * Properties.
+	 */
+	currentlyHighlightedOption: number = -1;
+	protected keyUpEventListener: EventListener;
+
+	/**
+	 * Constructor.
+	 */
+	constructor() {
+		super();
+		this.keyUpEventListener = this.handleKeyup.bind( this ) as EventListener;
+	}
+
+	/**
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
@@ -27,6 +41,39 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		// Initialize component.
 		this.initialize();
+	}
+
+	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
+		return [ 'open' ];
+	}
+
+	/**
+	 * Attribute changed callback.
+	 *
+	 * @param {string} name     Attribute name.
+	 * @param {string} oldValue Old value.
+	 * @param {string} newValue New value.
+	 */
+	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		if ( oldValue === newValue ) {
+			return;
+		}
+
+		if ( 'open' === name ) {
+			if ( 'yes' === newValue ) {
+				document.addEventListener( 'keyup', this.keyUpEventListener );
+				this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
+			} else {
+				this.currentlyHighlightedOption = -1;
+				document.removeEventListener( 'keyup', this.keyUpEventListener );
+				this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
+			}
+		}
 	}
 
 	/**
@@ -231,5 +278,106 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		this.dispatchEvent( new CustomEvent( 'unselect-all', { bubbles: true } ) );
 		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
+	}
+
+	/**
+	 * Handle keyboard inputs.
+	 *
+	 * @param {Event} e Keyboard event.
+	 */
+	handleKeyup( e: KeyboardEvent ): void {
+		switch ( e.key ) {
+			case 'ArrowDown':
+				this.highlightNextOption();
+				break;
+			case 'ArrowUp':
+				this.highlightPreviousOption();
+				break;
+			case 'Enter':
+				this.toggleHighlightedOption();
+				break;
+			case 'Escape':
+				this.unHighlightAllOptions();
+				this.removeAttribute( 'open' );
+				break;
+		}
+	}
+
+	/**
+	 * Highlight the next option.
+	 */
+	highlightNextOption(): void {
+		// Get options.
+		const options: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option:not([hidden="yes"])' );
+		if ( ! options ) {
+			this.currentlyHighlightedOption = -1;
+			return;
+		}
+
+		// Highlight next option.
+		if ( this.currentlyHighlightedOption === options.length - 1 ) {
+			return;
+		}
+
+		this.currentlyHighlightedOption++;
+
+		// Set option attributes based on highlight.
+		options.forEach( ( option: TPMultiSelectOptionElement, index: number ): void => {
+			if ( this.currentlyHighlightedOption === index ) {
+				option.setAttribute( 'highlighted', 'yes' );
+			} else {
+				option.removeAttribute( 'highlighted' );
+			}
+		} );
+	}
+
+	/**
+	 * Highlight previous option.
+	 */
+	highlightPreviousOption(): void {
+		// Get options.
+		const options: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option:not([hidden="yes"])' );
+		if ( ! options ) {
+			this.currentlyHighlightedOption = -1;
+			return;
+		}
+
+		// Highlight next option.
+		if ( this.currentlyHighlightedOption === 0 ) {
+			return;
+		}
+
+		this.currentlyHighlightedOption--;
+
+		// Set option attributes based on highlight.
+		options.forEach( ( option: TPMultiSelectOptionElement, index: number ): void => {
+			if ( this.currentlyHighlightedOption === index ) {
+				option.setAttribute( 'highlighted', 'yes' );
+			} else {
+				option.removeAttribute( 'highlighted' );
+			}
+		} );
+	}
+
+	/**
+	 * Toggle highlighted option.
+	 */
+	toggleHighlightedOption(): void {
+		const option: TPMultiSelectOptionElement | null = this.querySelector( `tp-multi-select-option[highlighted="yes"]` );
+		option?.toggle( null );
+	}
+
+	/**
+	 * Un-highlight all options.
+	 */
+	unHighlightAllOptions(): void {
+		this.currentlyHighlightedOption = -1;
+
+		const options: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
+		if ( options ) {
+			options.forEach( ( option: TPMultiSelectOptionElement ): void => {
+				option.removeAttribute( 'highlighted' );
+			} );
+		}
 	}
 }

@@ -19,9 +19,9 @@ export class TPMultiSelectPillElement extends HTMLElement {
 	 *
 	 * @param {Event} e Click event.
 	 */
-	removePill( e: Event ): void {
-		e.preventDefault();
-		e.stopPropagation();
+	removePill( e: Event | null ): void {
+		e?.preventDefault();
+		e?.stopPropagation();
 
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		if ( multiSelect && this.getAttribute( 'value' ) ) {
