@@ -1,4 +1,10 @@
 /**
+ * Internal dependencies.
+ */
+import { TPMultiSelectElement } from './tp-multi-select';
+import { TPMultiSelectOptionElement } from './tp-multi-select-option';
+
+/**
  * TP Multi Select Status.
  */
 export class TPMultiSelectStatusElement extends HTMLElement {
@@ -29,6 +35,25 @@ export class TPMultiSelectStatusElement extends HTMLElement {
 	 */
 	update(): void {
 		const format: string = this.getAttribute( 'format' ) ?? '$total Selected';
-		this.innerHTML = format.replace( '$total', this.getAttribute( 'total' ) ?? '' );
+		let html: string = format.replace( '$total', this.getAttribute( 'total' ) ?? '' );
+
+		if ( format.includes( '$value' ) ) {
+			const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+			if ( multiSelect ) {
+				const value: string[] = multiSelect.value ?? [];
+				let replace: string = '';
+
+				if ( value.length > 0 ) {
+					const option: TPMultiSelectOptionElement | null = multiSelect.querySelector( `tp-multi-select-option[value="${ value[ 0 ] }"]` );
+					if ( option ) {
+						replace = option.getAttribute( 'label' ) ?? '';
+					}
+				}
+
+				html = html.replace( '$value', replace );
+			}
+		}
+
+		this.innerHTML = html;
 	}
 }

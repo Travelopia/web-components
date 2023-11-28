@@ -61,17 +61,31 @@
 				<tp-multi-select-status format="$total Selected"></tp-multi-select-status>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
-				<tp-multi-select-option value="priya">Priya</tp-multi-select-option>
-				<tp-multi-select-option value="varun">Varun</tp-multi-select-option>
-				<tp-multi-select-option value="john">John</tp-multi-select-option>
-				<tp-multi-select-option value="jane">Jane</tp-multi-select-option>
+				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
+				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
+				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
+				<tp-multi-select-option value="jane" label="Jane">Jane</tp-multi-select-option>
 			</tp-multi-select-options>
 		</tp-multi-select>
 
-		<tp-multi-select name="names2[]">
+		<tp-multi-select name="name" multiple="no" close-on-select="yes">
+			<tp-multi-select-field>
+				<tp-multi-select-placeholder>Select...</tp-multi-select-placeholder>
+				<tp-multi-select-status format="$value"></tp-multi-select-status>
+			</tp-multi-select-field>
+			<tp-multi-select-options>
+				<tp-multi-select-option value="" label="">Select...</tp-multi-select-option>
+				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
+				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
+				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
+				<tp-multi-select-option value="jane" label="Jane">Jane</tp-multi-select-option>
+			</tp-multi-select-options>
+		</tp-multi-select>
+
+		<tp-multi-select name="names2[]" close-on-select="yes">
 			<tp-multi-select-field>
 				<tp-multi-select-pills></tp-multi-select-pills>
-				<tp-multi-select-search close-on-select="yes">
+				<tp-multi-select-search>
 					<input placeholder="Select...">
 				</tp-multi-select-search>
 			</tp-multi-select-field>

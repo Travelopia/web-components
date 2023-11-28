@@ -206,7 +206,11 @@ export class TPMultiSelectElement extends HTMLElement {
 		if ( ! selectElement ) {
 			selectElement = document.createElement( 'select' );
 			selectElement.setAttribute( 'name', this.getAttribute( 'name' ) ?? '' );
-			selectElement.setAttribute( 'multiple', 'multiple' );
+
+			if ( 'no' !== this.getAttribute( 'multiple' ) ) {
+				selectElement.setAttribute( 'multiple', 'multiple' );
+			}
+
 			this.append( selectElement );
 		} else {
 			selectElement.innerHTML = '';
@@ -226,15 +230,37 @@ export class TPMultiSelectElement extends HTMLElement {
 	 * @param {string} value Value to select.
 	 */
 	select( value: string = '' ): void {
+		// Stuff for single-select.
+		if ( 'no' === this.getAttribute( 'multiple' ) ) {
+			// First, unselect everything.
+			this.unSelectAll();
+
+			// If the value is blank, don't do anything else.
+			if ( '' === value ) {
+				if ( 'yes' === this.getAttribute( 'close-on-select' ) ) {
+					this.removeAttribute( 'open' );
+				}
+				return;
+			}
+		}
+
+		// Select all options.
 		const styledSelectedOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( `tp-multi-select-option[value="${ value }"]` );
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.setAttribute( 'selected', 'yes' );
 		} );
 
+		// Search stuff.
 		const search: TPMultiSelectSearchElement | null = this.querySelector( 'tp-multi-select-search' );
 		search?.clear();
 		search?.focus();
 
+		// Close the field, if applicable.
+		if ( 'yes' === this.getAttribute( 'close-on-select' ) ) {
+			this.removeAttribute( 'open' );
+		}
+
+		// Trigger events.
 		this.dispatchEvent( new CustomEvent( 'select', { bubbles: true } ) );
 		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}

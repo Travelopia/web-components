@@ -101,10 +101,6 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		if ( search ) {
 			search.value = '';
 			search.dispatchEvent( new Event( 'change' ) );
-
-			if ( 'yes' === this.getAttribute( 'close-on-select' ) ) {
-				this.closest( 'tp-multi-select' )?.removeAttribute( 'open' );
-			}
 		}
 	}
 
