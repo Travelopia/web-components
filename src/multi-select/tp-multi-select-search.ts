@@ -18,6 +18,7 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 			return;
 		}
 
+		input.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
 		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
 		input.addEventListener( 'change', this.handleSearchChange.bind( this ) );
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
@@ -25,11 +26,36 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 	}
 
 	/**
-	 * Handle search field value changed.
+	 * Handle keyboard inputs.
 	 *
 	 * @param {Event} e Keyboard event.
 	 */
-	protected handleSearchChange( e: Event ): void {
+	handleKeyboardInputs( e: KeyboardEvent ): void {
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+		const search: HTMLInputElement | null = this.querySelector( 'input' );
+		if ( ! multiSelect || ! search ) {
+			return;
+		}
+
+		switch ( e.key ) {
+			case 'ArrowDown':
+				multiSelect.setAttribute( 'open', 'yes' );
+				break;
+			case 'Backspace':
+				if ( 0 === search.value.length ) {
+					const pill: TPMultiSelectPillElement | null = multiSelect.querySelector( 'tp-multi-select-pill:last-of-type' );
+					if ( pill ) {
+						pill.removePill();
+					}
+				}
+				break;
+		}
+	}
+
+	/**
+	 * Handle search field value changed.
+	 */
+	protected handleSearchChange(): void {
 		// Get search field and options.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		const search: HTMLInputElement | null = this.querySelector( 'input' );
@@ -53,25 +79,6 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		} else {
 			search.style.width = `${ search.value.length + 2 }ch`;
 			multiSelect.setAttribute( 'open', 'yes' );
-		}
-
-		// Determine keys.
-		if ( 'key' in e ) {
-			switch ( e.key ) {
-				case 'ArrowDown':
-					multiSelect.setAttribute( 'open', 'yes' );
-					break;
-				case 'Backspace':
-					if ( 0 === search.value.length ) {
-						const pill: TPMultiSelectPillElement | null = multiSelect.querySelector( 'tp-multi-select-pill:last-of-type' );
-						if ( pill ) {
-							pill.removePill( null );
-						}
-					}
-					break;
-				default:
-					multiSelect.currentlyHighlightedOption = -1;
-			}
 		}
 	}
 

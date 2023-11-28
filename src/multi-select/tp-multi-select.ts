@@ -14,14 +14,14 @@ export class TPMultiSelectElement extends HTMLElement {
 	 * Properties.
 	 */
 	currentlyHighlightedOption: number = -1;
-	protected keyUpEventListener: EventListener;
+	protected keyboardEventListener: EventListener;
 
 	/**
 	 * Constructor.
 	 */
 	constructor() {
 		super();
-		this.keyUpEventListener = this.handleKeyup.bind( this ) as EventListener;
+		this.keyboardEventListener = this.handleKeyboardInputs.bind( this ) as EventListener;
 	}
 
 	/**
@@ -66,11 +66,11 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		if ( 'open' === name ) {
 			if ( 'yes' === newValue ) {
-				document.addEventListener( 'keyup', this.keyUpEventListener );
+				document.addEventListener( 'keydown', this.keyboardEventListener );
 				this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
 			} else {
-				this.currentlyHighlightedOption = -1;
-				document.removeEventListener( 'keyup', this.keyUpEventListener );
+				this.unHighlightAllOptions();
+				document.removeEventListener( 'keydown', this.keyboardEventListener );
 				this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
 			}
 		}
@@ -285,7 +285,7 @@ export class TPMultiSelectElement extends HTMLElement {
 	 *
 	 * @param {Event} e Keyboard event.
 	 */
-	handleKeyup( e: KeyboardEvent ): void {
+	handleKeyboardInputs( e: KeyboardEvent ): void {
 		switch ( e.key ) {
 			case 'ArrowDown':
 				this.highlightNextOption();

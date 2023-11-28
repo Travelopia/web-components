@@ -11,18 +11,24 @@ export class TPMultiSelectPillElement extends HTMLElement {
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
-		this.querySelector( 'button' )?.addEventListener( 'click', this.removePill.bind( this ) );
+		this.querySelector( 'button' )?.addEventListener( 'click', this.handleButtonClick.bind( this ) );
+	}
+
+	/**
+	 * Handle button click.
+	 *
+	 * @param {Event} e Click event.
+	 */
+	handleButtonClick( e: Event | null ): void {
+		e?.preventDefault();
+		e?.stopPropagation();
+		this.removePill();
 	}
 
 	/**
 	 * Remove this pill.
-	 *
-	 * @param {Event} e Click event.
 	 */
-	removePill( e: Event | null ): void {
-		e?.preventDefault();
-		e?.stopPropagation();
-
+	removePill(): void {
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		if ( multiSelect && this.getAttribute( 'value' ) ) {
 			multiSelect.unSelect( this.getAttribute( 'value' ) ?? '' );
