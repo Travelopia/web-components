@@ -16,8 +16,13 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 
 	/**
 	 * Select / un-select this option.
+	 *
+	 * @param {Event} e Click event.
 	 */
-	toggle(): void {
+	toggle( e: Event ): void {
+		e?.preventDefault();
+		e?.stopPropagation();
+
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		const value: string = this.getAttribute( 'value' ) ?? '';
 

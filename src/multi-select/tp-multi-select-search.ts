@@ -11,8 +11,14 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
-		this.querySelector( 'input' )?.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
-		this.querySelector( 'input' )?.addEventListener( 'change', this.handleSearchChange.bind( this ) );
+		const input: HTMLInputElement | null = this.querySelector( 'input' );
+		if ( ! input ) {
+			return;
+		}
+
+		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
+		input.addEventListener( 'change', this.handleSearchChange.bind( this ) );
+		this.addEventListener( 'click', this.handleClick.bind( this ) );
 	}
 
 	/**
@@ -40,7 +46,19 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 			search.removeAttribute( 'style' );
 		} else {
 			search.style.width = `${ search.value.length + 2 }ch`;
+			this.closest( 'tp-multi-select' )?.setAttribute( 'open', 'yes' );
 		}
+	}
+
+	/**
+	 * Handle click.
+	 *
+	 * @param {Event} e Click event.
+	 */
+	protected handleClick( e: Event ): void {
+		e.preventDefault();
+		e.stopPropagation();
+		this.closest( 'tp-multi-select' )?.setAttribute( 'open', 'yes' );
 	}
 
 	/**
@@ -50,7 +68,15 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		const search: HTMLInputElement | null = this.querySelector( 'input' );
 		if ( search ) {
 			search.value = '';
+			this.closest( 'tp-multi-select' )?.removeAttribute( 'open' );
 			search.dispatchEvent( new Event( 'change' ) );
 		}
+	}
+
+	/**
+	 * Set focus on the search field.
+	 */
+	focus(): void {
+		this.querySelector( 'input' )?.focus();
 	}
 }

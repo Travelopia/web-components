@@ -1,6 +1,7 @@
 tp-multi-select {
 	display: block;
 	position: relative;
+	user-select: none;
 
 	select {
 		visibility: hidden;

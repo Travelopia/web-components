@@ -131,12 +131,6 @@ export class TPMultiSelectElement extends HTMLElement {
 				status.removeAttribute( 'total' );
 			}
 		}
-
-		// Clear search field.
-		const search: TPMultiSelectSearchElement | null = this.querySelector( 'tp-multi-select-search' );
-		if ( search ) {
-			search.clear();
-		}
 	}
 
 	/**
@@ -189,6 +183,10 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.setAttribute( 'selected', 'yes' );
 		} );
+
+		const search: TPMultiSelectSearchElement | null = this.querySelector( 'tp-multi-select-search' );
+		search?.clear();
+		search?.focus();
 
 		this.dispatchEvent( new CustomEvent( 'select', { bubbles: true } ) );
 		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
