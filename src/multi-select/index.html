@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Multi Select</title>
+
+	<link rel="stylesheet" href="../../dist/multi-select/style.css" media="all">
+	<script type="module" src="../../dist/multi-select/index.js"></script>
+
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		main {
+			max-width: 400px;
+			margin: 0 auto;
+		}
+
+		tp-multi-select + tp-multi-select {
+			margin-top: 20px;
+		}
+
+		tp-multi-select-field {
+			width: 100%;
+			min-height: 30px;
+			border: 1px solid #000;
+			display: flex;
+			align-items: center;
+			padding: 5px;
+		}
+
+		tp-multi-select-options {
+			border: 1px solid #000;
+		}
+
+		tp-multi-select-select-all,
+		tp-multi-select-option {
+			cursor: pointer;
+		}
+
+		tp-multi-select-select-all {
+			border-bottom: 1px solid #000;
+		}
+
+		tp-multi-select-option + tp-multi-select-option {
+			border-top: 1px solid #000;
+		}
+
+		tp-multi-select-select-all[selected="yes"]::after,
+		tp-multi-select-option[selected="yes"]::after {
+			content: " ✓";
+		}
+
+		tp-multi-select-option[highlighted="yes"] {
+			background-color: #efefef;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<tp-multi-select name="names[]">
+			<tp-multi-select-field>
+				<tp-multi-select-placeholder>Select...</tp-multi-select-placeholder>
+				<tp-multi-select-status format="$total Selected"></tp-multi-select-status>
+			</tp-multi-select-field>
+			<tp-multi-select-options>
+				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
+				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
+				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
+				<tp-multi-select-option value="jane" label="Jane">Jane</tp-multi-select-option>
+			</tp-multi-select-options>
+		</tp-multi-select>
+
+		<tp-multi-select name="name" multiple="no" close-on-select="yes">
+			<tp-multi-select-field>
+				<tp-multi-select-placeholder>Select...</tp-multi-select-placeholder>
+				<tp-multi-select-status format="$value"></tp-multi-select-status>
+			</tp-multi-select-field>
+			<tp-multi-select-options>
+				<tp-multi-select-option value="" label="">Select...</tp-multi-select-option>
+				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
+				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
+				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
+				<tp-multi-select-option value="jane" label="Jane">Jane</tp-multi-select-option>
+			</tp-multi-select-options>
+		</tp-multi-select>
+
+		<tp-multi-select name="names2[]" close-on-select="yes">
+			<tp-multi-select-field>
+				<tp-multi-select-pills></tp-multi-select-pills>
+				<tp-multi-select-search>
+					<input placeholder="Select...">
+				</tp-multi-select-search>
+			</tp-multi-select-field>
+			<tp-multi-select-options>
+				<tp-multi-select-select-all select-text="Select All" unselect-text="Un-Select All">Select All</tp-multi-select-select-all>
+				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
+				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
+				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
+				<tp-multi-select-option value="jane" label="Jane">Jane</tp-multi-select-option>
+				<tp-multi-select-option value="jack" label="Jack">Jack</tp-multi-select-option>
+				<tp-multi-select-option value="jill" label="Jill">Jill</tp-multi-select-option>
+			</tp-multi-select-options>
+		</tp-multi-select>
+	</main>
+</body>
+</html>

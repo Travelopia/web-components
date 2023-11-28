@@ -1,0 +1,71 @@
+tp-multi-select {
+	display: block;
+	position: relative;
+	user-select: none;
+
+	select {
+		visibility: hidden;
+		position: absolute;
+	}
+}
+
+tp-multi-select-field {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+tp-multi-select-options {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background-color: #fff;
+	z-index: 2;
+
+	tp-multi-select[open="yes"] & {
+		display: block;
+	}
+}
+
+tp-multi-select-option {
+	display: block;
+
+	&[hidden="yes"] {
+		display: none;
+	}
+}
+
+tp-multi-select-placeholder {
+	display: block;
+
+	tp-multi-select[selected="yes"] & {
+		display: none;
+	}
+}
+
+tp-multi-select-status {
+	display: none;
+
+	tp-multi-select[selected="yes"] & {
+		display: block;
+	}
+}
+
+tp-multi-select-search {
+
+	input {
+		box-sizing: border-box;
+		border: 0;
+		outline: none;
+		min-width: 3ch;
+	}
+}
+
+tp-multi-select-pills {
+	display: inline-block;
+}
+
+tp-multi-select-select-all {
+	display: block;
+}
