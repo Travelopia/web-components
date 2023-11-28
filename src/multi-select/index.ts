@@ -15,6 +15,7 @@ import { TPMultiSelectOptionElement } from './tp-multi-select-option';
 import { TPMultiSelectSearchElement } from './tp-multi-select-search';
 import { TPMultiSelectPillElement } from './tp-multi-select-pill';
 import { TPMultiSelectPillsElement } from './tp-multi-select-pills';
+import { TPMultiSelectSelectAllElement } from './tp-multi-select-select-all';
 
 /**
  * Register Components.
@@ -28,3 +29,4 @@ customElements.define( 'tp-multi-select-option', TPMultiSelectOptionElement );
 customElements.define( 'tp-multi-select-search', TPMultiSelectSearchElement );
 customElements.define( 'tp-multi-select-pill', TPMultiSelectPillElement );
 customElements.define( 'tp-multi-select-pills', TPMultiSelectPillsElement );
+customElements.define( 'tp-multi-select-select-all', TPMultiSelectSelectAllElement );

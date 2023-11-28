@@ -58,6 +58,7 @@ const value = multiSelect.value;
 		</tp-multi-select-search>
 	</tp-multi-select-field>
 	<tp-multi-select-options>
+		<tp-multi-select-select-all select-text="Select All" unselect-text="Un-Select All">Select All</tp-multi-select-select-all>
 		<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
 		<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
 		<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>

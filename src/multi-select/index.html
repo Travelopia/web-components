@@ -36,14 +36,20 @@
 			border: 1px solid #000;
 		}
 
+		tp-multi-select-select-all,
 		tp-multi-select-option {
 			cursor: pointer;
+		}
+
+		tp-multi-select-select-all {
+			border-bottom: 1px solid #000;
 		}
 
 		tp-multi-select-option + tp-multi-select-option {
 			border-top: 1px solid #000;
 		}
 
+		tp-multi-select-select-all[selected="yes"]::after,
 		tp-multi-select-option[selected="yes"]::after {
 			content: " ✓";
 		}
@@ -90,6 +96,7 @@
 				</tp-multi-select-search>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
+				<tp-multi-select-select-all select-text="Select All" unselect-text="Un-Select All">Select All</tp-multi-select-select-all>
 				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
 				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
 				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
