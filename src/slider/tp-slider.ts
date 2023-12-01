@@ -33,6 +33,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Event listeners.
 		window.addEventListener( 'resize', this.handleResize.bind( this ) );
+		document.fonts.ready.then( () => this.handleResize() );
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
@@ -172,8 +173,8 @@ export class TPSliderElement extends HTMLElement {
 
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
-		if ( 'fade' !== behaviour ) {
-			slidesContainer.style.left = `-${ this.offsetWidth * ( this.currentSlideIndex - 1 ) }px`;
+		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
+			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
 		}
 	}
 
