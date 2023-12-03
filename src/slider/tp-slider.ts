@@ -32,7 +32,14 @@ export class TPSliderElement extends HTMLElement {
 		this.setAttribute( 'initialized', 'yes' );
 
 		// Event listeners.
-		window.addEventListener( 'resize', this.handleResize.bind( this ) );
+		if ( ! ( 'ResizeObserver' in window ) ) {
+			// We set the resize observer in `tp-slider-slide`
+			// These are just fallbacks for browsers that don't support ResizeObserver.
+			// @ts-ignore
+			window.addEventListener( 'resize', this.handleResize.bind( this ) );
+			document.fonts.ready.then( () => this.handleResize() );
+		}
+
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
@@ -172,8 +179,8 @@ export class TPSliderElement extends HTMLElement {
 
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
-		if ( 'fade' !== behaviour ) {
-			slidesContainer.style.left = `-${ this.offsetWidth * ( this.currentSlideIndex - 1 ) }px`;
+		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
+			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
 		}
 	}
 
@@ -267,7 +274,12 @@ export class TPSliderElement extends HTMLElement {
 	 *
 	 * @protected
 	 */
-	protected handleResize(): void {
+	handleResize(): void {
+		// Check if we're already resizing.
+		if ( this.getAttribute( 'resizing' ) ) {
+			return;
+		}
+
 		// First, lets flag this component as resizing.
 		this.setAttribute( 'resizing', 'yes' );
 
@@ -279,7 +291,7 @@ export class TPSliderElement extends HTMLElement {
 		const _this = this;
 		setTimeout( function() {
 			_this.removeAttribute( 'resizing' );
-		}, 10 );
+		}, 20 );
 	}
 
 	/**
