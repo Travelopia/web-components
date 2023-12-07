@@ -37,8 +37,17 @@ export class TPSliderElement extends HTMLElement {
 			// These are just fallbacks for browsers that don't support ResizeObserver.
 			// @ts-ignore
 			window.addEventListener( 'resize', this.handleResize.bind( this ) );
-			document.fonts.ready.then( () => this.handleResize() );
 		}
+
+		/**
+		 * Add callback when fonts are ready.
+		 *
+		 * We are doing this so that height is slider height is re-calculated
+		 * after the fonts are loaded, otherwise we get incorrect height
+		 * due to default fonts size at initial load.
+		 * This does not work on 'DOMContentLoaded' event.
+		 */
+		document.fonts.ready.then( () => this.updateHeight() );
 
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
