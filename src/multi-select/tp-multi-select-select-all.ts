@@ -26,7 +26,7 @@ export class TPMultiSelectSelectAllElement extends HTMLElement {
 			return;
 		}
 
-		if ( Array.from( options ).filter( ( optionNode ) => optionNode.getAttribute( 'disabled' ) !== 'yes').length === multiSelect.value.length ) {
+		if ( Array.from( options ).filter( ( optionNode ) => optionNode.getAttribute( 'disabled' ) !== 'yes' ).length === multiSelect.value.length ) {
 			this.setAttribute( 'selected', 'yes' );
 			this.innerHTML = this.getAttribute( 'unselect-text' ) ?? '';
 		} else {

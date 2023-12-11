@@ -247,7 +247,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		// Select all options.
 		const styledSelectedOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( `tp-multi-select-option[value="${ value }"]` );
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
-			if ( 'yes' !== option.getAttribute( 'disabled' )) {
+			if ( 'yes' !== option.getAttribute( 'disabled' ) ) {
 				option.setAttribute( 'selected', 'yes' );
 			}
 		} );
@@ -273,7 +273,7 @@ export class TPMultiSelectElement extends HTMLElement {
 	selectAll(): void {
 		const styledOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
 		styledOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
-			if ( 'yes' !== option.getAttribute( 'disabled' )) {
+			if ( 'yes' !== option.getAttribute( 'disabled' ) ) {
 				option.setAttribute( 'selected', 'yes' );
 			}
 		} );
