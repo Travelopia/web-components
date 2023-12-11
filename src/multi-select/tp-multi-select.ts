@@ -220,6 +220,9 @@ export class TPMultiSelectElement extends HTMLElement {
 		options.forEach( ( option: HTMLOptionElement ): void => {
 			const newOption: HTMLOptionElement = document.createElement( 'option' );
 			newOption.setAttribute( 'value', option.getAttribute( 'value' ) ?? '' );
+			if ( 'yes' === option.getAttribute( 'selected' ) ) {
+				newOption.setAttribute( 'selected', 'selected' );
+			}
 			selectElement?.append( newOption );
 		} );
 	}
