@@ -34,6 +34,11 @@ tp-multi-select-option {
 	&[hidden="yes"] {
 		display: none;
 	}
+
+	&[disabled="yes"] {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 }
 
 tp-multi-select-placeholder {
