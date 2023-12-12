@@ -341,33 +341,33 @@ export class TPMultiSelectElement extends HTMLElement {
 	 */
 	highlightNextOption(): void {
 		// Get options.
-		const options: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll('tp-multi-select-option:not([hidden="yes"])');
-    
-		if ( !options ) {
+		const options: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option:not([hidden="yes"])' );
+
+		if ( ! options ) {
 			this.currentlyHighlightedOption = -1;
 			return;
 		}
-	
+
 		// Find the next option to be highlighted.
 		let nextToBeHighlighted = this.currentlyHighlightedOption + 1;
-	
-		while (nextToBeHighlighted < options.length && options[nextToBeHighlighted].getAttribute('disabled') === 'yes') {
+
+		while ( nextToBeHighlighted < options.length && options[ nextToBeHighlighted ].getAttribute( 'disabled' ) === 'yes' ) {
 			nextToBeHighlighted++;
 		}
-	
-		if (nextToBeHighlighted === options.length) {
+
+		if ( nextToBeHighlighted === options.length ) {
 			return;
 		}
-	
+
 		// Remove highlight from the current option, if any.
-		if (this.currentlyHighlightedOption !== -1) {
-			options[this.currentlyHighlightedOption].removeAttribute('highlighted');
+		if ( this.currentlyHighlightedOption !== -1 ) {
+			options[ this.currentlyHighlightedOption ].removeAttribute( 'highlighted' );
 		}
-	
+
 		// Highlight the next option.
-		options[nextToBeHighlighted].setAttribute('highlighted', 'yes');
-		options[nextToBeHighlighted].scrollIntoView(false);
-	
+		options[ nextToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
+		options[ nextToBeHighlighted ].scrollIntoView( false );
+
 		this.currentlyHighlightedOption = nextToBeHighlighted;
 	}
 
@@ -385,7 +385,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		// Find the previous option to be highlighted.
 		let previousToBeHighlighted = this.currentlyHighlightedOption - 1;
 
-		while( previousToBeHighlighted >= 0 && options[previousToBeHighlighted].getAttribute('disabled') === 'yes' ) {
+		while ( previousToBeHighlighted >= 0 && options[ previousToBeHighlighted ].getAttribute( 'disabled' ) === 'yes' ) {
 			previousToBeHighlighted--;
 		}
 
@@ -394,14 +394,13 @@ export class TPMultiSelectElement extends HTMLElement {
 		}
 
 		if ( this.currentlyHighlightedOption !== 0 ) {
-			options[this.currentlyHighlightedOption].removeAttribute('highlighted');
+			options[ this.currentlyHighlightedOption ].removeAttribute( 'highlighted' );
 		}
 
-		options[previousToBeHighlighted].setAttribute('highlighted', 'yes');
-		options[previousToBeHighlighted].scrollIntoView(false);
+		options[ previousToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
+		options[ previousToBeHighlighted ].scrollIntoView( false );
 
 		this.currentlyHighlightedOption = previousToBeHighlighted;
-
 	}
 
 	/**
