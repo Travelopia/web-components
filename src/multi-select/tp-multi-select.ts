@@ -118,33 +118,30 @@ export class TPMultiSelectElement extends HTMLElement {
 	protected updateFormFieldValue(): void {
 		// Get options.
 		const styledSelectedOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( `tp-multi-select-option` );
-		const selectFieldOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option' );
+		const selectField: HTMLSelectElement | null = this.querySelector( 'select' );
 
-		if ( ! styledSelectedOptions || ! selectFieldOptions ) {
+		if ( ! styledSelectedOptions || ! selectField ) {
 			return;
 		}
 
 		// Traverse options.
 		styledSelectedOptions.forEach( ( option: TPMultiSelectOptionElement ): void => {
-			// Get matching select field options.
-			const matchingSelectOptions: HTMLOptionElement[] = [ ...selectFieldOptions ].filter( ( selectOption: HTMLOptionElement ): boolean =>
-				selectOption.getAttribute( 'value' ) === option.getAttribute( 'value' ) );
+			const optionValue = option.getAttribute( 'value' ) ?? '';
+			if ( optionValue ) {
+				const matchingSelectOption: HTMLOptionElement | null = document.querySelector( `select option[value=${ optionValue }]` );
 
-			if ( 0 === matchingSelectOptions.length ) {
-				return;
-			}
-
-			// Check whether to mark them as selected or not.
-			if ( 'yes' === option.getAttribute( 'selected' ) ) {
-				matchingSelectOptions.forEach( ( matchingSelectOption: HTMLOptionElement ): void => {
-					matchingSelectOption.selected = true;
-					matchingSelectOption.setAttribute( 'selected', 'selected' );
-				} );
-			} else {
-				matchingSelectOptions.forEach( ( matchingSelectOption: HTMLOptionElement ): void => {
-					matchingSelectOption.selected = false;
-					matchingSelectOption.removeAttribute( 'selected' );
-				} );
+				if ( 'yes' === option.getAttribute( 'selected' ) ) {
+					if ( matchingSelectOption ) {
+						matchingSelectOption.setAttribute( 'selected', 'selected' );
+					} else {
+						const newOption: HTMLOptionElement = document.createElement( 'option' );
+						newOption.setAttribute( 'value', option.getAttribute( 'value' ) ?? '' );
+						newOption.setAttribute( 'selected', 'selected' );
+						selectField?.append( newOption );
+					}
+				} else if ( matchingSelectOption ) {
+					matchingSelectOption.remove();
+				}
 			}
 		} );
 
@@ -215,16 +212,6 @@ export class TPMultiSelectElement extends HTMLElement {
 		} else {
 			selectElement.innerHTML = '';
 		}
-
-		// Append new options.
-		options.forEach( ( option: HTMLOptionElement ): void => {
-			const newOption: HTMLOptionElement = document.createElement( 'option' );
-			newOption.setAttribute( 'value', option.getAttribute( 'value' ) ?? '' );
-			if ( 'yes' === option.getAttribute( 'selected' ) ) {
-				newOption.setAttribute( 'selected', 'selected' );
-			}
-			selectElement?.append( newOption );
-		} );
 
 		this.update();
 	}
