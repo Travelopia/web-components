@@ -225,6 +225,8 @@ export class TPMultiSelectElement extends HTMLElement {
 			}
 			selectElement?.append( newOption );
 		} );
+
+		this.update();
 	}
 
 	/**
@@ -366,7 +368,6 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		// Highlight the next option.
 		options[ nextToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
-		options[ nextToBeHighlighted ].scrollIntoView( false );
 
 		this.currentlyHighlightedOption = nextToBeHighlighted;
 	}
@@ -398,7 +399,6 @@ export class TPMultiSelectElement extends HTMLElement {
 		}
 
 		options[ previousToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
-		options[ previousToBeHighlighted ].scrollIntoView( false );
 
 		this.currentlyHighlightedOption = previousToBeHighlighted;
 	}
