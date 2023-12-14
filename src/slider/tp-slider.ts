@@ -152,7 +152,12 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		this.dispatchEvent( new CustomEvent( 'slide-set', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'slide-set', {
+			bubbles: true,
+			detail: {
+				slideIndex: index,
+			},
+		} ) );
 		this.setAttribute( 'current-slide', index.toString() );
 	}
 
