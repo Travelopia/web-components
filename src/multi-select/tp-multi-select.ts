@@ -106,9 +106,14 @@ export class TPMultiSelectElement extends HTMLElement {
 	get value(): string[] {
 		const value: string[] = [];
 
-		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option[selected]' );
-		selectedOptions?.forEach( ( option: HTMLOptionElement ) => value.push( option.value ) );
-
+		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
+		selectedOptions?.forEach( ( option: HTMLOptionElement ) => {
+			const isSelected = 'yes' === option.getAttribute( 'selected' );
+			const optionValue = option.getAttribute( 'value' );
+			if ( isSelected && optionValue ) {
+				value.push( optionValue );
+			}
+		} );
 		return value;
 	}
 
@@ -192,12 +197,6 @@ export class TPMultiSelectElement extends HTMLElement {
 	 * Initialize component.
 	 */
 	initialize(): void {
-		// Get options.
-		const options: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
-		if ( ! options ) {
-			return;
-		}
-
 		// Create select element (if it doesn't already exist).
 		let selectElement: HTMLSelectElement | null = this.querySelector( 'select' );
 		if ( ! selectElement ) {
@@ -213,6 +212,7 @@ export class TPMultiSelectElement extends HTMLElement {
 			selectElement.innerHTML = '';
 		}
 
+		// Update components for selected options.
 		this.update();
 	}
 
