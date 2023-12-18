@@ -133,7 +133,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			const optionValue = option.getAttribute( 'value' ) ?? '';
 			if ( optionValue ) {
-				const matchingSelectOption: HTMLOptionElement | null = document.querySelector( `select option[value=${ optionValue }]` );
+				const matchingSelectOption: HTMLOptionElement | null = this.querySelector( `select option[value="${ optionValue }"]` );
 
 				if ( 'yes' === option.getAttribute( 'selected' ) ) {
 					if ( matchingSelectOption ) {
