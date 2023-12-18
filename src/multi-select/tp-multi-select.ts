@@ -144,14 +144,14 @@ export class TPMultiSelectElement extends HTMLElement {
 						newOption.setAttribute( 'selected', 'selected' );
 						selectField?.append( newOption );
 					}
-				} else if ( matchingSelectOption ) {
-					matchingSelectOption.remove();
+				} else {
+					matchingSelectOption?.remove();
 				}
 			}
 		} );
 
 		// Dispatch events.
-		this.querySelector( 'select' )?.dispatchEvent( new Event( 'change' ) );
+		selectField.dispatchEvent( new Event( 'change' ) );
 	}
 
 	/**
