@@ -32,6 +32,8 @@ export class TPMultiSelectPillElement extends HTMLElement {
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		if ( multiSelect && this.getAttribute( 'value' ) ) {
 			multiSelect.unSelect( this.getAttribute( 'value' ) ?? '' );
+			multiSelect.dispatchEvent( new CustomEvent( 'unselect', { bubbles: true } ) );
+			multiSelect.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 		}
 	}
 }

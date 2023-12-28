@@ -253,10 +253,6 @@ export class TPMultiSelectElement extends HTMLElement {
 		if ( 'yes' === this.getAttribute( 'close-on-select' ) ) {
 			this.removeAttribute( 'open' );
 		}
-
-		// Trigger events.
-		this.dispatchEvent( new CustomEvent( 'select', { bubbles: true } ) );
-		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 
 	/**
@@ -269,9 +265,6 @@ export class TPMultiSelectElement extends HTMLElement {
 				option.setAttribute( 'selected', 'yes' );
 			}
 		} );
-
-		this.dispatchEvent( new CustomEvent( 'select-all', { bubbles: true } ) );
-		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 
 	/**
@@ -284,9 +277,6 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.removeAttribute( 'selected' );
 		} );
-
-		this.dispatchEvent( new CustomEvent( 'unselect', { bubbles: true } ) );
-		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 
 	/**
@@ -297,9 +287,6 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.removeAttribute( 'selected' );
 		} );
-
-		this.dispatchEvent( new CustomEvent( 'unselect-all', { bubbles: true } ) );
-		this.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 
 	/**
