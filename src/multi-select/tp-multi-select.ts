@@ -106,9 +106,9 @@ export class TPMultiSelectElement extends HTMLElement {
 	get value(): string[] {
 		const value: string[] = [];
 
-		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
+		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option[selected]' );
 		selectedOptions?.forEach( ( option: HTMLOptionElement ) => {
-			const isSelected = 'yes' === option.getAttribute( 'selected' );
+			const isSelected = 'selected' === option.getAttribute( 'selected' );
 			const optionValue = option.getAttribute( 'value' );
 			if ( isSelected && optionValue ) {
 				value.push( optionValue );
@@ -253,6 +253,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		if ( 'yes' === this.getAttribute( 'close-on-select' ) ) {
 			this.removeAttribute( 'open' );
 		}
+		this.update();
 	}
 
 	/**
@@ -265,6 +266,7 @@ export class TPMultiSelectElement extends HTMLElement {
 				option.setAttribute( 'selected', 'yes' );
 			}
 		} );
+		this.update();
 	}
 
 	/**
@@ -277,6 +279,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.removeAttribute( 'selected' );
 		} );
+		this.update();
 	}
 
 	/**
@@ -287,6 +290,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		styledSelectedOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			option.removeAttribute( 'selected' );
 		} );
+		this.update();
 	}
 
 	/**
