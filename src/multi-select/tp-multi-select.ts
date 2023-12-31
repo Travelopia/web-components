@@ -129,11 +129,13 @@ export class TPMultiSelectElement extends HTMLElement {
 			return;
 		}
 
+		const selectOptions: HTMLOptionElement[] = Array.from( selectField.options );
+
 		// Traverse options.
 		styledSelectedOptions.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			const optionValue = option.getAttribute( 'value' ) ?? '';
 			if ( optionValue ) {
-				const matchingSelectOption: HTMLOptionElement | null = this.querySelector( `select option[value="${ optionValue }"]` );
+				const matchingSelectOption: HTMLOptionElement | undefined = selectOptions.find( ( selectOption ) => selectOption.value === optionValue );
 
 				if ( 'yes' === option.getAttribute( 'selected' ) ) {
 					if ( matchingSelectOption ) {
