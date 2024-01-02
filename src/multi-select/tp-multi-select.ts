@@ -108,9 +108,8 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		const selectedOptions: NodeListOf<HTMLOptionElement> | null = this.querySelectorAll( 'select option[selected]' );
 		selectedOptions?.forEach( ( option: HTMLOptionElement ) => {
-			const isSelected = 'selected' === option.getAttribute( 'selected' );
 			const optionValue = option.getAttribute( 'value' );
-			if ( isSelected && optionValue ) {
+			if ( optionValue ) {
 				value.push( optionValue );
 			}
 		} );
