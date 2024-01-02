@@ -300,6 +300,7 @@ export class TPMultiSelectElement extends HTMLElement {
 	 * @param {Event} e Keyboard event.
 	 */
 	handleKeyboardInputs( e: KeyboardEvent ): void {
+		e.preventDefault();
 		switch ( e.key ) {
 			case 'ArrowDown':
 				this.highlightNextOption();
@@ -347,6 +348,7 @@ export class TPMultiSelectElement extends HTMLElement {
 
 		// Highlight the next option.
 		options[ nextToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
+		options[ nextToBeHighlighted ].scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 
 		this.currentlyHighlightedOption = nextToBeHighlighted;
 	}
@@ -378,6 +380,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		}
 
 		options[ previousToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
+		options[ previousToBeHighlighted ].scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 
 		this.currentlyHighlightedOption = previousToBeHighlighted;
 	}
