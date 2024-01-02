@@ -324,19 +324,20 @@ export class TPMultiSelectElement extends HTMLElement {
 	highlightNextOption(): void {
 		// Get options.
 		const options: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option:not([hidden="yes"])' );
-
 		if ( ! options ) {
 			this.currentlyHighlightedOption = -1;
 			return;
 		}
 
-		// Find the next option to be highlighted.
+		// Find the next option to be highlighted. Assume next option is the favorable option.
 		let nextToBeHighlighted = this.currentlyHighlightedOption + 1;
 
+		// Keep iterating to skip over disabled options until we find a suitable option.
 		while ( nextToBeHighlighted < options.length && options[ nextToBeHighlighted ].getAttribute( 'disabled' ) === 'yes' ) {
 			nextToBeHighlighted++;
 		}
 
+		// If there are no more options to highlight, exit. Here, the last highlighted option keeps highlighted.
 		if ( nextToBeHighlighted === options.length ) {
 			return;
 		}
@@ -346,10 +347,13 @@ export class TPMultiSelectElement extends HTMLElement {
 			options[ this.currentlyHighlightedOption ].removeAttribute( 'highlighted' );
 		}
 
-		// Highlight the next option.
+		// Highlight the found option.
 		options[ nextToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
+
+		// Scroll the highlighted option into view with smooth behavior.
 		options[ nextToBeHighlighted ].scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 
+		// Update the currentlyHighlightedOption for the next iteration.
 		this.currentlyHighlightedOption = nextToBeHighlighted;
 	}
 
@@ -364,24 +368,31 @@ export class TPMultiSelectElement extends HTMLElement {
 			return;
 		}
 
-		// Find the previous option to be highlighted.
+		// Find the previous option to be highlighted. Assume previous option is the favorable option.
 		let previousToBeHighlighted = this.currentlyHighlightedOption - 1;
 
+		// Keep iterating to skip over disabled options until we find a suitable option.
 		while ( previousToBeHighlighted >= 0 && options[ previousToBeHighlighted ].getAttribute( 'disabled' ) === 'yes' ) {
 			previousToBeHighlighted--;
 		}
 
+		// If there are no more options to highlight, exit.
 		if ( previousToBeHighlighted < 0 ) {
 			return;
 		}
 
+		// Remove highlight from the current option, if any.
 		if ( this.currentlyHighlightedOption !== 0 ) {
 			options[ this.currentlyHighlightedOption ].removeAttribute( 'highlighted' );
 		}
 
+		// Highlight the found option.
 		options[ previousToBeHighlighted ].setAttribute( 'highlighted', 'yes' );
+
+		// Scroll the highlighted option into view with smooth behavior.
 		options[ previousToBeHighlighted ].scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 
+		// Update the currentlyHighlightedOption for the next iteration.
 		this.currentlyHighlightedOption = previousToBeHighlighted;
 	}
 
