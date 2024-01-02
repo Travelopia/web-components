@@ -300,12 +300,13 @@ export class TPMultiSelectElement extends HTMLElement {
 	 * @param {Event} e Keyboard event.
 	 */
 	handleKeyboardInputs( e: KeyboardEvent ): void {
-		e.preventDefault();
 		switch ( e.key ) {
 			case 'ArrowDown':
+				e.preventDefault();
 				this.highlightNextOption();
 				break;
 			case 'ArrowUp':
+				e.preventDefault();
 				this.highlightPreviousOption();
 				break;
 			case 'Enter':
