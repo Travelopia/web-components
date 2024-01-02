@@ -18,7 +18,6 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 	 * Toggle opening this component.
 	 */
 	toggleOpen(): void {
-
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		if ( ! multiSelect ) {
 			return;
