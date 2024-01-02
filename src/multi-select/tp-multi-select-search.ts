@@ -83,7 +83,7 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 			multiSelect.setAttribute( 'open', 'yes' );
 		}
 
-		multiSelect.setAttribute( 'matched-options-count', matchedOptionCount.toString() );
+		multiSelect.setAttribute( 'visible-options', matchedOptionCount.toString() );
 	}
 
 	/**
