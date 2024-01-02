@@ -20,7 +20,7 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 
 		input.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
 		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
-		input.addEventListener( 'change', this.handleSearchChange.bind( this ) );
+		input.addEventListener( 'input', this.handleSearchChange.bind( this ) );
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
 		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
 	}
@@ -64,10 +64,12 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 			return;
 		}
 
+		let matchedOptionCount = 0;
 		// Hide and show options based on search.
 		options.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			if ( option.getAttribute( 'value' )?.match( new RegExp( `.*${ search.value }.*` ) ) ) {
 				option.removeAttribute( 'hidden' );
+				matchedOptionCount++;
 			} else {
 				option.setAttribute( 'hidden', 'yes' );
 			}
@@ -80,6 +82,8 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 			search.style.width = `${ search.value.length + 2 }ch`;
 			multiSelect.setAttribute( 'open', 'yes' );
 		}
+
+		multiSelect.setAttribute( 'visible-options', matchedOptionCount.toString() );
 	}
 
 	/**

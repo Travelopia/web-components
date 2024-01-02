@@ -38,6 +38,10 @@ tp-multi-select-option {
 	&[disabled="yes"] {
 		opacity: 0.5;
 		cursor: not-allowed;
+
+		&:active {
+			pointer-events: none;
+		}
 	}
 }
 

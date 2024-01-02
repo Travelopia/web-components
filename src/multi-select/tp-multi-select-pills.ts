@@ -14,6 +14,7 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 	 */
 	connectedCallback(): void {
 		this.closest( 'tp-multi-select' )?.addEventListener( 'change', this.update.bind( this ) );
+		this.update();
 	}
 
 	/**
