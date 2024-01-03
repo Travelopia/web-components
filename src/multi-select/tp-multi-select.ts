@@ -89,7 +89,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		const styledOptions: NodeListOf<TPMultiSelectOptionElement> | null = this.querySelectorAll( 'tp-multi-select-option' );
 		styledOptions?.forEach( ( option: TPMultiSelectOptionElement ): void => {
 			if ( value.includes( option.getAttribute( 'value' ) ?? '' ) ) {
-				option.setAttribute( 'selected', 'selected' );
+				option.setAttribute( 'selected', 'yes' );
 			} else {
 				option.removeAttribute( 'selected' );
 			}
