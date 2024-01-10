@@ -1,3 +1,5 @@
+import { TPSliderElement } from './tp-slider';
+
 /**
  * TP Slider Count.
  */
@@ -8,7 +10,7 @@ export class TPSliderCountElement extends HTMLElement {
 	 * @return {Array} Observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'current', 'total', 'format' ];
+		return [ 'format' ];
 	}
 
 	/**
@@ -40,9 +42,20 @@ export class TPSliderCountElement extends HTMLElement {
 	 * Update component.
 	 */
 	update(): void {
+		const slider: TPSliderElement | null = this.closest( 'tp-slider' );
+		if ( ! slider ) {
+			return;
+		}
+
+		const current = slider.getAttribute( 'current-slide' );
+		const total = slider.getAttribute( 'total' );
+
 		this.innerHTML =
 			this.format
-				.replace( '$current', this.getAttribute( 'current' ) ?? '' )
-				.replace( '$total', this.getAttribute( 'total' ) ?? '' );
+				.replace( '$current', current || '' )
+				.replace( '$total', total || '' );
+
+		this.setAttribute( 'current', current || '' );
+		this.setAttribute( 'total', total || '' );
 	}
 }

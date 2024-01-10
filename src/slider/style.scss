@@ -37,25 +37,30 @@ tp-slider-nav {
 // Fade in Styles.
 tp-slider[behaviour="fade"] {
 
-	tp-slider-slides {
+	> tp-slider-track > tp-slider-slides {
 		display: block;
+
+		> tp-slider-slide {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: auto;
+			transition-property: opacity, visibility;
+			transition-duration: .6s;
+			transition-timing-function: ease;
+			visibility: hidden;
+			opacity: 0;
+
+			&[active="yes"] {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
 	}
 
-	tp-slider-slide {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: auto;
-		transition-property: opacity, visibility;
-		transition-duration: .6s;
-		transition-timing-function: ease;
-		visibility: hidden;
-		opacity: 0;
-	}
-
-	tp-slider-slide[active="yes"] {
-		visibility: visible;
-		opacity: 1;
-	}
+	//tp-slider-slide[active="yes"] {
+	//	visibility: visible;
+	//	opacity: 1;
+	//}
 }
