@@ -37,7 +37,13 @@ tp-slider-nav {
 // Fade in Styles.
 tp-slider[behaviour="fade"] {
 
-	> tp-slider-track > tp-slider-slides {
+	/**
+	 * We are using first of type and direct child here
+	 * so that if there is a nested slider it does not affect
+	 * the styles for the inner slider and is only applied to the
+	 * parent.
+	 */
+	tp-slider-slides:first-of-type {
 		display: block;
 
 		> tp-slider-slide {
@@ -51,11 +57,11 @@ tp-slider[behaviour="fade"] {
 			transition-timing-function: ease;
 			visibility: hidden;
 			opacity: 0;
+		}
 
-			&[active="yes"] {
-				visibility: visible;
-				opacity: 1;
-			}
+		> tp-slider-slide[active="yes"] {
+			visibility: visible;
+			opacity: 1;
 		}
 	}
 }
