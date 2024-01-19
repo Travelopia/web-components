@@ -14,7 +14,8 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 	 */
 	connectedCallback(): void {
 		const input: HTMLInputElement | null = this.querySelector( 'input' );
-		if ( ! input ) {
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+		if ( ! input || ! multiSelect ) {
 			return;
 		}
 
@@ -22,7 +23,25 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
 		input.addEventListener( 'input', this.handleSearchChange.bind( this ) );
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
-		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
+		multiSelect?.addEventListener( 'open', this.focus.bind( this ) );
+		multiSelect?.addEventListener( 'select-all', () => this.toggleSearchInputVisibility( false ) );
+		multiSelect?.addEventListener( 'unselect-all', () => this.toggleSearchInputVisibility( true ) );
+	}
+
+	/**
+	 * Toggle Search Input Visibility.
+	 *
+	 * @param {boolean} active Active.
+	 */
+	toggleSearchInputVisibility( active = true ) {
+		// Check if active is true.
+		if ( active ) {
+			// Set active attribute value to true.
+			this.setAttribute( 'active', 'true' );
+		} else {
+			// Set active attribute value to false.
+			this.setAttribute( 'active', 'false' );
+		}
 	}
 
 	/**

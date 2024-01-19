@@ -86,11 +86,12 @@ const value = multiSelect.value;
 
 ## Attributes
 
-| Attribute       | Required | Values                   | Notes                                                                               |
-|-----------------|----------|--------------------------|-------------------------------------------------------------------------------------|
-| name            | Yes      | <name of the form field> | Whether the height of the slider changes depending on the content inside the slides |
-| multiple        | No       | `yes`, `no`               | Whether the field needs to be a single or mult-select form field. Yes by default    |
-| close-on-select | No       | `yes`                    | Whether to close the options when a value is selected                               |
+| Attribute       | Required | Values                   | Notes                                                                                                                        |
+|-----------------|----------|--------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| name            | Yes      | <name of the form field> | Whether the height of the slider changes depending on the content inside the slides                                          |
+| multiple        | No       | `yes`, `no`              | Whether the field needs to be a single or mult-select form field. Yes by default                                             |
+| close-on-select | No       | `yes`                    | Whether to close the options when a value is selected                                                                        |
+| select-all-text | No       | `All Selected`           | When a text value is passed, it will show that value when Select All is clicked and won't show all selected pills in the box |
 
 ## Events
 

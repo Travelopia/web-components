@@ -63,6 +63,10 @@ tp-multi-select-status {
 
 tp-multi-select-search {
 
+	&[active="false"] {
+		display: none;
+	}
+
 	input {
 		box-sizing: border-box;
 		border: 0;

@@ -51,6 +51,12 @@ export class TPMultiSelectSelectAllElement extends HTMLElement {
 			multiSelect.unSelectAll();
 			multiSelect.dispatchEvent( new CustomEvent( 'unselect-all', { bubbles: true } ) );
 		}
-		multiSelect.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
+
+		multiSelect.dispatchEvent( new CustomEvent( 'change', {
+			detail: {
+				selection: 'all',
+			},
+			bubbles: true,
+		} ) );
 	}
 }

@@ -13,8 +13,47 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
-		this.closest( 'tp-multi-select' )?.addEventListener( 'change', this.update.bind( this ) );
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+		const selectAllText: string = multiSelect?.getAttribute( 'select-all-text' ) || '';
+
+		// Add pills.
+		multiSelect?.addEventListener( 'change', ( ( event: CustomEvent ) => this.handleSelectionChange( event ) ) as EventListener );
 		this.update();
+
+		// If select all text is not empty
+		if ( selectAllText ) {
+			// Update the pills markup with select all text.
+			multiSelect?.addEventListener( 'select-all', () => this.updateSelectAllText( selectAllText ) );
+			multiSelect?.addEventListener( 'unselect-all', () => this.updateSelectAllText( '' ) );
+		}
+	}
+
+	/**
+	 * Update Select All text.
+	 *
+	 * @param {string} text
+	 */
+	updateSelectAllText( text: string = '' ) {
+		this.innerHTML = text;
+	}
+
+	handleSelectionChange( event: CustomEvent ) {
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+		const selectAllText: string = multiSelect?.getAttribute( 'select-all-text' ) || '';
+
+		/**
+		 * Only update the pills if it's not the selection all event, and
+		 * select all text is not empty.
+		 */
+		if ( selectAllText ) {
+			if ( ! event.detail?.selection ) {
+				this.update();
+			}
+		} else {
+			this.update();
+		}
 	}
 
 	/**
@@ -25,6 +64,11 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		if ( ! multiSelect ) {
 			return;
+		}
+
+		// First clear the select all text.
+		if ( multiSelect.getAttribute( 'select-all-text' ) === this.textContent ) {
+			this.textContent = '';
 		}
 
 		// Determine pills.
