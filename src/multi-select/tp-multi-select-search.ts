@@ -33,7 +33,7 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 	 *
 	 * @param {boolean} active Active.
 	 */
-	toggleSearchInputVisibility( active = true ) {
+	toggleSearchInputVisibility( active: boolean = true ): void {
 		// Check if active is true.
 		if ( active ) {
 			// Set active attribute value to true.

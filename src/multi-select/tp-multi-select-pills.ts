@@ -38,6 +38,11 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 		this.innerHTML = text;
 	}
 
+	/**
+	 * Handle Selection Change.
+	 *
+	 * @param {CustomEvent} event Event.
+	 */
 	handleSelectionChange( event: CustomEvent ) {
 		// Get multi-select.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
