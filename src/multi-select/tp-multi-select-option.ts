@@ -28,10 +28,16 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 
 		if ( 'yes' !== this.getAttribute( 'selected' ) ) {
 			multiSelect?.select( value );
-			multiSelect?.dispatchEvent( new CustomEvent( 'select', { bubbles: true } ) );
+			multiSelect?.dispatchEvent( new CustomEvent( 'select', {
+				bubbles: true,
+				detail: { value },
+			} ) );
 		} else {
 			multiSelect?.unSelect( value );
-			multiSelect?.dispatchEvent( new CustomEvent( 'unselect', { bubbles: true } ) );
+			multiSelect?.dispatchEvent( new CustomEvent( 'unselect', {
+				bubbles: true,
+				detail: { value },
+			} ) );
 		}
 		multiSelect?.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
