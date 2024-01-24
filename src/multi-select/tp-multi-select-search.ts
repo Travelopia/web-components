@@ -112,6 +112,10 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 	 * Set focus on the search field.
 	 */
 	focus(): void {
+		// When it's focused, use search change to ensure the results are refreshed.
+		this.handleSearchChange();
+
+		// Focus on input.
 		this.querySelector( 'input' )?.focus();
 	}
 }
