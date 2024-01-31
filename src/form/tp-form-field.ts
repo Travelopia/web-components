@@ -86,6 +86,11 @@ export class TPFormFieldElement extends HTMLElement {
 			return true;
 		}
 
+		// Check if the field is not visible.
+		if ( this.offsetWidth <= 0 || this.offsetHeight <= 0 ) {
+			return true;
+		}
+
 		// Prepare error and valid status.
 		let valid: boolean = true;
 		let error: string = '';
@@ -137,7 +142,7 @@ export class TPFormFieldElement extends HTMLElement {
 			this.appendChild( errorElement );
 		}
 
-		this.dispatchEvent( new CustomEvent( 'validation-error', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'validation-error' ) );
 	}
 
 	/**
@@ -145,6 +150,6 @@ export class TPFormFieldElement extends HTMLElement {
 	 */
 	removeErrorMessage(): void {
 		this.querySelector( 'tp-form-error' )?.remove();
-		this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
+		this.dispatchEvent( new CustomEvent( 'validation-success' ) );
 	}
 }

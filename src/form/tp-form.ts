@@ -37,6 +37,7 @@ export class TPFormElement extends HTMLElement {
 		const formValid: boolean = this.validate();
 		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
 			e.preventDefault();
+			e.stopImmediatePropagation();
 		}
 
 		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
@@ -46,6 +47,10 @@ export class TPFormElement extends HTMLElement {
 			} else {
 				submit.removeAttribute( 'submitting' );
 			}
+		}
+
+		if ( formValid ) {
+			this.dispatchEvent( new CustomEvent( 'submit-validation-success', { bubbles: true } ) );
 		}
 	}
 
