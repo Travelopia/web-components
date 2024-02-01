@@ -45,6 +45,20 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Connected callback.
+	 */
+	connectedCallback() {
+		/**
+		 * Update on initial render.
+		 *
+		 * This is so that the disabled values of the navigation arrows
+		 * can be set because attributeChangedCallback does not get fired when
+		 * no attributes are passed to the slider.
+		 */
+		this.update();
+	}
+
+	/**
 	 * Get observed attributes.
 	 *
 	 * @return {Array} List of observed attributes.
@@ -213,13 +227,17 @@ export class TPSliderElement extends HTMLElement {
 
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
-		slides?.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
-			if ( this.currentSlideIndex - 1 === index ) {
-				slide.setAttribute( 'active', 'yes' );
-			} else {
-				slide.removeAttribute( 'active' );
-			}
-		} );
+
+		// Check if slides are available.
+		if ( slides ) {
+			slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
+				if ( this.currentSlideIndex - 1 === index ) {
+					slide.setAttribute( 'active', 'yes' );
+				} else {
+					slide.removeAttribute( 'active' );
+				}
+			} );
+		}
 
 		// Set current slider nav item.
 		if ( sliderNavItems ) {
