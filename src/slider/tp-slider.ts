@@ -222,7 +222,7 @@ export class TPSliderElement extends HTMLElement {
 	 * This function checks if the parent tp-slider belongs to this component,
 	 * then return that arrow element, using 'this'.
 	 *
-	 * @param {String} selector Selector.
+	 * @param {string} selector Selector.
 	 */
 	getArrow( selector: string ) {
 		// Get all arrows.
