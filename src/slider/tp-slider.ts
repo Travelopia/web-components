@@ -215,6 +215,37 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Get the arrow element by selector.
+	 *
+	 * In case of nested sliders, it difficult to find the correct arrow
+	 * because arrows can be placed anywhere.
+	 * This function checks if the parent tp-slider belongs to this component,
+	 * then return that arrow element, using 'this'.
+	 *
+	 * @param {String} selector Selector.
+	 */
+	getArrow( selector: string ) {
+		// Get all arrows.
+		const arrows: NodeListOf<TPSliderArrowElement> | null = this.querySelectorAll( selector );
+		const parentSliderElement: TPSliderElement = this;
+		let theArrow: TPSliderArrowElement | null = this.querySelector( selector );
+
+		// Loop through all the arrows including the one's inside nested slider.
+		arrows.forEach( ( arrow ) => {
+			/**
+			 * If the closest tp-slider is the same as the parentSliderElement, that means we have found
+			 * the correct arrow.
+			 */
+			if ( parentSliderElement === arrow.closest( 'tp-slider' ) ) {
+				theArrow = arrow;
+			}
+		} );
+
+		// Return arrow.
+		return theArrow;
+	}
+
+	/**
 	 * Update stuff when any attribute has changed.
 	 * Example: Update subcomponents.
 	 */
@@ -222,8 +253,8 @@ export class TPSliderElement extends HTMLElement {
 		// Get subcomponents.
 		const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
 		const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
-		const leftArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="previous"]' );
-		const rightArrow: TPSliderArrowElement | null = this.querySelector( 'tp-slider-arrow[direction="next"]' );
+		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
+		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
 
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
