@@ -21,6 +21,7 @@ export class TPModalElement extends HTMLElement {
 	 * Open the modal.
 	 */
 	open(): void {
+		this.dispatchEvent( new CustomEvent( 'before-open', { bubbles: true } ) );
 		this.setAttribute( 'open', 'yes' );
 		this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
 	}
@@ -29,6 +30,7 @@ export class TPModalElement extends HTMLElement {
 	 * Close the modal.
 	 */
 	close(): void {
+		this.dispatchEvent( new CustomEvent( 'before-close', { bubbles: true } ) );
 		this.removeAttribute( 'open' );
 		this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
 	}
