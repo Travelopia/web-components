@@ -50,10 +50,12 @@ modal.open();
 
 ## Events
 
-| Event | Notes                    |
-|-------|--------------------------|
-| open  | When the modal is opened |
-| close | When the modal is closed |
+| Event        | Notes                                  |
+|--------------|----------------------------------------|
+| before-open  | Immediately before the modal is opened |
+| open         | When the modal is opened               |
+| close        | When the modal is closed               |
+| before-close | Immediately before the modal is closed |
 
 ## Methods
 
