@@ -34,11 +34,8 @@
 	<main>
 		<tp-form prevent-submit="yes">
 			<form action="#">
-				<tp-form-field class="form-field form-field--inline " radio="yes">
-
-			<span class="form-field--inline-title body-text-small">Print or Digital Brochure? *
-</span>
-
+				<tp-form-field id="radio-form-field" selected-value="digital" class="form-field form-field--inline " radio="yes">
+					<span class="form-field--inline-title body-text-small">Print or Digital Brochure? *</span>
 					<div class="form-field--inline-content">
 						<label for="digital" class="label radio">
 							<input id="digital" type="radio" name="fields[brochure_type]" value="digital" required="required" checked="checked">
@@ -54,7 +51,7 @@
 					<label>Field 1</label>
 					<input type="text" name="field_1">
 				</tp-form-field>
-				<tp-form-field required="yes" email="yes">
+				<tp-form-field required="yes" email="yes" visibility-owner-id="radio-form-field" visibility-value="print">
 					<label>Field 2</label>
 					<input type="email" name="field_2">
 				</tp-form-field>

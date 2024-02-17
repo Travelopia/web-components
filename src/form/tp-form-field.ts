@@ -54,6 +54,7 @@ export class TPFormFieldElement extends HTMLElement {
 				{
 					bubbles: true,
 					detail: {
+						id: this.getAttribute( 'id' ) || '',
 						type: 'radio',
 						value: targetElement.value,
 					},
