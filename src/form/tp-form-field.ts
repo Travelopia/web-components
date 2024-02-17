@@ -14,6 +14,18 @@ export class TPFormFieldElement extends HTMLElement {
 		const field = this.getField();
 		field?.addEventListener( 'keyup', this.handleFieldChanged.bind( this ) );
 		field?.addEventListener( 'change', this.handleFieldChanged.bind( this ) );
+
+		// Check if it's a radio field and add event for radio elements.
+		if ( 'yes' === this.getAttribute( 'radio' ) ) {
+			// Get radio input elements.
+			const radioInputs: NodeListOf<HTMLInputElement> = this.querySelectorAll( 'input[type="radio"]' );
+
+			// Loop through radio inputs.
+			radioInputs?.forEach( ( radioInput: HTMLInputElement ) => {
+				// Add change event.
+				radioInput?.addEventListener( 'change', ( event ) => this.handleRadioFieldChanged( event ) );
+			} );
+		}
 	}
 
 	/**
@@ -23,6 +35,30 @@ export class TPFormFieldElement extends HTMLElement {
 		if ( this.getAttribute( 'valid' ) || this.getAttribute( 'error' ) ) {
 			this.validate();
 		}
+	}
+
+	/**
+	 * Handle Radio Field Change.
+	 *
+	 * @param {Event} event Event.
+	 */
+	handleRadioFieldChanged( event: Event ): void {
+		// Get Target Element.
+		const targetElement = event.target as HTMLInputElement;
+		this.setAttribute( 'selected-value', targetElement.value );
+
+		// Fire Custom Event.
+		this.dispatchEvent(
+			new CustomEvent(
+				'changed',
+				{
+					bubbles: true,
+					detail: {
+						type: 'radio',
+						value: targetElement.value,
+					},
+				} ),
+		);
 	}
 
 	/**

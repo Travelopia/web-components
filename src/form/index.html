@@ -34,6 +34,22 @@
 	<main>
 		<tp-form prevent-submit="yes">
 			<form action="#">
+				<tp-form-field class="form-field form-field--inline " radio="yes">
+
+			<span class="form-field--inline-title body-text-small">Print or Digital Brochure? *
+</span>
+
+					<div class="form-field--inline-content">
+						<label for="digital" class="label radio">
+							<input id="digital" type="radio" name="fields[brochure_type]" value="digital" required="required" checked="checked">
+							Digital
+						</label>
+						<label for="print" class="label radio">
+							<input id="print" type="radio" name="fields[brochure_type]" value="print" required="required">
+							Print
+						</label>
+					</div>
+				</tp-form-field>
 				<tp-form-field required="yes">
 					<label>Field 1</label>
 					<input type="text" name="field_1">
