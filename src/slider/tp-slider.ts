@@ -357,11 +357,7 @@ export class TPSliderElement extends HTMLElement {
 		this.slide();
 
 		// Done, let's remove the flag.
-		// We need to do this on a timeout to avoid a race condition with transitions.
-		const _this = this;
-		setTimeout( function() {
-			_this.removeAttribute( 'resizing' );
-		}, 20 );
+		this.removeAttribute( 'resizing' );
 	}
 
 	/**
