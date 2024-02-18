@@ -321,8 +321,8 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Bail early if we don't want it to be flexible height.
-		if ( 'yes' !== this.getAttribute( 'flexible-height' ) ) {
+		// Bail early if we don't want it to be flexible height - as long as it doesn't fade.
+		if ( 'yes' !== this.getAttribute( 'flexible-height' ) && 'fade' !== this.getAttribute( 'behaviour' ) ) {
 			// Remove height property for good measure!
 			slidesContainer.style.removeProperty( 'height' );
 			return;
@@ -334,9 +334,22 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Set the height of the container to be the height of the current slide.
-		const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
-		slidesContainer.style.height = `${ height }px`;
+		// Check if we have a flexible height.
+		if ( 'yes' === this.getAttribute( 'flexible-height' ) ) {
+			// Set the height of the container to be the height of the current slide.
+			const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
+			slidesContainer.style.height = `${ height }px`;
+		} else {
+			// Set the height of the container to be the height of the tallest slide.
+			let height: number = 0;
+			slides.forEach( ( slide: TPSliderSlideElement ): void => {
+				if ( slide.scrollHeight > height ) {
+					height = slide.scrollHeight;
+				}
+			} );
+
+			slidesContainer.style.height = `${ height }px`;
+		}
 	}
 
 	/**
