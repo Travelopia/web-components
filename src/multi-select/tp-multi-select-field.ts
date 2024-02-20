@@ -8,9 +8,22 @@ import { TPMultiSelectElement } from './tp-multi-select';
  */
 export class TPMultiSelectFieldElement extends HTMLElement {
 	/**
+	 * Properties.
+	 */
+	private initialized: boolean = false;
+
+	/**
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
+		// Return early if already initialized.
+		if ( true === this.initialized ) {
+			return;
+		}
+
+		// Set initialized flag to true.
+		this.initialized = true;
+
 		this.addEventListener( 'click', this.toggleOpen.bind( this ) );
 	}
 
