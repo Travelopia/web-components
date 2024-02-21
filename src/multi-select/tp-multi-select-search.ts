@@ -67,7 +67,7 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		let matchedOptionCount = 0;
 		// Hide and show options based on search.
 		options.forEach( ( option: TPMultiSelectOptionElement ): void => {
-			if ( option.getAttribute( 'label' )?.toLowerCase().match( new RegExp( `.*${ search.value.replace( /\s/g, '.*' ) }.*` ) ) ) {
+			if ( option.getAttribute( 'label' )?.toLowerCase().match( new RegExp( `.*${ search.value.toLowerCase().replace( /\s/g, '.*' ) }.*` ) ) ) {
 				option.removeAttribute( 'hidden' );
 				matchedOptionCount++;
 			} else {
