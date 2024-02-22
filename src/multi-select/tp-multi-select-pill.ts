@@ -11,7 +11,7 @@ export class TPMultiSelectPillElement extends HTMLElement {
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
-		this.querySelector( 'button' )?.addEventListener( 'click', ( event: any ) => this.handleButtonClick( event ) );
+		this.querySelector( 'button' )?.addEventListener( 'click', this.handleButtonClick.bind( this ) );
 	}
 	/**
 	 * Handle button click.
