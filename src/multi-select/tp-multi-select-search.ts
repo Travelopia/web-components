@@ -21,7 +21,6 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		input.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
 		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
 		input.addEventListener( 'input', this.handleSearchChange.bind( this ) );
-		this.addEventListener( 'click', this.handleClick.bind( this ) );
 		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
 	}
 
@@ -84,17 +83,6 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		}
 
 		multiSelect.setAttribute( 'visible-options', matchedOptionCount.toString() );
-	}
-
-	/**
-	 * Handle click.
-	 *
-	 * @param {Event} e Click event.
-	 */
-	protected handleClick( e: Event ): void {
-		e.preventDefault();
-		e.stopPropagation();
-		this.closest( 'tp-multi-select' )?.setAttribute( 'open', 'yes' );
 	}
 
 	/**
