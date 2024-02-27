@@ -49,12 +49,12 @@ class DeclarationBundlerPlugin {
 				const line = lines[ i ];
 				if (
 					line !== '' &&
-					line.indexOf('export =' ) === -1 &&
+					line.indexOf( 'export =' ) === -1 &&
 					! ( /import ([a-z0-9A-Z_-]+) = require\(/ ).test( line ) &&
-					( ! this.excludedReferences || line.indexOf('<reference' ) === -1 || ! this.excludedReferences.some( ( reference ) => line.indexOf( reference ) !== -1 ) )
+					( ! this.excludedReferences || line.indexOf( '<reference' ) === -1 || ! this.excludedReferences.some( ( reference ) => line.indexOf( reference ) !== -1 ) )
 				) {
-					if ( line.indexOf('declare ' ) !== -1 ) {
-						lines[ i ] = line.replace('declare ', '' );
+					if ( line.indexOf( 'declare ' ) !== -1 ) {
+						lines[ i ] = line.replace( 'declare ', '' );
 					}
 					lines[ i ] = lines[ i ];
 				} else {
