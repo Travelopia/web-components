@@ -17,9 +17,30 @@
 <body>
 	<main>
 		<tp-lightbox-trigger>
-			<button type="button">Click me</button>
+			<button type="button">Default gallery</button>
 			<template>
 				<div style="height:400px;width:400px;background-color:#d864d8;">
+				</div>
+			</template>
+		</tp-lightbox-trigger>
+		<tp-lightbox-trigger>
+			<button type="button">Default gallery 2</button>
+			<template>
+				<div style="height:400px;width:400px;background-color:#ff0000;">
+				</div>
+			</template>
+		</tp-lightbox-trigger>
+		<tp-lightbox-trigger gallery-id="my_gallery">
+			<button type="button">My gallery</button>
+			<template>
+				<div style="height:400px;width:400px;background-color:pink;">
+				</div>
+			</template>
+		</tp-lightbox-trigger>
+		<tp-lightbox-trigger gallery-id="my_gallery">
+			<button type="button">My gallery 2</button>
+			<template>
+				<div style="height:400px;width:400px;background-color:green;">
 				</div>
 			</template>
 		</tp-lightbox-trigger>

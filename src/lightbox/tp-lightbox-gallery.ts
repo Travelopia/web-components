@@ -5,7 +5,7 @@ export class TPLightboxGalleryElement extends HTMLElement {
 	/**
 	 * Properties
 	 */
-	private galleryID: string;
+	private galleryID: string | null;
 	private numSlides: number;
 	private currentSlide: number;
 
@@ -15,7 +15,7 @@ export class TPLightboxGalleryElement extends HTMLElement {
 	constructor() {
 		super();
 
-		this.galleryID = this.getAttribute( 'gallery-id' ) ?? '';
+		this.galleryID = this.getAttribute( 'gallery-id' );
 		this.numSlides = 0;
 		this.currentSlide = 0;
 	}
@@ -30,7 +30,7 @@ export class TPLightboxGalleryElement extends HTMLElement {
 			document.createElement( 'tp-lightbox-slider' ),
 		];
 
-		if ( '' !== this.galleryID ) {
+		if ( null !== this.galleryID ) {
 			const prevBtn = document.createElement( 'tp-lightbox-nav-button' );
 			const nextBtn = document.createElement( 'tp-lightbox-nav-button' );
 			prevBtn.setAttribute( 'direction', 'prev' );
@@ -45,9 +45,9 @@ export class TPLightboxGalleryElement extends HTMLElement {
 	/**
 	 * Adds slide
 	 *
-	 * @param { HTMLElement } slideContent
+	 * @param { HTMLElement | undefined } slideContent
 	 */
-	addSlide( slideContent: HTMLElement ): number | undefined {
+	addSlide( slideContent: HTMLElement | undefined ): number | undefined {
 		if ( ! slideContent ) {
 			return undefined;
 		}

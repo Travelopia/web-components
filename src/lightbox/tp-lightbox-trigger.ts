@@ -7,9 +7,9 @@ export class TPLightboxTriggerElement extends HTMLElement {
 	/**
 	 * Properties
 	 */
-	private galleryID: string;
-	private lightboxContentTemplate: HTMLTemplateElement | null;
+	private galleryID: string | null;
 	private slideIndex: number | undefined;
+	lightboxContentTemplate: HTMLTemplateElement | null;
 
 	/**
 	 * Constructor
@@ -17,8 +17,30 @@ export class TPLightboxTriggerElement extends HTMLElement {
 	constructor() {
 		super();
 
-		this.galleryID = '';
+		this.galleryID = null;
 		this.lightboxContentTemplate = null;
+	}
+
+	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
+		return [ 'slide-index' ];
+	}
+
+	/**
+	 * Attribute changed callback.
+	 *
+	 * @param {string} name     Attribute name.
+	 * @param {string} oldValue Old value.
+	 * @param {string} newValue New value.
+	 */
+	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		if ( 'slide-index' === name && oldValue !== newValue && '' !== newValue ) {
+			this.slideIndex = Number( newValue );
+		}
 	}
 
 	/**
@@ -26,7 +48,7 @@ export class TPLightboxTriggerElement extends HTMLElement {
 	 */
 	connectedCallback(): void {
 		// Initialize fields
-		this.galleryID = this.getAttribute( 'gallery-id' ) ?? '';
+		this.galleryID = this.getAttribute( 'gallery-id' );
 		this.lightboxContentTemplate = this.querySelector( 'template' );
 
 		// Check if there is a template for the content.
@@ -42,10 +64,24 @@ export class TPLightboxTriggerElement extends HTMLElement {
 	 * Event: Handles click event.
 	 */
 	handleClick() {
-		let tpLightboxGallery = document.querySelector( `tp-lightbox-gallery[gallery-id="${ this.galleryID }"]` ) as TPLightboxGalleryElement;
+		let galleryQuery = 'tp-lightbox-gallery';
+
+		if ( ! this.galleryID ) {
+			galleryQuery += ':not([gallery-id])';
+		} else {
+			galleryQuery += `[gallery-id="${ this.galleryID }"]`;
+		}
+
+		let tpLightboxGallery = document.querySelector( galleryQuery ) as TPLightboxGalleryElement;
 
 		if ( ! tpLightboxGallery ) {
 			tpLightboxGallery = this.initializeLightbox();
+
+			const slideIndexAttribute = this.getAttribute( 'slide-index' );
+
+			if ( slideIndexAttribute ) {
+				this.slideIndex = Number( slideIndexAttribute );
+			}
 		}
 
 		tpLightboxGallery.open( this.slideIndex );
@@ -63,12 +99,13 @@ export class TPLightboxTriggerElement extends HTMLElement {
 		}
 
 		const tpLightboxGallery = document.createElement( 'tp-lightbox-gallery' ) as TPLightboxGalleryElement;
-		tpLightboxGallery.setAttribute( 'gallery-id', this.galleryID );
-		tpLightbox.appendChild( tpLightboxGallery );
 
-		if ( this.lightboxContentTemplate ) {
-			this.slideIndex = tpLightboxGallery.addSlide( this.lightboxContentTemplate?.content.cloneNode( true ) as HTMLElement );
+		// There is no gallery id, put it in the default one.
+		if ( this.galleryID ) {
+			tpLightboxGallery.setAttribute( 'gallery-id', this.galleryID );
 		}
+
+		tpLightbox.appendChild( tpLightboxGallery );
 
 		return tpLightboxGallery;
 	}
