@@ -40,6 +40,8 @@ export class TPLightboxGalleryElement extends HTMLElement {
 		}
 
 		innerElements.forEach( ( innerElement ) => this.appendChild( innerElement ) );
+
+		this.addEventListener( 'click', this.handleClick.bind( this ) );
 	}
 
 	/**
@@ -71,10 +73,18 @@ export class TPLightboxGalleryElement extends HTMLElement {
 		this.currentSlide = slideIndex;
 		this.setAttribute( 'current-slide', this.currentSlide.toString() );
 		this.setAttribute( 'open', '' );
+		this.dispatchEvent( new CustomEvent( 'open', { bubbles: false } ) );
 	}
 
 	// Close the lightbox gallery.
 	close() {
 		this.removeAttribute( 'open' );
+		this.dispatchEvent( new CustomEvent( 'close', { bubbles: false } ) );
+	}
+
+	handleClick( e: Event ) {
+		if ( e.target === this ) {
+			this.close();
+		}
 	}
 }

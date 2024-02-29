@@ -1,0 +1,34 @@
+tp-lightbox {
+
+	@keyframes fade-in {
+		to {
+			opacity: 1;
+		}
+	}
+
+	&-gallery {
+		display: none;
+
+		&[open] {
+			display: block;
+			position: fixed;
+			inset: 0;
+			background-color: rgba(0, 0, 0, 0.9);
+		}
+	}
+
+	&-close {
+		display: block;
+		position: absolute;
+		inset: 5px 10px auto auto;
+		height: fit-content;
+		width: fit-content;
+
+		&::before {
+			content: "\00d7";
+			color: #fff;
+			font-size: 2.5rem;
+			font-weight: 400;
+		}
+	}
+}
