@@ -31,6 +31,19 @@ export class TPSliderElement extends HTMLElement {
 		this.slide();
 		this.setAttribute( 'initialized', 'yes' );
 
+		// Auto Slide.
+		const autoSlide = this.getAttribute( 'auto-slide' );
+
+		// If auto slide is enabled, then we need to start the interval.
+		if ( 'yes' === autoSlide ) {
+			const interval = this.getAttribute( 'auto-slide-interval' );
+
+			// Start the interval.
+			setInterval( () => {
+				this.next();
+			}, parseInt( interval ?? '4000' ) );
+		}
+
 		// Event listeners.
 		if ( ! ( 'ResizeObserver' in window ) ) {
 			// We set the resize observer in `tp-slider-slide`
