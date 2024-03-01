@@ -92,8 +92,15 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 	 * @param {Event} e Click event.
 	 */
 	protected handleClick( e: Event ): void {
+		// First, prevent propagation to avoid document.click set on `tp-multi-select`.
 		e.preventDefault();
 		e.stopPropagation();
+
+		// Now send the event so other stuff can work as per normal, and another event for good measure.
+		this.dispatchEvent( new CustomEvent( 'multi-select-opened' ) );
+		document.dispatchEvent( new Event( 'click' ) );
+
+		// Open multi select.
 		this.closest( 'tp-multi-select' )?.setAttribute( 'open', 'yes' );
 	}
 
