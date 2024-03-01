@@ -433,6 +433,6 @@ export class TPSliderElement extends HTMLElement {
 			this.next();
 			this.autoSlide();
 			this.dispatchEvent( new CustomEvent( 'auto-slide-complete' ) );
-		}, parseInt( autoSlideInterval ) );
+		}, interval );
 	}
 }
