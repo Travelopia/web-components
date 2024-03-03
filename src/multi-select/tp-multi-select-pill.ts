@@ -23,12 +23,12 @@ export class TPMultiSelectPillElement extends HTMLElement {
 		e?.stopPropagation();
 
 		/**
-		 * If the event is has a pointerType, which means it's a mouse event or touch event
+		 * If the event has a clientX greater than 0, then it is a genuine click event.
 		 * Only then we remove pill.
-		 * This will ensure, it will not get fired when a enter button is pressed.
+		 * This will ensure, it will not get fired when the enter button is pressed.
 		 * We do this so that it does not remove the pills when enter button is pressed.
 		 */
-		if ( e?.pointerType ) {
+		if ( e?.clientX ?? 0 > 0 ) {
 			this.removePill();
 		}
 	}
