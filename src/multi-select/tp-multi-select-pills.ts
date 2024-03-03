@@ -67,7 +67,7 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 			newPill.setAttribute( 'value', pillValue );
 			newPill.innerHTML = `
 			<span>${ multiSelectOption.getAttribute( 'label' ) ?? '' }</span>
-			<button>x</button>
+			<button type="button">x</button>
 			`;
 			this.appendChild( newPill );
 		} );

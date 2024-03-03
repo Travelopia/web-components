@@ -38,6 +38,9 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		}
 
 		switch ( e.key ) {
+			case 'Enter':
+				e.preventDefault(); // Prevent inadvertent form submits.
+				break;
 			case 'ArrowDown':
 				multiSelect.setAttribute( 'open', 'yes' );
 				break;

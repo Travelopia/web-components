@@ -16,21 +16,12 @@ export class TPMultiSelectPillElement extends HTMLElement {
 	/**
 	 * Handle button click.
 	 *
-	 * @param {any} e Click event.
+	 * @param {Event} e Click event.
 	 */
-	handleButtonClick( e: any | null ): void {
+	handleButtonClick( e: Event | null ): void {
 		e?.preventDefault();
 		e?.stopPropagation();
-
-		/**
-		 * If the event has a clientX greater than 0, then it is a genuine click event.
-		 * Only then we remove pill.
-		 * This will ensure, it will not get fired when the enter button is pressed.
-		 * We do this so that it does not remove the pills when enter button is pressed.
-		 */
-		if ( e?.clientX ?? 0 > 0 ) {
-			this.removePill();
-		}
+		this.removePill();
 	}
 
 	/**
