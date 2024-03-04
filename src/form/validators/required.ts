@@ -20,7 +20,7 @@ export const errorMessage: string = 'This field is required';
  */
 export const validator: TPFormValidator = {
 	validate: ( field: TPFormFieldElement ): boolean => {
-		return '' !== field.getField()?.value ?? '';
+		return '' !== field.getField()?.value.trim() ?? '';
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
 };
