@@ -201,7 +201,6 @@ export class TPSliderElement extends HTMLElement {
 		// Get slides.
 		const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
-
 		if ( ! slidesContainer || ! slides ) {
 			return;
 		}
@@ -209,7 +208,7 @@ export class TPSliderElement extends HTMLElement {
 		// First, update the height.
 		this.updateHeight();
 
-		// Update the slides per view.
+		// Get slides per view.
 		const slidesPerView: number = parseInt( this.getAttribute( 'slides-per-view' ) ?? '1' );
 		const tpSliderArrowButtons = this.querySelectorAll( 'tp-slider-arrow' );
 
