@@ -11,12 +11,14 @@ import * as required from './validators/required';
 import * as email from './validators/email';
 import * as minLength from './validators/min-length';
 import * as maxLength from './validators/max-length';
+import * as noEmptySpaces from './validators/no-empty-spaces';
 
 const validators = [
 	required,
 	email,
 	minLength,
 	maxLength,
+	noEmptySpaces,
 ];
 
 /**
