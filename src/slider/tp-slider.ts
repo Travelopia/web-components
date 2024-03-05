@@ -201,12 +201,41 @@ export class TPSliderElement extends HTMLElement {
 		// Get slides.
 		const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
 		if ( ! slidesContainer || ! slides ) {
 			return;
 		}
 
 		// First, update the height.
 		this.updateHeight();
+
+		// Update the slides per view.
+		const slidesPerView: number = parseInt( this.getAttribute( 'slides-per-view' ) ?? '1' );
+		const tpSliderArrowButtons = this.querySelectorAll( 'tp-slider-arrow' );
+
+		// If we have more than 1 slide per view, we need to handle the arrow buttons.
+		if ( slidesPerView > 1 ) {
+			tpSliderArrowButtons.forEach( ( arrowButton ) => {
+				// Handle first/last slide button clicks to avoid white space slides.
+				arrowButton.addEventListener( 'click', () => {
+					// Current Slide Number.
+					const currentSlideNumber = this.getCurrentSlide() ?? 0;
+					const lastSlideNumber = this.getTotalSlides() - slidesPerView + 1;
+
+					// Check the direction of the button clicked.
+					const direction = arrowButton?.getAttribute( 'direction' );
+
+					// If user clicked next at the end of the last visible slide.
+					if ( 'next' === direction && lastSlideNumber < currentSlideNumber ) {
+						// Redirect the slider to first slide.
+						this.setCurrentSlide( 1 );
+					} else if ( 'previous' === direction && lastSlideNumber < currentSlideNumber ) {
+						// If user clicked previous at the first slide, redirect it to last visible slide.
+						this.setCurrentSlide( lastSlideNumber );
+					}
+				} );
+			} );
+		}
 
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
