@@ -13,7 +13,7 @@ export const name: string = 'no-empty-spaces';
 /**
  * Error message.
  */
-export const errorMessage: string = 'This field should not have only whitespaces.';
+export const errorMessage: string = 'This field should not contain only whitespaces';
 
 /**
  * Validator.
