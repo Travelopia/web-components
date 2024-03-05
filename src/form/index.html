@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -30,11 +31,12 @@
 		}
 	</style>
 </head>
+
 <body>
 	<main>
 		<tp-form prevent-submit="yes">
 			<form action="#">
-				<tp-form-field required="yes">
+				<tp-form-field no-empty-spaces="yes" required="yes">
 					<label>Field 1</label>
 					<input type="text" name="field_1">
 				</tp-form-field>
@@ -62,4 +64,5 @@
 		</tp-form>
 	</main>
 </body>
+
 </html>
