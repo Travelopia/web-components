@@ -64,7 +64,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe' ];
+		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'slides-per-view', 'step' ];
 	}
 
 	/**
@@ -108,9 +108,10 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	getTotalSlides(): number {
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+		const slidesPerView: number = parseInt( this.getAttribute( 'slides-per-view' ) || '1' );
 
 		if ( slides ) {
-			return slides.length;
+			return slides.length - slidesPerView + 1;
 		}
 
 		return 0;
@@ -140,7 +141,15 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		this.setCurrentSlide( this.currentSlideIndex + 1 );
+		const slideStep: number = parseInt( this.getAttribute( 'step' ) || '1' );
+		const nextSlideNumber = this.currentSlideIndex + slideStep;
+
+		// Check if the next slide step is not taking it beyond the last slide.
+		if ( nextSlideNumber <= this.getTotalSlides() ) {
+			this.setCurrentSlide( this.currentSlideIndex + slideStep );
+		} else {
+			this.setCurrentSlide( this.getTotalSlides() );
+		}
 	}
 
 	/**
@@ -155,7 +164,15 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		this.setCurrentSlide( this.currentSlideIndex - 1 );
+		const slideStep: number = parseInt( this.getAttribute( 'step' ) || '1' );
+		const previousSlideNumber = this.currentSlideIndex - slideStep;
+
+		// Check if the previous slide step is not taking it beyond the first slide.
+		if ( previousSlideNumber >= 1 ) {
+			this.setCurrentSlide( previousSlideNumber );
+		} else {
+			this.setCurrentSlide( 1 );
+		}
 	}
 
 	/**
@@ -336,9 +353,28 @@ export class TPSliderElement extends HTMLElement {
 
 		// Check if we have a flexible height.
 		if ( 'yes' === this.getAttribute( 'flexible-height' ) ) {
-			// Set the height of the container to be the height of the current slide.
-			const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
-			slidesContainer.style.height = `${ height }px`;
+			const slidesPerView: number = parseInt( this.getAttribute( 'slides-per-view' ) || '1' );
+
+			// Check if slides-per-view is greater than 1.
+			if ( slidesPerView > 1 ) {
+				const currentIndex: number = this.currentSlideIndex - 1;
+				let slidesOnCurrentView: number = currentIndex + slidesPerView;
+				let maxHeight: number = 0;
+
+				// Traverse all slides in the current view and add their height to the array.
+				for ( let i = currentIndex; i < slidesOnCurrentView; i++ ) {
+					if ( slides[ i ].scrollHeight > maxHeight ) {
+						maxHeight = slides[ i ].scrollHeight;
+					}
+				}
+
+				// Set the height of the container to be the max height of the slides in the current view.
+				slidesContainer.style.height = `${ maxHeight }px`;
+			} else {
+				// Set the height of the container to be the height of the current slide.
+				const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
+				slidesContainer.style.height = `${ height }px`;
+			}
 		} else {
 			// Set the height of the container to be the height of the tallest slide.
 			let height: number = 0;
