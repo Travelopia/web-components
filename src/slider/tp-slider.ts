@@ -29,6 +29,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Initialize slider.
 		this.slide();
+		this.autoSlide();
 		this.setAttribute( 'initialized', 'yes' );
 
 		// Event listeners.
@@ -442,5 +443,32 @@ export class TPSliderElement extends HTMLElement {
 		} else if ( swipeDistance < 0 ) {
 			this.next();
 		}
+	}
+
+	/**
+	 * Auto slide.
+	 */
+	protected autoSlide(): void {
+		// Auto Slide.
+		const autoSlideInterval: string | null = this.getAttribute( 'auto-slide-interval' );
+
+		// Check if we have an auto slider interval.
+		if ( ! autoSlideInterval ) {
+			return;
+		}
+
+		// Check for a valid interval.
+		const interval: number = parseInt( autoSlideInterval );
+		if ( interval <= 0 ) {
+			return;
+		}
+
+		// Run this on a timeout, rather than interval, so the interval can be controlled after
+		// the component is initialised.
+		setTimeout( (): void => {
+			this.next();
+			this.autoSlide();
+			this.dispatchEvent( new CustomEvent( 'auto-slide-complete' ) );
+		}, interval );
 	}
 }
