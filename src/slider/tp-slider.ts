@@ -359,7 +359,7 @@ export class TPSliderElement extends HTMLElement {
 			// Check if slides-per-view is greater than 1.
 			if ( slidesPerView > 1 ) {
 				const currentIndex: number = this.currentSlideIndex - 1;
-				let slidesOnCurrentView: number = currentIndex + slidesPerView;
+				const slidesOnCurrentView: number = currentIndex + slidesPerView;
 				let maxHeight: number = 0;
 
 				// Traverse all slides in the current view and add their height to the array.
