@@ -289,7 +289,11 @@ export class TPSliderElement extends HTMLElement {
 
 			// Update slider counts.
 			sliderCounts.forEach( ( slideCount: TPSliderCountElement ) => {
-				slideCount.update();
+				// Check if the slideCount.update is a function.
+				if ( 'function' === typeof slideCount.update ) {
+					// Update slide count.
+					slideCount.update();
+				}
 			} );
 		}
 
