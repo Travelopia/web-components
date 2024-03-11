@@ -50,15 +50,15 @@ export class TPSliderCountElement extends HTMLElement {
 			return;
 		}
 
-		const current = slider.getAttribute( 'current-slide' );
-		const total = slider.getAttribute( 'total' );
+		const current: number = slider.currentSlideIndex - 1 + slider.step;
+		const total: string = slider.getAttribute( 'total' ) ?? '';
 
 		this.innerHTML =
 			this.format
-				.replace( '$current', current || '' )
+				.replace( '$current', current.toString() )
 				.replace( '$total', total || '' );
 
-		this.setAttribute( 'current', current || '' );
+		this.setAttribute( 'current', current.toString() );
 		this.setAttribute( 'total', total || '' );
 	}
 }
