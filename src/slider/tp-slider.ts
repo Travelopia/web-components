@@ -65,7 +65,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe' ];
+		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'per-view', 'step' ];
 	}
 
 	/**
@@ -100,6 +100,42 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	set currentSlideIndex( index: number ) {
 		this.setCurrentSlide( index );
+	}
+
+	/**
+	 * Get current step.
+	 *
+	 * @return {number} Current step.
+	 */
+	get step(): number {
+		return parseInt( this.getAttribute( 'step' ) ?? '1' );
+	}
+
+	/**
+	 * Set current step.
+	 *
+	 * @param {number} step Step.
+	 */
+	set step( step: number ) {
+		this.setAttribute( 'step', step.toString() );
+	}
+
+	/**
+	 * Get per view.
+	 *
+	 * @return {number} Current step.
+	 */
+	get perView(): number {
+		return parseInt( this.getAttribute( 'per-view' ) ?? '1' );
+	}
+
+	/**
+	 * Set per view.
+	 *
+	 * @param {number} perView Per view.
+	 */
+	set perView( perView: number ) {
+		this.setAttribute( 'per-view', perView.toString() );
 	}
 
 	/**
@@ -141,7 +177,14 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		this.setCurrentSlide( this.currentSlideIndex + 1 );
+		const nextSlideIndex: number = this.currentSlideIndex + this.step;
+
+		// Check if the next slide step is not taking it beyond the last slide.
+		if ( nextSlideIndex > totalSlides ) {
+			return;
+		}
+
+		this.setCurrentSlide( nextSlideIndex );
 	}
 
 	/**
@@ -156,7 +199,14 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		this.setCurrentSlide( this.currentSlideIndex - 1 );
+		const previousSlideNumber: number = this.currentSlideIndex - this.step;
+
+		// Check if the previous slide step is not taking it beyond the first slide.
+		if ( previousSlideNumber > 1 ) {
+			this.setCurrentSlide( previousSlideNumber );
+		} else {
+			this.setCurrentSlide( 1 );
+		}
 	}
 
 	/**
@@ -341,9 +391,26 @@ export class TPSliderElement extends HTMLElement {
 
 		// Check if we have a flexible height.
 		if ( 'yes' === this.getAttribute( 'flexible-height' ) ) {
-			// Set the height of the container to be the height of the current slide.
-			const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
-			slidesContainer.style.height = `${ height }px`;
+			// Check if per-view is greater than 1.
+			if ( this.perView > 1 ) {
+				const currentIndex: number = this.currentSlideIndex - 1;
+				const slidesOnCurrentView: number = currentIndex + this.perView;
+				let maxHeight: number = 0;
+
+				// Traverse all slides in the current view and add their height to the array.
+				for ( let i: number = currentIndex; i < slidesOnCurrentView; i++ ) {
+					if ( slides[ i ].scrollHeight > maxHeight ) {
+						maxHeight = slides[ i ].scrollHeight;
+					}
+				}
+
+				// Set the height of the container to be the max height of the slides in the current view.
+				slidesContainer.style.height = `${ maxHeight }px`;
+			} else {
+				// Set the height of the container to be the height of the current slide.
+				const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
+				slidesContainer.style.height = `${ height }px`;
+			}
 		} else {
 			// Set the height of the container to be the height of the tallest slide.
 			let height: number = 0;

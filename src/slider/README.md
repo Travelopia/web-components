@@ -60,6 +60,8 @@ slider.setCurrentSlide( 2 );
 | swipe               | No       | `yes`           | Whether to add support for swiping gestures on touch devices                                           |
 | behaviour           | No       | `fade`, `slide` | The default behaviour is to slide between slides. This can be updated to fade.                         |
 | auto-slide-interval | No       | <interval>      | Interval in milliseconds.                                                                              |
+| per-view            | No       | <per-view>      | Handles slider behavior having more than 1 slides. Default value is 1.                                 |
+| step                | No       | <step>          | Steps number of slides on next and previous transition. Default value is 1.                            |
 
 ## Events
 
