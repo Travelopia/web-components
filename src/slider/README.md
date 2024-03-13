@@ -53,15 +53,46 @@ slider.setCurrentSlide( 2 );
 
 ## Attributes
 
-| Attribute           | Required | Values          | Notes                                                                                                  |
-|---------------------|----------|-----------------|--------------------------------------------------------------------------------------------------------|
-| flexible-height     | No       | `yes`           | Whether the height of the slider changes depending on the content inside the slides                    |
-| infinite            | No       | `yes`           | Go back to the first slide at the end of all slides, and open the last slide when navigating backwards |
-| swipe               | No       | `yes`           | Whether to add support for swiping gestures on touch devices                                           |
-| behaviour           | No       | `fade`, `slide` | The default behaviour is to slide between slides. This can be updated to fade.                         |
-| auto-slide-interval | No       | <interval>      | Interval in milliseconds.                                                                              |
-| per-view            | No       | <per-view>      | Handles slider behavior having more than 1 slides. Default value is 1.                                 |
-| step                | No       | <step>          | Steps number of slides on next and previous transition. Default value is 1.                            |
+| Attribute           | Required | Values                | Notes                                                                                                           |
+|---------------------|----------|-----------------------|-----------------------------------------------------------------------------------------------------------------|
+| flexible-height     | No       | `yes`                 | Whether the height of the slider changes depending on the content inside the slides                             |
+| infinite            | No       | `yes`                 | Go back to the first slide at the end of all slides, and open the last slide when navigating backwards          |
+| swipe               | No       | `yes`                 | Whether to add support for swiping gestures on touch devices                                                    |
+| behaviour           | No       | `fade`, `slide`       | The default behaviour is to slide between slides. This can be updated to fade.                                  |
+| auto-slide-interval | No       | <interval>            | Interval in milliseconds.                                                                                       |
+| per-view            | No       | <per-view>            | Handles slider behavior having more than 1 slides. No. of slides to show in one view. Default value is 1.       |
+| step                | No       | <step>                | Steps number of slides on next and previous transition. No. of slides to step to at a time. Default value is 1. |
+| responsive          | No       | <responsive-settings> | Responsive settings to be passed in a JSON string format.                                                       |
+
+* `responsive` attribute value data shape.
+- When passing the settings, JSON stringy it before passing it to responsive attribute.
+- By default, the slider will use the attributes that are passed directly ( not within responsive attribute ). However, when
+responsive attribute is also passed, it will override the directly passed default attribute values at the given breakpoints.
+
+```javascript
+[
+    {
+        'media'              : '(max-width: 600px)',
+        'flexible-height'    : 'yes',
+        'infinite'           : 'yes',
+        'swipe'              : 'yes',
+        'behaviour'          : 'fade',
+        'auto-slide-interval': 3000,
+        'per-view'           : 2,
+        'step'               : 2,
+    },
+    {
+        'media'              : '(max-width: 300px)',
+        'flexible-height'    : 'no',
+        'infinite'           : 'no',
+        'swipe'              : 'yes',
+        'behaviour'          : 'slide',
+        'auto-slide-interval': 2000,
+        'per-view'           : 1,
+        'step'               : 1,
+    },
+]
+```
 
 ## Events
 

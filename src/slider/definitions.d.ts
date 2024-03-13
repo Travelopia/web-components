@@ -1,3 +1,6 @@
+/**
+ * Interface TPSliderSettings.
+ */
 interface TPSliderSettings {
 	'flexible-height'?: string,
 	'infinite'?: string,

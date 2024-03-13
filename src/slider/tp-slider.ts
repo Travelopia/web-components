@@ -15,7 +15,7 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
-	private responsiveSettings: any;
+	private responsiveSettings: TPSliderSettings;
 	private defaultSettings: TPSliderSettings;
 	private settingKeys: string[];
 
@@ -495,7 +495,7 @@ export class TPSliderElement extends HTMLElement {
 		let matchFound: boolean = false;
 
 		// Step 2: Loop through responsiveSettings and check if the media query is matched.
-		this.responsiveSettings.forEach( ( settings: any ) => {
+		this.responsiveSettings.forEach( ( settings: TPSliderSettings ) => {
 			// Check if media query is matched.
 			if ( window.matchMedia( settings.media ).matches ) {
 				// If yes, loop through the settings at this media breakpoint.
