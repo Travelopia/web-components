@@ -15,6 +15,9 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
+	private responsiveSettings: any;
+	private defaultSettings: TPSliderSettings;
+	private settingKeys: string[];
 
 	/**
 	 * Constructor.
@@ -31,6 +34,22 @@ export class TPSliderElement extends HTMLElement {
 		this.slide();
 		this.autoSlide();
 		this.setAttribute( 'initialized', 'yes' );
+
+		// Settings.
+		const responsiveData: string = this.getAttribute( 'responsive' ) || '';
+		this.responsiveSettings = responsiveData ? JSON.parse( responsiveData ) : [];
+		this.defaultSettings = {};
+		this.settingKeys = [
+			'flexible-height',
+			'infinite',
+			'swipe',
+			'behaviour',
+			'auto-slide-interval',
+			'per-view',
+			'step',
+			'responsive',
+		];
+		this.setDefaultSettings();
 
 		// Event listeners.
 		if ( ! ( 'ResizeObserver' in window ) ) {
@@ -430,6 +449,9 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	handleResize(): void {
+		// Update responsive settings.
+		this.updateResponsiveSettings();
+
 		// Check if we're already resizing.
 		if ( this.getAttribute( 'resizing' ) ) {
 			return;
@@ -443,6 +465,70 @@ export class TPSliderElement extends HTMLElement {
 
 		// Done, let's remove the flag.
 		this.removeAttribute( 'resizing' );
+	}
+
+	/**
+	 * Set Default Settings.
+	 */
+	setDefaultSettings() {
+		// Loop through the setting keys and set the default settings.
+		this.settingKeys?.forEach( ( key: string ) => {
+			// Check if the key attribute exists and the attribute name is in the settingKeys array.
+			if ( this.getAttribute( key ) && this.settingKeys.includes( key ) ) {
+				// Set all the default settings keys, equal to the value of that attribute.
+				this.defaultSettings[ key ] = this.getAttribute( key ) || '';
+			}
+		} );
+	}
+
+	/**
+	 * Update responsive settings.
+	 */
+	updateResponsiveSettings() {
+		// Check if responsiveSettings exist.
+		if ( ! this.responsiveSettings.length ) {
+			// Early Return.
+			return;
+		}
+
+		// Step 1: Initialize matchFound.
+		let matchFound: boolean = false;
+
+		// Step 2: Loop through responsiveSettings and check if the media query is matched.
+		this.responsiveSettings.forEach( ( settings: any ) => {
+			// Check if media query is matched.
+			if ( window.matchMedia( settings.media ).matches ) {
+				// If yes, loop through the settings at this media breakpoint.
+				for ( const settingKey in settings ) {
+					// Check if the setting key is not media.
+					if ( 'media' !== settingKey ) {
+						// Set those keys as attributes.
+						this.setAttribute( settingKey, settings[ settingKey ] );
+					}
+				}
+
+				// Set match found to true.
+				matchFound = true;
+			}
+		} );
+
+		// Step 3: If match is not found, set defaults.
+		if ( ! matchFound ) {
+			// Set defaults.
+			for ( const settingKey in this.defaultSettings ) {
+				// Set the attributes to default settings.
+				this.setAttribute( settingKey, this.defaultSettings[ settingKey ] );
+			}
+
+			// Remove previously set settings.
+			this.settingKeys?.forEach( ( key: string ) => {
+				// Check if the key attribute exists and the attribute name is in the settingKeys array.
+				if ( undefined === this.defaultSettings[ key ] ) {
+					// Remove that attribute.
+					this.removeAttribute( key );
+				}
+			} );
+		}
 	}
 
 	/**
