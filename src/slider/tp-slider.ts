@@ -15,8 +15,7 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
-	protected responsiveSettings: TPSliderSettings;
-	protected defaultSettings: TPSliderSettings;
+	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
 		'infinite',
@@ -47,8 +46,6 @@ export class TPSliderElement extends HTMLElement {
 		// Responsive Settings.
 		const responsiveSettingsJSON: string = this.getAttribute( 'responsive' ) || '';
 		this.responsiveSettings = responsiveSettingsJSON ? JSON.parse( responsiveSettingsJSON ) : [];
-		this.defaultSettings = {};
-		this.setDefaultSettings();
 
 		// Event listeners.
 		if ( ! ( 'ResizeObserver' in window ) ) {
@@ -469,20 +466,6 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
-	 * Set Default Settings.
-	 */
-	setDefaultSettings() {
-		// Loop through the setting keys and set the default settings.
-		this.allowedResponsiveKeys?.forEach( ( key: string ) => {
-			// Check if the key attribute exists and the attribute name is in the allowedResponsiveKeys array.
-			if ( this.getAttribute( key ) && this.allowedResponsiveKeys.includes( key ) ) {
-				// Set all the default settings keys, equal to the value of that attribute.
-				this.defaultSettings[ key ] = this.getAttribute( key ) || '';
-			}
-		} );
-	}
-
-	/**
 	 * Update attributes responsive settings.
 	 */
 	updateAttributesResponsively(): void {
@@ -492,49 +475,31 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Step 1: Initialize matchFound.
-		let matchFound: boolean = false;
+		// Step 2: First remove all the allowed responsive keys.
+		this.allowedResponsiveKeys.forEach( ( key: string ) => {
+			this.removeAttribute( key );
+		} );
 
-		// Step 2: Loop through responsiveSettings and check if the media query is matched.
-		this.responsiveSettings.every( ( settings: TPSliderSettings ) => {
+		// Step 3: Loop through responsiveSettings and check if the media query is matched.
+		this.responsiveSettings.every( ( settings: { [ key: string ]: any } ) => {
 			// Check if media query is matched.
 			if ( window.matchMedia( settings.media ).matches ) {
 				// If yes, loop through the settings at this media breakpoint.
 				for ( const settingKey in settings ) {
 					// Check if the setting key is not media.
-					if ( 'media' !== settingKey ) {
+					if ( 'media' !== settingKey && this.allowedResponsiveKeys.includes( settingKey ) ) {
 						// Set those keys as attributes.
 						this.setAttribute( settingKey, settings[ settingKey ] );
 					}
 				}
 
-				// Set match found to true.
-				matchFound = true;
-
 				// Return false to break out of the loop.
 				return false;
 			}
 
+			// Return true so that the loop continues, if it does not break above.
 			return true;
 		} );
-
-		// Step 3: If match is not found, set defaults.
-		if ( ! matchFound ) {
-			// Set defaults.
-			for ( const settingKey in this.defaultSettings ) {
-				// Set the attributes to default settings.
-				this.setAttribute( settingKey, this.defaultSettings[ settingKey ] );
-			}
-
-			// Remove previously set settings.
-			this.allowedResponsiveKeys?.forEach( ( key: string ) => {
-				// Check if the key attribute exists and the attribute name is in the allowedResponsiveKeys array.
-				if ( undefined === this.defaultSettings[ key ] ) {
-					// Remove that attribute.
-					this.removeAttribute( key );
-				}
-			} );
-		}
 	}
 
 	/**

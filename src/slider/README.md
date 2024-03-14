@@ -66,13 +66,13 @@ slider.setCurrentSlide( 2 );
 
 * `responsive` attribute value data shape.
 - When passing the settings, JSON stringy it before passing it to responsive attribute.
-- By default, the slider will use the attributes that are passed directly ( not within responsive attribute ). However, when
-responsive attribute is also passed, it will override the directly passed default attribute values at the given breakpoints.
+- If you pass the responsive attribute, then it will take precedence over any the directly passed attributes values at the given breakpoints.
+So if you are passing responsive attribute, then do not pass the attributes directly, pass then inside the responsive attribute for all screen sizes.
 
 ```javascript
 [
     {
-        'media'              : '(max-width: 600px)',
+        'media'              : '(min-width: 600px)',
         'flexible-height'    : 'yes',
         'infinite'           : 'yes',
         'swipe'              : 'yes',
@@ -82,7 +82,7 @@ responsive attribute is also passed, it will override the directly passed defaul
         'step'               : 2,
     },
     {
-        'media'              : '(max-width: 300px)',
+        'media'              : '(min-width: 300px)',
         'flexible-height'    : 'no',
         'infinite'           : 'no',
         'swipe'              : 'yes',
