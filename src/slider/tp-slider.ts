@@ -15,6 +15,17 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
+	protected responsiveSettings: { [ key: string ]: any };
+	protected allowedResponsiveKeys: string[] = [
+		'flexible-height',
+		'infinite',
+		'swipe',
+		'behaviour',
+		'auto-slide-interval',
+		'per-view',
+		'step',
+		'responsive',
+	];
 
 	/**
 	 * Constructor.
@@ -31,6 +42,10 @@ export class TPSliderElement extends HTMLElement {
 		this.slide();
 		this.autoSlide();
 		this.setAttribute( 'initialized', 'yes' );
+
+		// Responsive Settings.
+		const responsiveSettingsJSON: string = this.getAttribute( 'responsive' ) || '';
+		this.responsiveSettings = responsiveSettingsJSON ? JSON.parse( responsiveSettingsJSON ) : [];
 
 		// Event listeners.
 		if ( ! ( 'ResizeObserver' in window ) ) {
@@ -430,6 +445,11 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	handleResize(): void {
+		// Update responsive settings. We are using setTimeout for INP( Interaction for Next Paint ).
+		setTimeout( () => {
+			this.updateAttributesResponsively();
+		}, 0 );
+
 		// Check if we're already resizing.
 		if ( this.getAttribute( 'resizing' ) ) {
 			return;
@@ -443,6 +463,43 @@ export class TPSliderElement extends HTMLElement {
 
 		// Done, let's remove the flag.
 		this.removeAttribute( 'resizing' );
+	}
+
+	/**
+	 * Update attributes responsive settings.
+	 */
+	updateAttributesResponsively(): void {
+		// Check if responsiveSettings exist.
+		if ( ! this.responsiveSettings.length ) {
+			// Early Return.
+			return;
+		}
+
+		// Step 2: First remove all the allowed responsive keys.
+		this.allowedResponsiveKeys.forEach( ( key: string ) => {
+			this.removeAttribute( key );
+		} );
+
+		// Step 3: Loop through responsiveSettings and check if the media query is matched.
+		this.responsiveSettings.every( ( settings: { [ key: string ]: any } ) => {
+			// Check if media query is matched.
+			if ( window.matchMedia( settings.media ).matches ) {
+				// If yes, loop through the settings at this media breakpoint.
+				for ( const settingKey in settings ) {
+					// Check if the setting key is not media.
+					if ( 'media' !== settingKey && this.allowedResponsiveKeys.includes( settingKey ) ) {
+						// Set those keys as attributes.
+						this.setAttribute( settingKey, settings[ settingKey ] );
+					}
+				}
+
+				// Return false to break out of the loop.
+				return false;
+			}
+
+			// Return true so that the loop continues, if it does not break above.
+			return true;
+		} );
 	}
 
 	/**
