@@ -15,9 +15,18 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
-	private responsiveSettings: TPSliderSettings;
-	private defaultSettings: TPSliderSettings;
-	private settingKeys: string[];
+	protected responsiveSettings: TPSliderSettings;
+	protected defaultSettings: TPSliderSettings;
+	protected allowedResponsiveKeys: string[] = [
+		'flexible-height',
+		'infinite',
+		'swipe',
+		'behaviour',
+		'auto-slide-interval',
+		'per-view',
+		'step',
+		'responsive',
+	];
 
 	/**
 	 * Constructor.
@@ -35,20 +44,10 @@ export class TPSliderElement extends HTMLElement {
 		this.autoSlide();
 		this.setAttribute( 'initialized', 'yes' );
 
-		// Settings.
-		const responsiveData: string = this.getAttribute( 'responsive' ) || '';
-		this.responsiveSettings = responsiveData ? JSON.parse( responsiveData ) : [];
+		// Responsive Settings.
+		const responsiveSettingsJSON: string = this.getAttribute( 'responsive' ) || '';
+		this.responsiveSettings = responsiveSettingsJSON ? JSON.parse( responsiveSettingsJSON ) : [];
 		this.defaultSettings = {};
-		this.settingKeys = [
-			'flexible-height',
-			'infinite',
-			'swipe',
-			'behaviour',
-			'auto-slide-interval',
-			'per-view',
-			'step',
-			'responsive',
-		];
 		this.setDefaultSettings();
 
 		// Event listeners.
@@ -449,8 +448,10 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	handleResize(): void {
-		// Update responsive settings.
-		this.updateResponsiveSettings();
+		// Update responsive settings. We are using setTimeout for INP( Interaction for Next Paint ).
+		setTimeout( () => {
+			this.updateAttributesResponsively();
+		}, 0 );
 
 		// Check if we're already resizing.
 		if ( this.getAttribute( 'resizing' ) ) {
@@ -472,9 +473,9 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	setDefaultSettings() {
 		// Loop through the setting keys and set the default settings.
-		this.settingKeys?.forEach( ( key: string ) => {
-			// Check if the key attribute exists and the attribute name is in the settingKeys array.
-			if ( this.getAttribute( key ) && this.settingKeys.includes( key ) ) {
+		this.allowedResponsiveKeys?.forEach( ( key: string ) => {
+			// Check if the key attribute exists and the attribute name is in the allowedResponsiveKeys array.
+			if ( this.getAttribute( key ) && this.allowedResponsiveKeys.includes( key ) ) {
 				// Set all the default settings keys, equal to the value of that attribute.
 				this.defaultSettings[ key ] = this.getAttribute( key ) || '';
 			}
@@ -482,9 +483,9 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
-	 * Update responsive settings.
+	 * Update attributes responsive settings.
 	 */
-	updateResponsiveSettings() {
+	updateAttributesResponsively(): void {
 		// Check if responsiveSettings exist.
 		if ( ! this.responsiveSettings.length ) {
 			// Early Return.
@@ -495,7 +496,7 @@ export class TPSliderElement extends HTMLElement {
 		let matchFound: boolean = false;
 
 		// Step 2: Loop through responsiveSettings and check if the media query is matched.
-		this.responsiveSettings.forEach( ( settings: TPSliderSettings ) => {
+		this.responsiveSettings.every( ( settings: TPSliderSettings ) => {
 			// Check if media query is matched.
 			if ( window.matchMedia( settings.media ).matches ) {
 				// If yes, loop through the settings at this media breakpoint.
@@ -509,7 +510,12 @@ export class TPSliderElement extends HTMLElement {
 
 				// Set match found to true.
 				matchFound = true;
+
+				// Return false to break out of the loop.
+				return false;
 			}
+
+			return true;
 		} );
 
 		// Step 3: If match is not found, set defaults.
@@ -521,8 +527,8 @@ export class TPSliderElement extends HTMLElement {
 			}
 
 			// Remove previously set settings.
-			this.settingKeys?.forEach( ( key: string ) => {
-				// Check if the key attribute exists and the attribute name is in the settingKeys array.
+			this.allowedResponsiveKeys?.forEach( ( key: string ) => {
+				// Check if the key attribute exists and the attribute name is in the allowedResponsiveKeys array.
 				if ( undefined === this.defaultSettings[ key ] ) {
 					// Remove that attribute.
 					this.removeAttribute( key );
