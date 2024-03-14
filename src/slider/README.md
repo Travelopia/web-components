@@ -67,7 +67,8 @@ slider.setCurrentSlide( 2 );
 * `responsive` attribute value data shape.
 - When passing the settings, JSON stringy it before passing it to responsive attribute.
 - If you pass the responsive attribute, then it will take precedence over any the directly passed attributes values at the given breakpoints.
-So if you are passing responsive attribute, then do not pass the attributes directly, pass then inside the responsive attribute for all screen sizes.
+Be sure to pass the default attributes outside the responsive attribute too, this is because there are CSS attached to those attributes and it may cause CLS
+issue if the default attributes ( e.g. flexible-height, infinite etc are not passed )
 
 ```javascript
 [
