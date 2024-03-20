@@ -195,7 +195,7 @@ export class TPSliderElement extends HTMLElement {
 		const nextSlideIndex: number = this.currentSlideIndex + this.step;
 
 		// Check if the next slide step is not taking it beyond the last slide.
-		if ( nextSlideIndex > totalSlides ) {
+		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
 			return;
 		}
 
