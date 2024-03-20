@@ -208,7 +208,7 @@ export class TPSliderElement extends HTMLElement {
 	previous(): void {
 		if ( this.currentSlideIndex <= 1 ) {
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
-				this.setCurrentSlide( this.getTotalSlides() );
+				this.setCurrentSlide( this.getTotalSlides() - this.perView + 1 );
 			}
 
 			return;
