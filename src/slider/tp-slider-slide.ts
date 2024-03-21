@@ -22,6 +22,17 @@ export class TPSliderSlideElement extends HTMLElement {
 	 */
 	protected handleHeightChange(): void {
 		const slider: TPSliderElement | null = this.closest( 'tp-slider' );
-		slider?.handleResize();
+		if ( ! slider ) {
+			return;
+		}
+
+		/**
+		 * Yield to main thread to avoid observation errors.
+		 *
+		 * @see https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#observation_errors
+		 */
+		setTimeout( (): void => {
+			slider.handleResize();
+		}, 0 );
 	}
 }
