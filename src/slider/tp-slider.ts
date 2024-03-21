@@ -56,7 +56,7 @@ export class TPSliderElement extends HTMLElement {
 			document.fonts.ready.then( () => this.handleResize() );
 		}
 
-		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
 
