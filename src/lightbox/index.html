@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Lightbox</title>
+
+	<link rel="stylesheet" href="../../dist/lightbox/style.css" media="all">
+	<script type="module" src="../../dist/lightbox/index.js"></script>
+</head>
+<body>
+	<main>
+		<tp-lightbox id="my-lightbox">
+			<dialog>
+				<tp-lightbox-close>
+					<button>Close</button>
+				</tp-lightbox-close>
+				<tp-lightbox-previous>
+					<button>Previous</button>
+				</tp-lightbox-previous>
+				<tp-lightbox-next>
+					<button>Next</button>
+				</tp-lightbox-next>
+				<tp-lightbox-content></tp-lightbox-content>
+			</dialog>
+		</tp-lightbox>
+
+		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
+			<button>Open Lightbox</button>
+			<template>
+				<img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="" loading="lazy">
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
+			<button>Open Lightbox</button>
+			<template>
+				<img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="" loading="lazy">
+			</template>
+		</tp-lightbox-trigger>
+	</main>
+</body>
+</html>
