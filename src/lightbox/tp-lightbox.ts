@@ -18,6 +18,16 @@ export class TPLightboxElement extends HTMLElement {
 	protected allGroups: NodeListOf<TPLightboxTriggerElement> | null = null;
 
 	/**
+	 * Constructor.
+	 */
+	constructor() {
+		super();
+
+		// Event listeners.
+		this.querySelector( 'dialog' )?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
+	}
+
+	/**
 	 * Get observed attributes.
 	 *
 	 * @return {Array} List of observed attributes.
@@ -308,5 +318,19 @@ export class TPLightboxElement extends HTMLElement {
 				image.addEventListener( 'load', incrementLoadingCounter, { once: true } );
 			}
 		} );
+	}
+
+	/**
+	 * Handle when the dialog is clicked.
+	 *
+	 * @param {Event} e Click event.
+	 */
+	handleDialogClick( e: MouseEvent ): void {
+		if (
+			'yes' === this.getAttribute( 'close-on-overlay-click' ) &&
+			this.querySelector( 'dialog' ) === e.target
+		) {
+			this.close();
+		}
 	}
 }
