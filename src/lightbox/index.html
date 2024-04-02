@@ -11,7 +11,7 @@
 </head>
 <body>
 	<main>
-		<tp-lightbox id="my-lightbox">
+		<tp-lightbox id="my-lightbox" close-on-overlay-click="yes">
 			<dialog>
 				<tp-lightbox-close>
 					<button>Close</button>
@@ -27,16 +27,33 @@
 		</tp-lightbox>
 
 		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
-			<button>Open Lightbox</button>
+			<button>Open Lightbox: Group 1</button>
 			<template>
 				<img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="" loading="lazy">
 			</template>
 		</tp-lightbox-trigger>
 
 		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
-			<button>Open Lightbox</button>
+			<button>Open Lightbox: Group 1</button>
 			<template>
 				<img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="" loading="lazy">
+			</template>
+		</tp-lightbox-trigger>
+
+		<br><br>
+
+		<tp-lightbox-trigger lightbox="my-lightbox" group="group-2">
+			<button>Open Lightbox: Group 2</button>
+			<template>
+				<p>Lorem ipsum.</p>
+				<p>Lorem ipsum.</p>
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox" group="group-2">
+			<button>Open Lightbox: Group 2</button>
+			<template>
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=ObmgotljlYd1J42S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 			</template>
 		</tp-lightbox-trigger>
 	</main>

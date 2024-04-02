@@ -157,8 +157,10 @@ export class TPLightboxElement extends HTMLElement {
 			return;
 		}
 
-		// First, take this opportunity to update all groups.
-		this.updateAllGroups();
+		// First, take this opportunity to update all groups (if it wasn't set from the trigger).
+		if ( '' !== this.group && ! this.allGroups ) {
+			this.updateAllGroups();
+		}
 
 		// Now, show the modal.
 		dialog.showModal();
@@ -220,8 +222,15 @@ export class TPLightboxElement extends HTMLElement {
 
 	/**
 	 * Update all groups and save it to memory.
+	 *
+	 * @param {NodeList} allGroups All groups.
 	 */
-	updateAllGroups(): void {
+	updateAllGroups( allGroups: NodeListOf<TPLightboxTriggerElement> | null = null ): void {
+		if ( allGroups && allGroups.length ) {
+			this.allGroups = allGroups;
+			return;
+		}
+
 		this.allGroups = document.querySelectorAll( `tp-lightbox-trigger[group="${ this.group }"]` );
 		if ( ! this.allGroups.length ) {
 			this.allGroups = null;
