@@ -47,3 +47,27 @@ Next, we need to trigger the lightbox with and give it some content. Any content
 	</template>
 </tp-lightbox-trigger>
 ```
+
+## Attributes
+
+| Attribute              | Required  | Values   | Notes                                        |
+|------------------------|-----------|----------|----------------------------------------------|
+| close-on-overlay-click | No        | `yes`    | Closes the modal when the overlay is clicked |
+
+## Events
+
+| Event          | Notes                                                       |
+|----------------|-------------------------------------------------------------|
+| change         | When any attribute has changed                              |
+| template-set   | When a template is set, before content has actually updated |
+| content-update | When the content has updated inside the lightbox            |
+
+## Methods
+
+### `open`
+
+Open the lightbox.
+
+### `close`
+
+Close the lightbox.

@@ -73,6 +73,7 @@ export class TPLightboxElement extends HTMLElement {
 	set template( template: HTMLTemplateElement | null ) {
 		// Set the template.
 		this.currentTemplate = template;
+		this.dispatchEvent( new CustomEvent( 'template-set' ) );
 
 		// Get lightbox content element.
 		const content: TPLightboxContentElement | null = this.querySelector( 'tp-lightbox-content' );
@@ -86,6 +87,7 @@ export class TPLightboxElement extends HTMLElement {
 			// We do this rather than a string to avoid script injection.
 			const templateContent: Node = this.currentTemplate.content.cloneNode( true );
 			content.replaceChildren( templateContent );
+			this.dispatchEvent( new CustomEvent( 'content-change' ) );
 
 			setTimeout( (): void => {
 				this.prepareImageLoading();
