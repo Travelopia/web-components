@@ -9,9 +9,11 @@ import { slideElementDown, slideElementUp } from '../utility';
  */
 export class TPAccordionItemElement extends HTMLElement {
 	/**
-	 * Connected callbacl.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		if ( 'yes' === this.getAttribute( 'open-by-default' ) ) {
 			this.setAttribute( 'open', 'yes' );
 		}
