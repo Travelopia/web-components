@@ -9,9 +9,11 @@ import { TPMultiSelectOptionElement } from './tp-multi-select-option';
  */
 export class TPMultiSelectSelectAllElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		this.closest( 'tp-multi-select' )?.addEventListener( 'change', this.handleValueChanged.bind( this ) );
 		this.addEventListener( 'click', this.toggleSelectAll.bind( this ) );
 	}

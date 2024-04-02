@@ -8,11 +8,13 @@ import { TPMultiSelectElement } from './tp-multi-select';
  */
 export class TPMultiSelectPillElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
 		this.querySelector( 'button' )?.addEventListener( 'click', this.handleButtonClick.bind( this ) );
 	}
+
 	/**
 	 * Handle button click.
 	 *
