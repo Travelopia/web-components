@@ -254,10 +254,13 @@ export class TPLightboxElement extends HTMLElement {
 	 * Prepare navigation.
 	 */
 	prepareNavigation(): void {
+		// Update counter.
+		const count: TPLightboxCountElement | null = this.querySelector( 'tp-lightbox-count' );
+		count?.update();
+
 		// Get previous and next elements.
 		const previous: TPLightboxPreviousElement | null = this.querySelector( 'tp-lightbox-previous' );
 		const next: TPLightboxNextElement | null = this.querySelector( 'tp-lightbox-next' );
-		const count: TPLightboxCountElement | null = this.querySelector( 'tp-lightbox-count' );
 
 		// Bail early if we don't have either.
 		if ( ! previous && ! next ) {
@@ -292,9 +295,6 @@ export class TPLightboxElement extends HTMLElement {
 		} else {
 			next?.setAttribute( 'disabled', 'yes' );
 		}
-
-		// Update counter.
-		count?.update();
 	}
 
 	/**
