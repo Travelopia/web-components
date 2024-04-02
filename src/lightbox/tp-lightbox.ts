@@ -5,6 +5,7 @@ import { TPLightboxContentElement } from './tp-lightbox-content';
 import { TPLightboxPreviousElement } from './tp-lightbox-previous';
 import { TPLightboxNextElement } from './tp-lightbox-next';
 import { TPLightboxTriggerElement } from './tp-lightbox-trigger';
+import { TPLightboxCountElement } from './tp-lightbox-count';
 
 /**
  * TP Lightbox.
@@ -33,7 +34,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'index' ];
+		return [ 'index', 'total', 'close-on-overlay-click', 'loading' ];
 	}
 
 	/**
@@ -48,6 +49,8 @@ export class TPLightboxElement extends HTMLElement {
 		if ( oldValue === newValue ) {
 			return;
 		}
+
+		this.dispatchEvent( new CustomEvent( 'change' ) );
 
 		// Trigger current index target if index has changed.
 		if ( 'index' === name ) {
@@ -228,12 +231,15 @@ export class TPLightboxElement extends HTMLElement {
 	updateAllGroups( allGroups: NodeListOf<TPLightboxTriggerElement> | null = null ): void {
 		if ( allGroups && allGroups.length ) {
 			this.allGroups = allGroups;
+			this.setAttribute( 'total', this.allGroups.length.toString() );
 			return;
 		}
 
 		this.allGroups = document.querySelectorAll( `tp-lightbox-trigger[group="${ this.group }"]` );
 		if ( ! this.allGroups.length ) {
 			this.allGroups = null;
+		} else {
+			this.setAttribute( 'total', this.allGroups.length.toString() );
 		}
 	}
 
@@ -251,6 +257,7 @@ export class TPLightboxElement extends HTMLElement {
 		// Get previous and next elements.
 		const previous: TPLightboxPreviousElement | null = this.querySelector( 'tp-lightbox-previous' );
 		const next: TPLightboxNextElement | null = this.querySelector( 'tp-lightbox-next' );
+		const count: TPLightboxCountElement | null = this.querySelector( 'tp-lightbox-count' );
 
 		// Bail early if we don't have either.
 		if ( ! previous && ! next ) {
@@ -285,6 +292,9 @@ export class TPLightboxElement extends HTMLElement {
 		} else {
 			next?.setAttribute( 'disabled', 'yes' );
 		}
+
+		// Update counter.
+		count?.update();
 	}
 
 	/**
