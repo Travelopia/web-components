@@ -10,9 +10,11 @@ import { TPTabsTabElement } from './tp-tabs-tab';
  */
 export class TPTabsElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		this.updateTabFromUrlHash();
 		window.addEventListener( 'hashchange', this.updateTabFromUrlHash.bind( this ) );
 	}

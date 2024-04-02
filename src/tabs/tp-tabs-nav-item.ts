@@ -8,9 +8,11 @@ import { TPTabsElement } from './tp-tabs';
  */
 export class TPTabsNavItemElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		const link: HTMLAnchorElement | null = this.querySelector( 'a' );
 		link?.addEventListener( 'click', this.handleLinkClick.bind( this ) );
 	}
