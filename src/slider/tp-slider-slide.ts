@@ -8,9 +8,11 @@ import { TPSliderElement } from './tp-slider';
  */
 export class TPSliderSlideElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		// Resize observer.
 		if ( 'ResizeObserver' in window ) {
 			new ResizeObserver( this.handleHeightChange.bind( this ) ).observe( this );

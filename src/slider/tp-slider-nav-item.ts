@@ -9,9 +9,10 @@ import { TPSliderNavElement } from './tp-slider-nav';
  */
 export class TPSliderNavItemElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
 		this.querySelector( 'button' )?.addEventListener( 'click', this.handleClick.bind( this ) );
 	}
 
