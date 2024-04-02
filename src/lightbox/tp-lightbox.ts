@@ -34,7 +34,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'index', 'total', 'close-on-overlay-click', 'loading' ];
+		return [ 'open', 'index', 'total', 'close-on-overlay-click', 'loading' ];
 	}
 
 	/**
@@ -167,6 +167,7 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Now, show the modal.
 		dialog.showModal();
+		this.setAttribute( 'open', 'yes' );
 	}
 
 	/**
@@ -176,6 +177,7 @@ export class TPLightboxElement extends HTMLElement {
 		// Find and close the dialog.
 		const dialog: HTMLDialogElement | null = this.querySelector( 'dialog' );
 		dialog?.close();
+		this.removeAttribute( 'open' );
 
 		// Clear groups from memory.
 		this.allGroups = null;
