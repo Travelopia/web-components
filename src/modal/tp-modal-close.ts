@@ -8,9 +8,10 @@ import { TPModalElement } from './tp-modal';
  */
 export class TPModalCloseElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
 		const button: HTMLButtonElement | null = this.querySelector( 'button' );
 		button?.addEventListener( 'click', this.closeModal.bind( this ) );
 	}
