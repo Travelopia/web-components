@@ -14,10 +14,17 @@ export class TPLightboxNextElement extends HTMLElement {
 		super();
 
 		// Events.
-		this.querySelector( 'button' )?.addEventListener( 'click', this.close.bind( this ) );
+		this.querySelector( 'button' )?.addEventListener( 'click', this.next.bind( this ) );
 	}
 
-	close(): void {
+	/**
+	 * Navigate next.
+	 */
+	next(): void {
+		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
+			return;
+		}
+
 		const lightbox: TPLightboxElement | null = this.closest( 'tp-lightbox' );
 		if ( lightbox ) {
 			setTimeout( (): void => {

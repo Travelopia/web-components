@@ -17,6 +17,9 @@ export class TPLightboxCloseElement extends HTMLElement {
 		this.querySelector( 'button' )?.addEventListener( 'click', this.close.bind( this ) );
 	}
 
+	/**
+	 * Close the lightbox.
+	 */
 	close(): void {
 		const lightbox: TPLightboxElement | null = this.closest( 'tp-lightbox' );
 		if ( lightbox ) {

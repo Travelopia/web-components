@@ -17,6 +17,9 @@ export class TPLightboxTriggerElement extends HTMLElement {
 		this.querySelector( 'button' )?.addEventListener( 'click', this.trigger.bind( this ) );
 	}
 
+	/**
+	 * Trigger the lightbox.
+	 */
 	trigger(): void {
 		const lightboxId: string | null = this.getAttribute( 'lightbox' );
 		const template: HTMLTemplateElement | null = this.querySelector( 'template' );
@@ -26,8 +29,14 @@ export class TPLightboxTriggerElement extends HTMLElement {
 		}
 
 		const lightbox: TPLightboxElement | null = document.querySelector( `#${ lightboxId.toString() }` );
+		if ( ! lightbox ) {
+			return;
+		}
+
 		setTimeout( (): void => {
-			lightbox?.open( template );
+			lightbox.template = template;
+			lightbox.group = this.getAttribute( 'group' ) ?? '';
+			lightbox.open();
 		}, 0 );
 	}
 }
