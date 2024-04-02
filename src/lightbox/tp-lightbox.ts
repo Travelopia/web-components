@@ -223,6 +223,9 @@ export class TPLightboxElement extends HTMLElement {
 	 */
 	updateAllGroups(): void {
 		this.allGroups = document.querySelectorAll( `tp-lightbox-trigger[group="${ this.group }"]` );
+		if ( ! this.allGroups.length ) {
+			this.allGroups = null;
+		}
 	}
 
 	/**
@@ -287,7 +290,8 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Bail if there are no images within current content.
 		const images: NodeListOf<HTMLImageElement> = content.querySelectorAll( 'img' );
-		if ( ! images ) {
+		if ( ! images.length ) {
+			this.removeAttribute( 'loading' );
 			return;
 		}
 
