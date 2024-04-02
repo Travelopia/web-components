@@ -29,24 +29,20 @@ export class TPLightboxElement extends HTMLElement {
 	/**
 	 * Attribute changed callback.
 	 *
-	 * @param {string} _name    Attribute name.
+	 * @param {string} name     Attribute name.
 	 * @param {string} oldValue Old value.
 	 * @param {string} newValue New value.
 	 */
-	attributeChangedCallback( _name: string = '', oldValue: string = '', newValue: string = '' ): void {
+	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// Prevent redundant updates.
 		if ( oldValue === newValue ) {
 			return;
 		}
 
-		// Get all groups and check if current index exists within group.
-		const allGroups: NodeListOf<TPLightboxTriggerElement> | null = this.getAllGroups();
-		if ( ! allGroups || ! allGroups[ this.currentIndex - 1 ] ) {
-			return;
+		// Trigger current index target if index has changed.
+		if ( 'index' === name ) {
+			this.triggerCurrentIndexTarget();
 		}
-
-		// Trigger element within group.
-		allGroups[ this.currentIndex - 1 ].trigger();
 	}
 
 	/**
@@ -79,6 +75,7 @@ export class TPLightboxElement extends HTMLElement {
 			content.replaceChildren( templateContent );
 
 			setTimeout( (): void => {
+				this.prepareImageLoading();
 				this.prepareNavigation();
 			}, 0 );
 		} else {
@@ -122,6 +119,20 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Setting this attributes triggers a re-trigger.
 		this.setAttribute( 'index', index.toString() );
+	}
+
+	/**
+	 * Trigger the target that matches the current index within current group.
+	 */
+	triggerCurrentIndexTarget(): void {
+		// Get all groups and check if current index exists within group.
+		const allGroups: NodeListOf<TPLightboxTriggerElement> | null = this.getAllGroups();
+		if ( ! allGroups || ! allGroups[ this.currentIndex - 1 ] ) {
+			return;
+		}
+
+		// Trigger element within group.
+		allGroups[ this.currentIndex - 1 ].trigger();
 	}
 
 	/**
@@ -252,5 +263,50 @@ export class TPLightboxElement extends HTMLElement {
 		} else {
 			next?.setAttribute( 'disabled', 'yes' );
 		}
+	}
+
+	/**
+	 * Prepare image loading.
+	 */
+	prepareImageLoading(): void {
+		// Get lightbox content element.
+		const content: TPLightboxContentElement | null = this.querySelector( 'tp-lightbox-content' );
+		if ( ! content ) {
+			return;
+		}
+
+		// Bail if there are no images within current content.
+		const images: NodeListOf<HTMLImageElement> = content.querySelectorAll( 'img' );
+		if ( ! images ) {
+			return;
+		}
+
+		// Start off by setting the state as loading.
+		this.setAttribute( 'loading', 'yes' );
+
+		// Prepare increment variables.
+		let counter: number = 0;
+		const totalImages: number = images.length;
+
+		/**
+		 * Increment counter.
+		 */
+		const incrementLoadingCounter = (): void => {
+			counter++;
+
+			// Remove loading attribute once all images have loaded.
+			if ( counter === totalImages ) {
+				this.removeAttribute( 'loading' );
+			}
+		};
+
+		// Check if images have loaded, else add an event listener.
+		images.forEach( ( image: HTMLImageElement ): void => {
+			if ( image.complete ) {
+				incrementLoadingCounter();
+			} else {
+				image.addEventListener( 'load', incrementLoadingCounter, { once: true } );
+			}
+		} );
 	}
 }
