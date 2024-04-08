@@ -19,12 +19,6 @@ export class TPFormElement extends HTMLElement {
 	constructor() {
 		super();
 		this.form = this.querySelector( 'form' );
-	}
-
-	/**
-	 * Connected callback.
-	 */
-	connectedCallback(): void {
 		this.form?.addEventListener( 'submit', this.handleFormSubmit.bind( this ) );
 	}
 

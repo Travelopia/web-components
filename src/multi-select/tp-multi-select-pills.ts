@@ -10,9 +10,11 @@ import { TPMultiSelectOptionElement } from './tp-multi-select-option';
  */
 export class TPMultiSelectPillsElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		// Events.
 		this.closest( 'tp-multi-select' )?.addEventListener( 'change', this.update.bind( this ) );
 		this.closest( 'tp-multi-select' )?.querySelector( 'select' )?.addEventListener( 'change', ( () => this.update() ) as EventListener );

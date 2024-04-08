@@ -10,9 +10,11 @@ import { TPMultiSelectPillElement } from './tp-multi-select-pill';
  */
 export class TPMultiSelectSearchElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
+
 		const input: HTMLInputElement | null = this.querySelector( 'input' );
 		if ( ! input ) {
 			return;

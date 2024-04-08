@@ -8,22 +8,10 @@ import { TPMultiSelectElement } from './tp-multi-select';
  */
 export class TPMultiSelectOptionElement extends HTMLElement {
 	/**
-	 * Properties.
+	 * Constructor.
 	 */
-	private initialized: boolean = false;
-
-	/**
-	 * Connected callback.
-	 */
-	connectedCallback(): void {
-		// Return early if already initialized.
-		if ( true === this.initialized ) {
-			return;
-		}
-
-		// Set initialized flag to true.
-		this.initialized = true;
-
+	constructor() {
+		super();
 		this.addEventListener( 'click', this.toggle.bind( this ) );
 	}
 

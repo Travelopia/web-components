@@ -21,14 +21,9 @@ export class TPMultiSelectElement extends HTMLElement {
 	 */
 	constructor() {
 		super();
-		this.keyboardEventListener = this.handleKeyboardInputs.bind( this ) as EventListener;
-	}
 
-	/**
-	 * Connected callback.
-	 */
-	connectedCallback(): void {
 		// Events.
+		this.keyboardEventListener = this.handleKeyboardInputs.bind( this ) as EventListener;
 		document.addEventListener( 'click', this.handleDocumentClick.bind( this ) );
 		this.addEventListener( 'change', this.update.bind( this ) );
 

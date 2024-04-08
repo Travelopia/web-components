@@ -8,9 +8,10 @@ import { TPSliderElement } from './tp-slider';
  */
 export class TPSliderArrowElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
 		this.querySelector( 'button' )?.addEventListener( 'click', this.handleClick.bind( this ) );
 	}
 

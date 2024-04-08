@@ -8,9 +8,10 @@ import { TPAccordionItemElement } from './tp-accordion-item';
  */
 export class TPAccordionHandleElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
 		this.querySelector( 'button' )?.addEventListener( 'click', this.toggle.bind( this ) );
 	}
 

@@ -8,9 +8,10 @@ import { TPFormErrorElement } from './tp-form-error';
  */
 export class TPFormFieldElement extends HTMLElement {
 	/**
-	 * Connected callback.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		super();
 		const field = this.getField();
 		field?.addEventListener( 'keyup', this.handleFieldChanged.bind( this ) );
 		field?.addEventListener( 'change', this.handleFieldChanged.bind( this ) );

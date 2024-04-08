@@ -7,13 +7,11 @@ export class TPModalElement extends HTMLElement {
 	 */
 	constructor() {
 		super();
-		document.querySelector( 'body' )?.appendChild( this );
-	}
 
-	/**
-	 * Connected callback.
-	 */
-	connectedCallback(): void {
+		// Move modal as a direct descendent of body to avoid z-index issues.
+		document.querySelector( 'body' )?.appendChild( this );
+
+		// Event listeners.
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
 	}
 
