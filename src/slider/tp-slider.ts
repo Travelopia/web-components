@@ -540,7 +540,7 @@ export class TPSliderElement extends HTMLElement {
 		const swipeDistanceY: number = touchEndY - this.touchStartY;
 
 		// Determine if the swipe is predominantly horizontal or vertical.
-		const isHorizontalSwipe = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
+		const isHorizontalSwipe: boolean = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
 
 		// If it's not horizontal swipe, return
 		if ( ! isHorizontalSwipe ) {
