@@ -62,6 +62,7 @@ slider.setCurrentSlide( 2 );
 | auto-slide-interval | No       | <interval>            | Interval in milliseconds.                                                                                       |
 | per-view            | No       | <per-view>            | Handles slider behavior having more than 1 slides. No. of slides to show in one view. Default value is 1.       |
 | step                | No       | <step>                | Steps number of slides on next and previous transition. No. of slides to step to at a time. Default value is 1. |
+| swipe-threshold     | No       | `200`                 | It will not swipe if the swipe value is more than this number. Default value is 200.                            |
 | responsive          | No       | <responsive-settings> | Responsive settings to be passed in a JSON string format.                                                       |
 
 * `responsive` attribute value data shape.
