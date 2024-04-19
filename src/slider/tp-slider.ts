@@ -15,6 +15,8 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
+	protected touchStartY: number = 0;
+	protected swipeThreshold: number = 200;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -37,6 +39,9 @@ export class TPSliderElement extends HTMLElement {
 		if ( ! this.getAttribute( 'current-slide' ) ) {
 			this.setAttribute( 'current-slide', '1' );
 		}
+
+		// Threshold Setting.
+		this.swipeThreshold = Number( this?.getAttribute( 'swipe-threshold' ) ?? '200' );
 
 		// Initialize slider.
 		this.slide();
@@ -512,6 +517,7 @@ export class TPSliderElement extends HTMLElement {
 	protected handleTouchStart( e: TouchEvent ): void {
 		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
 			this.touchStartX = e.touches[ 0 ].clientX;
+			this.touchStartY = e.touches[ 0 ].clientY;
 		}
 	}
 
@@ -527,13 +533,31 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
+		// Calculate the horizontal and vertical distance moved.
 		const touchEndX: number = e.changedTouches[ 0 ].clientX;
-		const swipeDistance: number = touchEndX - this.touchStartX;
+		const touchEndY: number = e.changedTouches[ 0 ].clientY;
+		const swipeDistanceX: number = touchEndX - this.touchStartX;
+		const swipeDistanceY: number = touchEndY - this.touchStartY;
 
-		if ( swipeDistance > 0 ) {
-			this.previous();
-		} else if ( swipeDistance < 0 ) {
-			this.next();
+		// Determine if the swipe is predominantly horizontal or vertical.
+		const isHorizontalSwipe: boolean = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
+
+		// If it's not horizontal swipe, return
+		if ( ! isHorizontalSwipe ) {
+			return;
+		}
+
+		// Check if it's a right or left swipe.
+		if ( swipeDistanceX > 0 ) {
+			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
+			if ( swipeDistanceX < this.swipeThreshold ) {
+				this.previous();
+			}
+		} else if ( swipeDistanceX < 0 ) {
+			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
+			if ( swipeDistanceX < -this.swipeThreshold ) {
+				this.next();
+			}
 		}
 	}
 
