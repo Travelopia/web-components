@@ -86,12 +86,12 @@ const value = multiSelect.value;
 
 ## Attributes
 
-| Attribute       | Required | Values                   | Notes                                                                               |
-|-----------------|----------|--------------------------|-------------------------------------------------------------------------------------|
-| name            | Yes      | \<name of the form field\> | The name that is given to the form field. |
-| multiple        | No       | `yes`, `no`               | Whether the field needs to be a single or mult-select form field. Yes by default    |
-| close-on-select | No       | `yes`                    | Whether to close the options when a value is selected                               |
-| form | No | \<id of the form\> | The id of the form with which the select input will be linked and submitted. |
+| Attribute       | Required | Values                   | Notes                                                                            |
+|-----------------|----------|--------------------------|----------------------------------------------------------------------------------|
+| name            | Yes      | <name of the form field> | The name that is given to the form field                                         |
+| form            | No       | <id of the form>         | The id of the form with which the select input will be linked                    |
+| multiple        | No       | `yes`, `no`              | Whether the field needs to be a single or mult-select form field. Yes by default |
+| close-on-select | No       | `yes`                    | Whether to close the options when a value is selected                            |
 
 ## Events
 
