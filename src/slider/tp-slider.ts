@@ -555,7 +555,7 @@ export class TPSliderElement extends HTMLElement {
 			}
 		} else if ( swipeDistanceX < 0 ) {
 			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX < -this.swipeThreshold ) {
+			if ( swipeDistanceX > -this.swipeThreshold ) {
 				this.next();
 			}
 		}
