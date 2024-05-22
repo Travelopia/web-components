@@ -65,13 +65,35 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 				return;
 			}
 
-			const newPill: HTMLElement = document.createElement( 'tp-multi-select-pill' );
-			newPill.setAttribute( 'value', pillValue );
-			newPill.innerHTML = `
-			<span>${ multiSelectOption.getAttribute( 'label' ) ?? '' }</span>
-			<button type="button">x</button>
-			`;
-			this.appendChild( newPill );
+			this.appendChild( this.createPill( pillValue, multiSelectOption.getAttribute( 'label' ) ?? '' ) );
 		} );
+	}
+
+	/**
+	 * Create a new pill.
+	 *
+	 * @param {string} value Pill value.
+	 * @param {string} label Pill label.
+	 *
+	 * @return {TPMultiSelectPillElement} New pill.
+	 */
+	createPill( value: string, label: string ): TPMultiSelectPillElement {
+		const newPill = document.createElement( 'tp-multi-select-pill' ) as TPMultiSelectPillElement;
+		newPill.setAttribute( 'value', value );
+
+		const pillLabel: HTMLElement = document.createElement( 'span' );
+		pillLabel.textContent = label;
+
+		const pillCloseButton: HTMLElement = document.createElement( 'button' );
+		pillCloseButton.setAttribute( 'type', 'button' );
+		pillCloseButton.textContent = 'x';
+		pillCloseButton.addEventListener( 'click', () => {
+			newPill.removePill();
+		} );
+
+		newPill.appendChild( pillLabel );
+		newPill.appendChild( pillCloseButton );
+
+		return newPill;
 	}
 }
