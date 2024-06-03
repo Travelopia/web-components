@@ -198,7 +198,6 @@ export class TPMultiSelectElement extends HTMLElement {
 		if ( ! selectElement ) {
 			selectElement = document.createElement( 'select' );
 			selectElement.setAttribute( 'name', this.getAttribute( 'name' ) ?? '' );
-			selectElement.setAttribute( 'form', this.getAttribute( 'form' ) ?? '' );
 
 			const formReference = this.getAttribute( 'form' );
 
