@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Toggle Attribute</title>
+
+	<link rel="stylesheet" href="../../dist/toggle-attribute/style.css" media="all">
+	<script type="module" src="../../dist/toggle-attribute/index.js"></script>
+
+	<style>
+		[id] {
+			display: none;
+		}
+
+		[toggled] {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<main>
+
+		<!-- Radio input nested -->
+		<tp-toggle-attribute trigger="input[type='radio']" value="Yes" target="#toggle-target">
+			<label>
+				<input type="radio" name="test" value="Yes" />
+				Yes
+			</label>
+			<label>
+				<input type="radio" name="test" value="No" />
+				No
+			</label>
+		</tp-toggle-attribute>
+
+		<!-- Select value -->
+		<tp-toggle-attribute target="my-target-1" group="my-group">
+			<select>
+				<option value="Yes">Yes</option>
+				<option value="No">No</option>
+			</select>
+		</tp-toggle-attribute>
+
+		<!-- Targets -->
+		<div id="toggle-target">
+			Yes
+		</div>
+
+		<div id="yes-target" data-toggle-group="my-group">
+			Yes
+		</div>
+
+		<div id="no-target" data-toggle-group="my-group">
+			No
+		</div>
+
+	</main>
+</body>
+</html>

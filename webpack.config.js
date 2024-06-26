@@ -83,6 +83,7 @@ module.exports = ( env ) => {
 			accordion: './src/accordion/index.ts',
 			'multi-select': './src/multi-select/index.ts',
 			lightbox: './src/lightbox/index.ts',
+			'toggle-attribute': './src/toggle-attribute/index.ts',
 		},
 		module: {
 			rules: [
