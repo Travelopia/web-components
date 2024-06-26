@@ -12,6 +12,9 @@
 	<style>
 		[id] {
 			display: none;
+			padding: 10px;
+			margin: 10px 0;
+			border: 1px solid red;
 		}
 
 		[toggled] {
@@ -22,7 +25,7 @@
 <body>
 	<main>
 
-		<!-- Radio input nested -->
+		<p>Nested radio inputs</p>
 		<tp-toggle-attribute trigger="input[type='radio']" value="Yes" target="#toggle-target">
 			<label>
 				<input type="radio" name="test" value="Yes" />
@@ -34,24 +37,37 @@
 			</label>
 		</tp-toggle-attribute>
 
+		<p>Select with targeted value</p>
+
 		<!-- Select value -->
-		<tp-toggle-attribute target="my-target-1" group="my-group">
+		<tp-toggle-attribute target="#toggle-target" value="Yes">
 			<select>
+				<option value="">Select</option>
 				<option value="Yes">Yes</option>
 				<option value="No">No</option>
 			</select>
 		</tp-toggle-attribute>
 
-		<!-- Targets -->
 		<div id="toggle-target">
+			Toggled
+		</div>
+
+		<p>Select with variable value</p>
+
+		<!-- Select with variable value -->
+		<tp-toggle-attribute group="my-group">
+			<select>
+				<option value="">Select</option>
+				<option value="Yes">Yes</option>
+				<option value="No">No</option>
+			</select>
+		</tp-toggle-attribute>
+
+		<div id="yes-target" data-toggle-value="Yes" data-toggle-group="my-group">
 			Yes
 		</div>
 
-		<div id="yes-target" data-toggle-group="my-group">
-			Yes
-		</div>
-
-		<div id="no-target" data-toggle-group="my-group">
+		<div id="no-target" data-toggle-value="No" data-toggle-group="my-group">
 			No
 		</div>
 
