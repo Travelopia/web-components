@@ -14,7 +14,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 * Update.
 	 */
 	update(): void {
-		// Get trigger element.
+		// Get trigger elements.
 		const triggerSelector: string = this.getAttribute( 'trigger' ) ?? ':scope > *';
 		const triggers: NodeListOf<HTMLElement> | null = this.querySelectorAll( triggerSelector );
 		if ( ! triggers ) {
@@ -22,27 +22,52 @@ export class TPToggleAttributeElement extends HTMLElement {
 		}
 
 		// Check for value.
-		triggers.forEach( ( trigger: HTMLElement ) => trigger.addEventListener( 'change', this.valueChanged.bind( this ) ) );
+		triggers.forEach( ( trigger: HTMLElement ) => trigger.addEventListener( this.getEvent(), (): void => {
+			let value: string | null = null;
+
+			// Check if we have a value.
+			if ( ( 'value' in trigger ) && 'string' === typeof trigger.value ) {
+				value = trigger.value;
+			}
+
+			this.triggerFired( trigger, value );
+		} ) );
 	}
 
 	/**
-	 * The value of the trigger has changed.
+	 * Get event.
 	 *
-	 * @param {Event} e Change event.
+	 * @return {string} The event.
 	 */
-	valueChanged( e: Event ): void {
-		// Check if we're able to detect a value in the trigger.
-		if ( ! e || ! e.currentTarget || ! ( 'value' in e.currentTarget ) || 'string' !== typeof e.currentTarget.value ) {
+	getEvent(): string {
+		return this.getAttribute( 'event' ) ?? 'change';
+	}
+
+	/**
+	 * Trigger has fired the event.
+	 *
+	 * @param {HTMLElement} trigger Trigger element.
+	 * @param {string}      value   The value of the trigger.
+	 */
+	triggerFired( trigger: HTMLElement, value: string | null = null ): void {
+		// Check if we have a trigger.
+		if ( ! trigger ) {
 			return;
 		}
 
-		// Check if an explicit value is set.
-		if ( this.hasAttribute( 'value' ) ) {
-			this.toggleTargetBasedOnValueAttribute( e.currentTarget.value );
-		} else if ( this.hasAttribute( 'group' ) ) {
-			this.toggleTargetGroupBasedOnTriggerValue( e.currentTarget.value );
+		// Check if trigger has a value, example: form inputs.
+		if ( value && '' !== value ) {
+			// Check if we have a value.
+			if ( this.hasAttribute( 'value' ) ) {
+				this.toggleTargetBasedOnValueAttribute( value );
+			} else if ( this.hasAttribute( 'group' ) ) {
+				this.toggleTargetGroupBasedOnTriggerValue( value );
+			} else {
+				this.toggleTargetBasedOnTriggerValue( value );
+			}
 		} else {
-			this.toggleTargetBasedOnTriggerValue( e.currentTarget.value );
+			// Trigger does not have a value, example: buttons.
+			this.toggleTargetAttribute();
 		}
 	}
 
@@ -117,7 +142,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 *
 	 * @param {string} type Either `on` or `off`.
 	 */
-	toggleTargetAttribute( type: string = 'on' ): void {
+	toggleTargetAttribute( type: string = '' ): void {
 		// Get target.
 		const target: HTMLElement | null = this.getTargetElement();
 		if ( ! target ) {
@@ -130,8 +155,10 @@ export class TPToggleAttributeElement extends HTMLElement {
 		// Next toggle attribute on or off.
 		if ( 'on' === type ) {
 			target.setAttribute( this.getAttributeName(), this.getAttributeValue() );
-		} else {
+		} else if ( 'off' === type ) {
 			target.removeAttribute( this.getAttributeName() );
+		} else {
+			target.toggleAttribute( this.getAttributeName() );
 		}
 	}
 
