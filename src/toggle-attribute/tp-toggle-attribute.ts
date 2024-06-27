@@ -55,6 +55,9 @@ export class TPToggleAttributeElement extends HTMLElement {
 			return;
 		}
 
+		// Dispatch event.
+		this.dispatchEvent( new CustomEvent( 'triggered' ) );
+
 		// Check if trigger has a value, example: form inputs.
 		if ( value && '' !== value ) {
 			// Check if we have a value.
@@ -155,10 +158,13 @@ export class TPToggleAttributeElement extends HTMLElement {
 		// Next toggle attribute on or off.
 		if ( 'on' === type ) {
 			target.setAttribute( this.getAttributeName(), this.getAttributeValue() );
+			this.dispatchEvent( new CustomEvent( 'toggled-on' ) );
 		} else if ( 'off' === type ) {
 			target.removeAttribute( this.getAttributeName() );
+			this.dispatchEvent( new CustomEvent( 'toggled-off' ) );
 		} else {
 			target.toggleAttribute( this.getAttributeName() );
+			this.dispatchEvent( new CustomEvent( 'toggled' ) );
 		}
 	}
 
