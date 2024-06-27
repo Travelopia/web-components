@@ -52,7 +52,22 @@
 			Toggled
 		</div>
 
-		<p>Select with variable value</p>
+		<p>Select with variable value and a target</p>
+
+		<!-- Select value -->
+		<tp-toggle-attribute target="#toggle-target-variable">
+			<select>
+				<option value="">Select</option>
+				<option value="Yes">Yes</option>
+				<option value="No">No</option>
+			</select>
+		</tp-toggle-attribute>
+
+		<div id="toggle-target-variable" data-toggle-value="Yes">
+			Toggled
+		</div>
+
+		<p>Select with variable value targeting a group</p>
 
 		<!-- Select with variable value -->
 		<tp-toggle-attribute group="my-group">

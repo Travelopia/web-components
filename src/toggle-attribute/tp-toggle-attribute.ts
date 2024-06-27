@@ -41,6 +41,8 @@ export class TPToggleAttributeElement extends HTMLElement {
 			this.toggleTargetBasedOnValueAttribute( e.currentTarget.value );
 		} else if ( this.hasAttribute( 'group' ) ) {
 			this.toggleTargetGroupBasedOnTriggerValue( e.currentTarget.value );
+		} else {
+			this.toggleTargetBasedOnTriggerValue( e.currentTarget.value );
 		}
 	}
 
@@ -85,6 +87,29 @@ export class TPToggleAttributeElement extends HTMLElement {
 				element.removeAttribute( this.getAttributeName() );
 			}
 		} );
+	}
+
+	/**
+	 * Toggle group based on value set on trigger.
+	 *
+	 * @param {string} value Trigger's value.
+	 */
+	toggleTargetBasedOnTriggerValue( value: string = '' ): void {
+		// Get target.
+		const target: HTMLElement | null = this.getTargetElement();
+		if ( ! target ) {
+			return;
+		}
+
+		// First, un-toggle group, if it exists.
+		this.unToggleGroup();
+
+		// Next toggle attribute on or off.
+		if ( target.getAttribute( 'data-toggle-value' ) === value ) {
+			target.setAttribute( this.getAttributeName(), this.getAttributeValue() );
+		} else {
+			target.removeAttribute( this.getAttributeName() );
+		}
 	}
 
 	/**
