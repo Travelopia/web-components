@@ -26,7 +26,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 			let value: string | null = null;
 
 			// Check if we have a value.
-			if ( ( 'value' in trigger ) && 'string' === typeof trigger.value ) {
+			if ( [ 'INPUT', 'SELECT', 'TEXTAREA' ].includes( trigger.tagName ) && ( 'value' in trigger ) && 'string' === typeof trigger.value ) {
 				value = trigger.value;
 			}
 
@@ -59,7 +59,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 		this.dispatchEvent( new CustomEvent( 'triggered' ) );
 
 		// Check if trigger has a value, example: form inputs.
-		if ( value && '' !== value ) {
+		if ( value || '' === value ) {
 			// Check if we have a value.
 			if ( this.hasAttribute( 'value' ) ) {
 				this.toggleTargetBasedOnValueAttribute( value );
