@@ -16,7 +16,7 @@ export class TPTabsElement extends HTMLElement {
 		super();
 
 		this.updateTabFromUrlHash();
-		window.addEventListener( 'hashchange', this.updateTabFromUrlHash.bind( this ), false );
+		window.addEventListener( 'hashchange', this.updateTabFromUrlHash.bind( this ) );
 	}
 
 	/**
