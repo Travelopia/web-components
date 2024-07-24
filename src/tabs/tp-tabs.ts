@@ -16,7 +16,7 @@ export class TPTabsElement extends HTMLElement {
 		super();
 
 		this.updateTabFromUrlHash();
-		window.addEventListener( 'hashchange', this.updateTabFromUrlHash.bind( this ) );
+		window.addEventListener( 'hashchange', this.updateTabFromUrlHash.bind( this ), false );
 	}
 
 	/**
@@ -92,10 +92,9 @@ export class TPTabsElement extends HTMLElement {
 			return;
 		}
 
-		const urlHash: string = window.location.hash;
-		if ( '' !== urlHash ) {
-			this.setAttribute( 'current-tab', urlHash.replace( '#', '' ) );
-		}
+		// Set and update current assiociated tab attributes.
+		this.setCurrentTab();
+		this.update();
 	}
 
 	/**
@@ -104,6 +103,16 @@ export class TPTabsElement extends HTMLElement {
 	 * @param {string} tabId Tab ID.
 	 */
 	setCurrentTab( tabId: string = '' ): void {
-		this.setAttribute( 'current-tab', tabId );
+		if ( '' !== tabId ) {
+			this.setAttribute( 'current-tab', tabId );
+		}
+
+		// Set current tab based on current url hash.
+		const urlHash: string = window.location.hash;
+		if ( '' !== urlHash ) {
+			const currentLink: HTMLAnchorElement | null = this.querySelector( `a[href="${ urlHash }"]` );
+			const currentTab = currentLink?.closest( 'tp-tabs' );
+			currentTab?.setAttribute( 'current-tab', urlHash.replace( '#', '' ) );
+		}
 	}
 }
