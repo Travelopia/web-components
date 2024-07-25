@@ -59,11 +59,14 @@ export class TPTabsElement extends HTMLElement {
 			return;
 		}
 
+		// Get current nested tab if has.
+		const currentNestedTab = this.getCurrentNestedTab( currentTab );
+
 		// Update nav items.
 		const navItems: NodeListOf<TPTabsNavItemElement> = this.querySelectorAll( 'tp-tabs-nav-item' );
 		if ( navItems ) {
 			navItems.forEach( ( navItem: TPTabsNavItemElement ): void => {
-				if ( navItem.isCurrentTab( currentTab ) ) {
+				if ( navItem.isCurrentTab( currentTab ) || ( currentNestedTab && navItem.isCurrentTab( currentNestedTab ) ) ) {
 					navItem.setAttribute( 'active', 'yes' );
 				} else {
 					navItem.removeAttribute( 'active' );
@@ -75,7 +78,7 @@ export class TPTabsElement extends HTMLElement {
 		const tabs: NodeListOf<TPTabsTabElement> = this.querySelectorAll( 'tp-tabs-tab' );
 		if ( tabs ) {
 			tabs.forEach( ( tab: TPTabsTabElement ): void => {
-				if ( currentTab === tab.getAttribute( 'id' ) ) {
+				if ( currentTab === tab.getAttribute( 'id' ) || ( currentNestedTab && currentNestedTab === tab.getAttribute( 'id' ) ) ) {
 					tab.setAttribute( 'open', 'yes' );
 				} else {
 					tab.removeAttribute( 'open' );
@@ -92,9 +95,8 @@ export class TPTabsElement extends HTMLElement {
 			return;
 		}
 
-		// Set and update current assiociated tab attributes.
+		// Set current assiociated tab.
 		this.setCurrentTab();
-		this.update();
 	}
 
 	/**
@@ -114,5 +116,24 @@ export class TPTabsElement extends HTMLElement {
 			const currentTab = currentLink?.closest( 'tp-tabs' );
 			currentTab?.setAttribute( 'current-tab', urlHash.replace( '#', '' ) );
 		}
+	}
+
+	/**
+	 * Get current nested tab.
+	 *
+	 * @param {string} currentTab Tab ID.
+	 * 
+	 * @return {string} If has Nested current tab or empty.
+	 */
+	getCurrentNestedTab( currentTab: string = '' ): string {
+		if ( '' === currentTab ) {
+			return '';
+		}
+
+		const currentTabElement = this.querySelector( `tp-tabs-tab[id="${ currentTab }"]` );
+		const currentNestedTabElement = currentTabElement?.querySelector( 'tp-tabs' );
+		const currentNestedTab = currentNestedTabElement?.getAttribute( 'current-tab' );
+
+		return currentNestedTab ?? '';
 	}
 }
