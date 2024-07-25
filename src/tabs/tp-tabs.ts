@@ -122,7 +122,7 @@ export class TPTabsElement extends HTMLElement {
 	 * Get current nested tab.
 	 *
 	 * @param {string} currentTab Tab ID.
-	 * 
+	 *
 	 * @return {string} If has Nested current tab or empty.
 	 */
 	getCurrentNestedTab( currentTab: string = '' ): string {
