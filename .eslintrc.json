@@ -1,5 +1,5 @@
 {
-  "extends": [ "plugin:@wordpress/eslint-plugin/recommended-with-formatting" ],
+  "extends": [ "plugin:@travelopia/eslint-plugin-wordpress-coding-standards/default" ],
   "overrides": [
     {
       "files": ["*.ts"],
