@@ -35,15 +35,6 @@ export class TPToggleAttributeElement extends HTMLElement {
 	}
 
 	/**
-	 * Get event.
-	 *
-	 * @return {string} The event.
-	 */
-	getEvent(): string {
-		return this.getAttribute( 'event' ) ?? 'change';
-	}
-
-	/**
 	 * Trigger has fired the event.
 	 *
 	 * @param {HTMLElement} trigger Trigger element.
@@ -62,98 +53,107 @@ export class TPToggleAttributeElement extends HTMLElement {
 		if ( value || '' === value ) {
 			// Check if we have a value.
 			if ( this.hasAttribute( 'value' ) ) {
-				this.toggleTargetBasedOnValueAttribute( value );
-			} else if ( this.hasAttribute( 'group' ) ) {
-				this.toggleTargetGroupBasedOnTriggerValue( value );
+				this.toggleByValueAttribute( value );
 			} else {
-				this.toggleTargetBasedOnTriggerValue( value );
+				this.toggleByTargetDataValue( value );
 			}
 		} else {
 			// Trigger does not have a value, example: buttons.
-			this.toggleTargetAttribute();
+			this.toggleWithoutValue();
 		}
 	}
 
 	/**
-	 * Toggle target based on value set on this component.
+	 * Toggle target based on value attribute set on this component.
 	 *
 	 * @param {string} value Trigger's value.
 	 */
-	toggleTargetBasedOnValueAttribute( value: string = '' ): void {
+	toggleByValueAttribute( value: string = '' ): void {
 		// Get value to listen for.
-		const valueAttribute: string = this.getAttribute( 'value' ) ?? '';
-		if ( '' === valueAttribute ) {
+		const values: string[] = ( this.getAttribute( 'value' ) ?? '' ).split( ',' );
+
+		// Get the target elements.
+		const targetElements = this.getTargetElements();
+
+		// Check if we can continue
+		if ( ! ( values.length && targetElements ) ) {
+			// We can't.
 			return;
 		}
 
-		// Toggle the target's attribute if the target and trigger have the same value.
-		if ( value === valueAttribute ) {
-			this.toggleTargetAttribute( 'on' );
-		} else {
-			this.toggleTargetAttribute( 'off' );
-		}
-	}
-
-	/**
-	 * Toggle group based on value set on trigger.
-	 *
-	 * @param {string} value Trigger's value.
-	 */
-	toggleTargetGroupBasedOnTriggerValue( value: string = '' ): void {
-		// Get group elements.
-		const groupElements: NodeListOf<HTMLElement> | null = this.getGroupElements();
-		if ( ! groupElements ) {
-			return;
-		}
-
-		// Traverse group elements.
-		groupElements.forEach( ( element: HTMLElement ): void => {
-			// Toggle on element attribute if it matches the value.
-			if ( value === element.getAttribute( 'data-toggle-value' ) ) {
-				element.setAttribute( this.getAttributeName(), this.getAttributeValue() );
+		targetElements.forEach( ( target ) => {
+			// Toggle the target's attribute if the target and trigger have the same value.
+			if ( values.includes( value ) ) {
+				this.toggleTargetAttribute( target, 'on' );
 			} else {
-				element.removeAttribute( this.getAttributeName() );
+				this.toggleTargetAttribute( target, 'off' );
 			}
 		} );
 	}
 
 	/**
-	 * Toggle group based on value set on trigger.
+	 * Toggle target based on `data-toggle-value` set on target.
 	 *
 	 * @param {string} value Trigger's value.
 	 */
-	toggleTargetBasedOnTriggerValue( value: string = '' ): void {
-		// Get target.
-		const target: HTMLElement | null = this.getTargetElement();
-		if ( ! target ) {
+	toggleByTargetDataValue( value: string = '' ): void {
+		// Get the target elements.
+		const targetElements = this.getTargetElements();
+
+		// Check if we can continue
+		if ( ! targetElements ) {
 			return;
 		}
 
-		// First, un-toggle group, if it exists.
-		this.unToggleGroup();
+		// Toggle the target elements.
+		targetElements.forEach( ( target: HTMLElement ): void => {
+			// Get values.
+			const values: string[] = ( target.getAttribute( 'data-toggle-value' ) ?? '' ).split( ',' );
 
-		// Next toggle attribute on or off.
-		if ( target.getAttribute( 'data-toggle-value' ) === value ) {
-			target.setAttribute( this.getAttributeName(), this.getAttributeValue() );
-		} else {
-			target.removeAttribute( this.getAttributeName() );
+			// Check if we can continue
+			if ( ! values.length ) {
+				return;
+			}
+
+			// Toggle on element attribute if it matches value.
+			if ( values.includes( value ) ) {
+				this.toggleTargetAttribute( target, 'on' );
+			} else {
+				this.toggleTargetAttribute( target, 'off' );
+			}
+		} );
+	}
+
+	/**
+	 * Toggle the target without any value.
+	 */
+	toggleWithoutValue(): void {
+		// Get the target elements.
+		const targetElements = this.getTargetElements();
+
+		// Check if we can continue
+		if ( ! targetElements ) {
+			return;
 		}
+
+		// Toggle the target elements.
+		targetElements.forEach( ( target: HTMLElement ): void => {
+			// Toggle on element attribute if it matches the value.
+			this.toggleTargetAttribute( target );
+		} );
 	}
 
 	/**
 	 * Toggle the target's value on or off.
 	 *
-	 * @param {string} type Either `on` or `off`.
+	 * @param {HTMLElement} target The target element.
+	 * @param {string}      type   Either `on` or `off`.
 	 */
-	toggleTargetAttribute( type: string = '' ): void {
-		// Get target.
-		const target: HTMLElement | null = this.getTargetElement();
+	toggleTargetAttribute( target: HTMLElement | null = null, type: string = '' ): void {
+		// Check if target exists.
 		if ( ! target ) {
 			return;
 		}
-
-		// First, un-toggle group, if it exists.
-		this.unToggleGroup();
 
 		// Next toggle attribute on or off.
 		if ( 'on' === type ) {
@@ -171,7 +171,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	/**
 	 * Get target element.
 	 */
-	getTargetElement(): HTMLElement | null {
+	getTargetElements(): NodeListOf<HTMLElement> | null {
 		// Get target selector.
 		const targetSelector: string = this.getAttribute( 'target' ) ?? '';
 		if ( '' === targetSelector ) {
@@ -179,7 +179,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 		}
 
 		// Return the target.
-		return this.getAncestorContext().querySelector( targetSelector );
+		return this.getAncestorContext().querySelectorAll( targetSelector );
 	}
 
 	/**
@@ -201,32 +201,12 @@ export class TPToggleAttributeElement extends HTMLElement {
 	}
 
 	/**
-	 * Un-toggle the target's group.
+	 * Get event.
+	 *
+	 * @return {string} The event.
 	 */
-	unToggleGroup(): void {
-		// Get group elements.
-		const groupElements: NodeListOf<HTMLElement> | null = this.getGroupElements();
-		if ( ! groupElements ) {
-			return;
-		}
-
-		// Remove attribute from this group.
-		const attributeName: string = this.getAttributeName();
-		groupElements.forEach( ( element: HTMLElement ) => element.removeAttribute( attributeName ) );
-	}
-
-	/**
-	 * Get group elements.
-	 */
-	getGroupElements(): NodeListOf<HTMLElement> | null {
-		// Get group name.
-		const groupName: string | null = this.getAttribute( 'group' );
-		if ( ! groupName ) {
-			return null;
-		}
-
-		// Get group elements.
-		return this.getAncestorContext().querySelectorAll( `[data-toggle-group=${ groupName }]` );
+	getEvent(): string {
+		return this.getAttribute( 'event' ) ?? 'change';
 	}
 
 	/**

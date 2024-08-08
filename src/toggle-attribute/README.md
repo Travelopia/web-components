@@ -25,7 +25,26 @@ import '@travelopia/web-components/dist/toggle-attribute/style.css';
 
 ```html
 <!-- Target based on an explicit value -->
-<tp-toggle-attribute target="#toggle-target" value="Yes">
+<p>Nested radio inputs</p>
+<tp-toggle-attribute trigger="input[type='radio']" value="Yes" target="#radio-target">
+	<label>
+		<input type="radio" name="test" value="Yes" />
+		Yes
+	</label>
+	<label>
+		<input type="radio" name="test" value="No" />
+		No
+	</label>
+</tp-toggle-attribute>
+
+<div id="radio-target">
+	Radio Target
+</div>
+
+<p>Select with targeted value</p>
+
+<!-- Select value -->
+<tp-toggle-attribute target="#select-target" value="Yes">
 	<select>
 		<option value="">Select</option>
 		<option value="Yes">Yes</option>
@@ -33,27 +52,48 @@ import '@travelopia/web-components/dist/toggle-attribute/style.css';
 	</select>
 </tp-toggle-attribute>
 
-<!-- Target based on value of the trigger -->
-<tp-toggle-attribute target="#toggle-target">
+<div id="select-target">
+	Select Target
+</div>
+
+<p>Select with variable value and multiple targets</p>
+
+<!-- Select value -->
+<tp-toggle-attribute target=".toggle-target-variable">
 	<select>
 		<option value="">Select</option>
-		<option value="Yes">Yes</option>
-		<option value="No">No</option>
+		<option value="First">First</option>
+		<option value="Second">Second</option>
+		<option value="All">All</option>
 	</select>
 </tp-toggle-attribute>
 
-<!-- Toggle based on a value of the trigger, but toggle other members of the same group off -->
-<tp-toggle-attribute group="my-group">
-	<select>
-		<option value="">Select</option>
-		<option value="Yes">Yes</option>
-		<option value="No">No</option>
-	</select>
+<div class="toggle-target-variable" data-toggle-value="First,All">
+	Toggled First
+</div>
+<div class="toggle-target-variable" data-toggle-value="Second,All">
+	Toggled Second
+</div>
+
+<p>Button with click event</p>
+<tp-toggle-attribute event="click" target=".button-target">
+	<button>Toggle using class</button>
 </tp-toggle-attribute>
 
-<!-- Example target -->
-<div id="toggle-target" data-toggle-value="Yes" data-toggle-group="my-group">
-	Yes
+<tp-toggle-attribute event="click" target="#button-target">
+	<button>Toggle using ID</button>
+</tp-toggle-attribute>
+
+<div class="button-target">
+	Button Target class
+</div>
+
+<div class="button-target">
+	Button Target class
+</div>
+
+<div id="button-target">
+	Button Target ID
 </div>
 ```
 
@@ -61,11 +101,10 @@ import '@travelopia/web-components/dist/toggle-attribute/style.css';
 
 | Attribute              | Required | Values                             | Notes                                                                                                                                   |
 |------------------------|----------|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| target                 | Maybe    | <selector or the target>           | This is required if group is not mentioned                                                                                              |
-| group                  | Maybe    | <name of the group>                | The group name. Will be looking for the `data-toggle-group` attribute on targets                                                        |
+| target                 | Yes    | <selector or the target>           | This is required if group is not mentioned                                                                                              |
 | attribute              | No       | <attribute key>                    | The attribute to toggle. Default: `toggled`                                                                                             |
 | attribute-value        | No       | <attribute value>                  | The attribute value when its. Default: `yes`                                                                                            |
-| value                  | No       | <value to match>                   | If this is specified, this value is matched with the value of the trigger. If they match, the target is toggled                         |
+| values                  | No       | <comma separated values to match>                   | If this is specified, these comma separated values are matched with the value of the trigger. If they match, the target(s) is/are toggled. Same goes for having a `data-toggle-value` attribute on a target.                         |
 | trigger                | No       | <selector of the trigger>          | If this is not specified, the direct child is treated as the trigger. If it is mentioned, it looks for this selector within the context |
 | closest-ancestor       | No       | <selector of the closest ancestor> | Default: `body`. If this is specified, the target is searched for within this selector, not on `body`.                                  |
 
