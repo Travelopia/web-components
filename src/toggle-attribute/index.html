@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -10,7 +11,8 @@
 	<script type="module" src="../../dist/toggle-attribute/index.js"></script>
 
 	<style>
-		[id] {
+		[id],
+		[class] {
 			display: none;
 			padding: 10px;
 			margin: 10px 0;
@@ -22,11 +24,11 @@
 		}
 	</style>
 </head>
+
 <body>
 	<main>
-
 		<p>Nested radio inputs</p>
-		<tp-toggle-attribute trigger="input[type='radio']" value="Yes" target="#toggle-target">
+		<tp-toggle-attribute trigger="input[type='radio']" value="Yes" target="#radio-target">
 			<label>
 				<input type="radio" name="test" value="Yes" />
 				Yes
@@ -37,10 +39,14 @@
 			</label>
 		</tp-toggle-attribute>
 
+		<div id="radio-target">
+			Radio Target
+		</div>
+
 		<p>Select with targeted value</p>
 
 		<!-- Select value -->
-		<tp-toggle-attribute target="#toggle-target" value="Yes">
+		<tp-toggle-attribute target="#select-target" value="Yes">
 			<select>
 				<option value="">Select</option>
 				<option value="Yes">Yes</option>
@@ -48,53 +54,50 @@
 			</select>
 		</tp-toggle-attribute>
 
-		<div id="toggle-target">
-			Toggled
+		<div id="select-target">
+			Select Target
 		</div>
 
-		<p>Select with variable value and a target</p>
+		<p>Select with variable value and multiple targets</p>
 
 		<!-- Select value -->
-		<tp-toggle-attribute target="#toggle-target-variable">
+		<tp-toggle-attribute target=".toggle-target-variable">
 			<select>
 				<option value="">Select</option>
-				<option value="Yes">Yes</option>
-				<option value="No">No</option>
+				<option value="First">First</option>
+				<option value="Second">Second</option>
+				<option value="All">All</option>
 			</select>
 		</tp-toggle-attribute>
 
-		<div id="toggle-target-variable" data-toggle-value="Yes">
-			Toggled
+		<div class="toggle-target-variable" data-toggle-value="First,All">
+			Toggled First
 		</div>
-
-		<p>Select with variable value targeting a group</p>
-
-		<!-- Select with variable value -->
-		<tp-toggle-attribute group="my-group">
-			<select>
-				<option value="">Select</option>
-				<option value="Yes">Yes</option>
-				<option value="No">No</option>
-			</select>
-		</tp-toggle-attribute>
-
-		<div id="yes-target" data-toggle-value="Yes" data-toggle-group="my-group">
-			Yes
-		</div>
-
-		<div id="no-target" data-toggle-value="No" data-toggle-group="my-group">
-			No
+		<div class="toggle-target-variable" data-toggle-value="Second,All">
+			Toggled Second
 		</div>
 
 		<p>Button with click event</p>
-		<tp-toggle-attribute event="click" target="#button-target">
-			<button>Toggle</button>
+		<tp-toggle-attribute event="click" target=".button-target">
+			<button>Toggle using class</button>
 		</tp-toggle-attribute>
 
-		<div id="button-target">
-			Button Target
+		<tp-toggle-attribute event="click" target="#button-target">
+			<button>Toggle using ID</button>
+		</tp-toggle-attribute>
+
+		<div class="button-target">
+			Button Target class
 		</div>
 
+		<div class="button-target">
+			Button Target class
+		</div>
+
+		<div id="button-target">
+			Button Target ID
+		</div>
 	</main>
 </body>
+
 </html>
