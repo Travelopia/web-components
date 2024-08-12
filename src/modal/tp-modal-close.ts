@@ -11,7 +11,10 @@ export class TPModalCloseElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
+
+		// Add event listener.
 		const button: HTMLButtonElement | null = this.querySelector( 'button' );
 		button?.addEventListener( 'click', this.closeModal.bind( this ) );
 	}
@@ -20,6 +23,7 @@ export class TPModalCloseElement extends HTMLElement {
 	 * Close the modal.
 	 */
 	closeModal(): void {
+		// Get modal and apply close method.
 		const modal: TPModalElement | null = this.closest( 'tp-modal' );
 		modal?.close();
 	}

@@ -11,6 +11,7 @@ export class TPLightboxPreviousElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
 
 		// Events.
@@ -21,13 +22,19 @@ export class TPLightboxPreviousElement extends HTMLElement {
 	 * Navigate previous.
 	 */
 	previous(): void {
+		// Check if we are disabled.
 		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
+			// No we don't. Exit.
 			return;
 		}
 
+		// Get lightbox.
 		const lightbox: TPLightboxElement | null = this.closest( 'tp-lightbox' );
+
+		// Check if we have a lightbox.
 		if ( lightbox ) {
 			setTimeout( (): void => {
+				// Previous.
 				lightbox.previous();
 			}, 0 );
 		}

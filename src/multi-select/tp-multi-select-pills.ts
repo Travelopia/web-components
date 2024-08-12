@@ -13,6 +13,7 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
 
 		// Events.
@@ -29,7 +30,10 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 	update(): void {
 		// Get multi-select.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Bail if there's no multi-select.
 		if ( ! multiSelect ) {
+			// Bail early.
 			return;
 		}
 
@@ -40,14 +44,19 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 
 		// Remove pills that shouldn't exist.
 		pills.forEach( ( pill: TPMultiSelectPillElement ): void => {
+			// Get pill value.
 			const pillValue: string = pill.getAttribute( 'value' ) ?? '';
 
+			// Early return if pill value is empty string.
 			if ( '' === pillValue ) {
+				// Early return.
 				return;
 			}
 
+			// Add pill value to the array.
 			pillValues.push( pillValue );
 
+			// Remove pill if it doesn't exist in the values.
 			if ( ! values.includes( pillValue ) ) {
 				pill.remove();
 			}
@@ -55,16 +64,25 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 
 		// Create new pills.
 		const pillsToCreate: string[] = values.filter( ( value: string ) => ! pillValues.includes( value ) );
+
+		// Create pills.
 		pillsToCreate.forEach( ( pillValue: string ): void => {
+			// Early return if pill value is empty string.
 			if ( '' === pillValue ) {
+				// Early return.
 				return;
 			}
 
+			// Get multi-select option.
 			const multiSelectOption: TPMultiSelectOptionElement | null = multiSelect.querySelector( `tp-multi-select-option[value="${ pillValue }"]` );
+
+			// Bail early if there's no multi-select option.
 			if ( ! multiSelectOption ) {
+				// Early return.
 				return;
 			}
 
+			// Add pill.
 			this.appendChild( this.createPill( pillValue, multiSelectOption.getAttribute( 'label' ) ?? '' ) );
 		} );
 	}
@@ -78,22 +96,30 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 	 * @return {TPMultiSelectPillElement} New pill.
 	 */
 	createPill( value: string, label: string ): TPMultiSelectPillElement {
+		// Create pill and set value attribute.
 		const newPill = document.createElement( 'tp-multi-select-pill' ) as TPMultiSelectPillElement;
 		newPill.setAttribute( 'value', value );
 
+		// Create pill label.
 		const pillLabel: HTMLElement = document.createElement( 'span' );
 		pillLabel.textContent = label;
 
+		// Create pill close button.
 		const pillCloseButton: HTMLElement = document.createElement( 'button' );
 		pillCloseButton.setAttribute( 'type', 'button' );
 		pillCloseButton.textContent = 'x';
+
+		// Add event listener.
 		pillCloseButton.addEventListener( 'click', () => {
+			// On click, run removePill method.
 			newPill.removePill();
 		} );
 
+		// Append label and close button to pill.
 		newPill.appendChild( pillLabel );
 		newPill.appendChild( pillCloseButton );
 
+		// Return newPill element.
 		return newPill;
 	}
 }
