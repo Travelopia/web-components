@@ -6,7 +6,10 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Call the parent constructor.
 		super();
+
+		// Call the update function to set up event listeners.
 		this.update();
 	}
 
@@ -17,12 +20,16 @@ export class TPToggleAttributeElement extends HTMLElement {
 		// Get trigger elements.
 		const triggerSelector: string = this.getAttribute( 'trigger' ) ?? ':scope > *';
 		const triggers: NodeListOf<HTMLElement> | null = this.querySelectorAll( triggerSelector );
+
+		// Exit the function if no triggers are found.
 		if ( ! triggers ) {
+			// Early return.
 			return;
 		}
 
 		// Check for value.
 		triggers.forEach( ( trigger: HTMLElement ) => trigger.addEventListener( this.getEvent(), (): void => {
+			// Set value.
 			let value: string | null = null;
 
 			// Check if we have a value.
@@ -30,6 +37,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 				value = trigger.value;
 			}
 
+			// Call the triggerFired function with the trigger element and its value.
 			this.triggerFired( trigger, value );
 		} ) );
 	}
@@ -43,6 +51,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	triggerFired( trigger: HTMLElement, value: string | null = null ): void {
 		// Check if we have a trigger.
 		if ( ! trigger ) {
+			// Early return.
 			return;
 		}
 
@@ -81,6 +90,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 			return;
 		}
 
+		// Toggle the target elements.
 		targetElements.forEach( ( target ) => {
 			// Toggle the target's attribute if the target and trigger have the same value.
 			if ( values.includes( value ) ) {
@@ -102,6 +112,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 
 		// Check if we can continue
 		if ( ! targetElements ) {
+			// We can't.
 			return;
 		}
 
@@ -112,6 +123,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 
 			// Check if we can continue
 			if ( ! values.length ) {
+				// We can't.
 				return;
 			}
 
@@ -133,6 +145,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 
 		// Check if we can continue
 		if ( ! targetElements ) {
+			// We can't.
 			return;
 		}
 
@@ -152,6 +165,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	toggleTargetAttribute( target: HTMLElement | null = null, type: string = '' ): void {
 		// Check if target exists.
 		if ( ! target ) {
+			// Early return.
 			return;
 		}
 
@@ -174,7 +188,10 @@ export class TPToggleAttributeElement extends HTMLElement {
 	getTargetElements(): NodeListOf<HTMLElement> | null {
 		// Get target selector.
 		const targetSelector: string = this.getAttribute( 'target' ) ?? '';
+
+		// Check if we have a target selector.
 		if ( '' === targetSelector ) {
+			// Return null if no target selector is provided.
 			return null;
 		}
 
@@ -188,6 +205,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 * @return {string} The attribute name.
 	 */
 	getAttributeName(): string {
+		// Return the attribute name from the 'attribute' attribute or default to 'toggled'.
 		return this.getAttribute( 'attribute' ) ?? 'toggled';
 	}
 
@@ -197,6 +215,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 * @return {string} The attribute value.
 	 */
 	getAttributeValue(): string {
+		// Return the attribute value from the 'attribute-value' attribute or default to 'yes'.
 		return this.getAttribute( 'attribute-value' ) ?? 'yes';
 	}
 
@@ -206,6 +225,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 * @return {string} The event.
 	 */
 	getEvent(): string {
+		// Return the event type from the 'event' attribute or default to 'change'.
 		return this.getAttribute( 'event' ) ?? 'change';
 	}
 
@@ -217,11 +237,17 @@ export class TPToggleAttributeElement extends HTMLElement {
 		let context: Document | HTMLElement = document;
 
 		// Check for closest ancestor attribute.
+
 		// If set, the context will be the closest target ancestor.
+
 		// Note: The target's ancestor must also be this element's ancestor!
 		const closestSelector: string = this.getAttribute( 'closest-ancestor' ) ?? '';
+
+		// Find the closest ancestor matching the selector.
 		if ( '' !== closestSelector ) {
 			const closestContext: HTMLElement | null = this.closest( closestSelector );
+
+			// Check if we can continue
 			if ( closestContext ) {
 				context = closestContext;
 			}

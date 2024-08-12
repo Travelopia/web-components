@@ -15,6 +15,7 @@ import { TPTabsElement } from './tp-tabs';
  * Register Components.
  */
 
+// Register components.
 customElements.define( 'tp-tabs-nav-item', TPTabsNavItemElement );
 customElements.define( 'tp-tabs-nav', TPTabsNavElement );
 customElements.define( 'tp-tabs-tab', TPTabsTabElement );
