@@ -34,6 +34,7 @@ window.tpFormErrors = {};
 validators.forEach( (
 	{ name, validator, errorMessage }: { name: string, validator: TPFormValidator, errorMessage: string }
 ): void => {
+	// Assigning validators and error messages to various fields.
 	window.tpFormValidators[ name ] = validator;
 	window.tpFormErrors[ name ] = errorMessage;
 } );

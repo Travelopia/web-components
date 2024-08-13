@@ -11,6 +11,7 @@ export class TPAccordionExpandAllElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
 		this.querySelector( 'button' )?.addEventListener( 'click', this.expandAll.bind( this ) );
 	}
@@ -21,7 +22,10 @@ export class TPAccordionExpandAllElement extends HTMLElement {
 	expandAll() {
 		// Get accordion.
 		const accordion: TPAccordionElement | null = this.closest( 'tp-accordion' );
+
+		// Terminates if accordion is not present.
 		if ( ! accordion ) {
+			// Early return.
 			return;
 		}
 

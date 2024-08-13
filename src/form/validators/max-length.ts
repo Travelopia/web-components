@@ -20,15 +20,19 @@ export const errorMessage: string = 'Must be less than %1 characters';
  */
 export const validator: TPFormValidator = {
 	validate: ( field: TPFormFieldElement ): boolean => {
+		// Get max length and value.
 		const minLength: number = parseInt( field.getAttribute( 'max-length' ) ?? '0' );
 		const value: string = field.getField()?.value ?? '';
 
+		// Validate.
 		return '' === value || value.length <= minLength;
 	},
 	getErrorMessage: ( field: TPFormFieldElement ): string => {
+		// Get error message.
 		const error: string = getErrorMessage( name );
 		const maxLength: string = field.getAttribute( 'max-length' ) ?? '';
 
+		// Return error message.
 		return error.replace( '%1', maxLength );
 	},
 };
