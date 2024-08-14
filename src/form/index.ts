@@ -6,6 +6,8 @@ import './style.scss';
 /**
  * Validators.
  */
+
+// Import validators.
 import { TPFormValidator } from './definitions';
 import * as required from './validators/required';
 import * as email from './validators/email';
@@ -13,6 +15,7 @@ import * as minLength from './validators/min-length';
 import * as maxLength from './validators/max-length';
 import * as noEmptySpaces from './validators/no-empty-spaces';
 
+// Prepare validators.
 const validators = [
 	required,
 	email,
@@ -27,9 +30,11 @@ const validators = [
 window.tpFormValidators = {};
 window.tpFormErrors = {};
 
+// Register validators.
 validators.forEach( (
 	{ name, validator, errorMessage }: { name: string, validator: TPFormValidator, errorMessage: string }
 ): void => {
+	// Assigning validators and error messages to various fields.
 	window.tpFormValidators[ name ] = validator;
 	window.tpFormErrors[ name ] = errorMessage;
 } );
@@ -49,4 +54,3 @@ customElements.define( 'tp-form', TPFormElement );
 customElements.define( 'tp-form-field', TPFormFieldElement );
 customElements.define( 'tp-form-error', TPFormErrorElement );
 customElements.define( 'tp-form-submit', TPFormSubmitElement );
-

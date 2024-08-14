@@ -22,6 +22,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
 
 		// Event listeners.
@@ -34,6 +35,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
+		// Attributes to observe.
 		return [ 'open', 'index', 'total', 'close-on-overlay-click', 'loading' ];
 	}
 
@@ -47,9 +49,11 @@ export class TPLightboxElement extends HTMLElement {
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// Prevent redundant updates.
 		if ( oldValue === newValue ) {
+			// Early return.
 			return;
 		}
 
+		// Trigger change event.
 		this.dispatchEvent( new CustomEvent( 'change' ) );
 
 		// Trigger current index target if index has changed.
@@ -62,6 +66,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * Get template.
 	 */
 	get template(): HTMLTemplateElement | null {
+		// Return current template.
 		return this.currentTemplate;
 	}
 
@@ -77,19 +82,26 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Get lightbox content element.
 		const content: TPLightboxContentElement | null = this.querySelector( 'tp-lightbox-content' );
+
+		// Check if we have a content.
 		if ( ! content ) {
+			// No we don't. Exit.
 			return;
 		}
 
 		// Check if we have a template.
 		if ( this.currentTemplate ) {
-			// We do, update content with template's content.
-			// We do this rather than a string to avoid script injection.
+			/**
+			 * We do, update content with template's content.
+			 * We do this rather than a string to avoid script injection.
+			 */
 			const templateContent: Node = this.currentTemplate.content.cloneNode( true );
 			content.replaceChildren( templateContent );
 			this.dispatchEvent( new CustomEvent( 'content-change' ) );
 
+			// Prepare image loading.
 			setTimeout( (): void => {
+				// We do, prepare image loading.
 				this.prepareImageLoading();
 				this.prepareNavigation();
 			}, 0 );
@@ -103,6 +115,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * Get current group.
 	 */
 	get group(): string {
+		// Return current group.
 		return this.currentGroup;
 	}
 
@@ -112,6 +125,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * @param {string} group Group name.
 	 */
 	set group( group: string ) {
+		// Set current group.
 		this.currentGroup = group;
 	}
 
@@ -119,6 +133,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * Get current index.
 	 */
 	get currentIndex(): number {
+		// Return current index.
 		return parseInt( this.getAttribute( 'index' ) ?? '1' );
 	}
 
@@ -128,6 +143,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * @param {number} index Current index.
 	 */
 	set currentIndex( index: number ) {
+		// Set current index.
 		if ( index < 1 ) {
 			index = 1;
 		}
@@ -142,7 +158,10 @@ export class TPLightboxElement extends HTMLElement {
 	triggerCurrentIndexTarget(): void {
 		// Get all groups and check if current index exists within group.
 		const allGroups: NodeListOf<TPLightboxTriggerElement> | null = this.getAllGroups();
+
+		// Bail early if we don't have groups.
 		if ( ! allGroups || ! allGroups[ this.currentIndex - 1 ] ) {
+			// No we don't. Exit.
 			return;
 		}
 
@@ -159,6 +178,7 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Check if dialog exists or is already open.
 		if ( ! dialog || dialog.open ) {
+			// Yes it is, Exit.
 			return;
 		}
 
@@ -191,12 +211,16 @@ export class TPLightboxElement extends HTMLElement {
 	previous(): void {
 		// Check if we even have a group.
 		if ( '' === this.group ) {
+			// No we don't. Exit.
 			return;
 		}
 
 		// Check if we have elements within group.
 		const allGroups: NodeListOf<TPLightboxTriggerElement> | null = this.getAllGroups();
+
+		// Bail early if we don't have groups.
 		if ( ! allGroups ) {
+			// No we don't. Exit.
 			return;
 		}
 
@@ -212,12 +236,16 @@ export class TPLightboxElement extends HTMLElement {
 	next(): void {
 		// Check if we even have a group.
 		if ( '' === this.group ) {
+			// No we don't. Exit.
 			return;
 		}
 
 		// Check if we have elements within group.
 		const allGroups: NodeListOf<TPLightboxTriggerElement> | null = this.getAllGroups();
+
+		// Bail early if we don't have groups.
 		if ( ! allGroups ) {
+			// No we don't. Exit.
 			return;
 		}
 
@@ -233,13 +261,19 @@ export class TPLightboxElement extends HTMLElement {
 	 * @param {NodeList} allGroups All groups.
 	 */
 	updateAllGroups( allGroups: NodeListOf<TPLightboxTriggerElement> | null = null ): void {
+		// Update all groups.
 		if ( allGroups && allGroups.length ) {
 			this.allGroups = allGroups;
 			this.setAttribute( 'total', this.allGroups.length.toString() );
+
+			// Exit.
 			return;
 		}
 
+		// Get all groups.
 		this.allGroups = document.querySelectorAll( `tp-lightbox-trigger[group="${ this.group }"]` );
+
+		// Update total.
 		if ( ! this.allGroups.length ) {
 			this.allGroups = null;
 		} else {
@@ -251,6 +285,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * Get all groups from memory.
 	 */
 	getAllGroups(): NodeListOf<TPLightboxTriggerElement> | null {
+		// Return all groups.
 		return this.allGroups;
 	}
 
@@ -268,6 +303,7 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Bail early if we don't have either.
 		if ( ! previous && ! next ) {
+			// Exit.
 			return;
 		}
 
@@ -275,14 +311,20 @@ export class TPLightboxElement extends HTMLElement {
 		if ( '' === this.group ) {
 			previous?.setAttribute( 'disabled', 'yes' );
 			next?.setAttribute( 'disabled', 'yes' );
+
+			// Exit.
 			return;
 		}
 
 		// Check if we have elements within the group.
 		const allGroups: NodeListOf<TPLightboxTriggerElement> | null = this.getAllGroups();
+
+		// Disable if we don't have any.
 		if ( ! allGroups ) {
 			previous?.setAttribute( 'disabled', 'yes' );
 			next?.setAttribute( 'disabled', 'yes' );
+
+			// Exit.
 			return;
 		}
 
@@ -307,14 +349,21 @@ export class TPLightboxElement extends HTMLElement {
 	prepareImageLoading(): void {
 		// Get lightbox content element.
 		const content: TPLightboxContentElement | null = this.querySelector( 'tp-lightbox-content' );
+
+		// Bail early if we don't have content.
 		if ( ! content ) {
+			// Exit.
 			return;
 		}
 
 		// Bail if there are no images within current content.
 		const images: NodeListOf<HTMLImageElement> = content.querySelectorAll( 'img' );
+
+		// Exit early if there are no images.
 		if ( ! images.length ) {
 			this.removeAttribute( 'loading' );
+
+			// Exit.
 			return;
 		}
 
@@ -329,6 +378,7 @@ export class TPLightboxElement extends HTMLElement {
 		 * Increment counter.
 		 */
 		const incrementLoadingCounter = (): void => {
+			// Increment
 			counter++;
 
 			// Remove loading attribute once all images have loaded.
@@ -339,6 +389,7 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Check if images have loaded, else add an event listener.
 		images.forEach( ( image: HTMLImageElement ): void => {
+			// Check if image has loaded.
 			if ( image.complete ) {
 				incrementLoadingCounter();
 			} else {
@@ -353,6 +404,7 @@ export class TPLightboxElement extends HTMLElement {
 	 * @param {Event} e Click event.
 	 */
 	handleDialogClick( e: MouseEvent ): void {
+		// Close on overlay click.
 		if (
 			'yes' === this.getAttribute( 'close-on-overlay-click' ) &&
 			this.querySelector( 'dialog' ) === e.target

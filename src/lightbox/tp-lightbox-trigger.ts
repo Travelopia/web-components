@@ -11,6 +11,7 @@ export class TPLightboxTriggerElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
 
 		// Events.
@@ -27,12 +28,16 @@ export class TPLightboxTriggerElement extends HTMLElement {
 
 		// We can't proceed without them.
 		if ( ! lightboxId || ! template ) {
+			// Exit.
 			return;
 		}
 
 		// Get the lightbox.
 		const lightbox: TPLightboxElement | null = document.querySelector( `#${ lightboxId.toString() }` );
+
+		// Check to see if we have a lightbox.
 		if ( ! lightbox ) {
+			// Exit.
 			return;
 		}
 
@@ -48,14 +53,18 @@ export class TPLightboxTriggerElement extends HTMLElement {
 			// Set index and group if we have them.
 			if ( '' !== group ) {
 				const allGroups: NodeListOf<TPLightboxTriggerElement> = document.querySelectorAll( `tp-lightbox-trigger[group="${ group }"]` );
+
+				// Update all groups.
 				if ( allGroups.length ) {
-					// Update all groups.
-					// We do this when we're opening a lightbox, or navigating.
-					// This allows consumers to inject elements at any point.
+					/**
+					 * We do this when we're opening a lightbox, or navigating.
+					 * This allows consumers to inject elements at any point.
+					 */
 					lightbox.updateAllGroups( allGroups );
 
 					// Get current trigger's index within the group.
 					allGroups.forEach( ( triggerElement: TPLightboxTriggerElement, index: number ): void => {
+						// Update current index.
 						if ( this === triggerElement ) {
 							lightbox.currentIndex = index + 1;
 						}

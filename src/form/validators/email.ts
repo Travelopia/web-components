@@ -20,6 +20,7 @@ export const errorMessage: string = 'Please enter a valid email address';
  */
 export const validator: TPFormValidator = {
 	validate: ( field: TPFormFieldElement ): boolean => {
+		// Boolean value to determine if the field is valid or not.
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test( field.getField()?.value ?? '' );
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
