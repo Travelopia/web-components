@@ -211,7 +211,7 @@ export class TPSliderElement extends HTMLElement {
 		const totalSlides: number = this.getTotalSlides();
 
 		// Check if we are at the last slide considering per view attribute.
-		if ( this.currentSlideIndex  >= totalSlides - this.perView + 1 ) {
+		if ( this.currentSlideIndex >= totalSlides - this.perView + 1 ) {
 			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
 				// Yes, we are, and go back to first slide.
