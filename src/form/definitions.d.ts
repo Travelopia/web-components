@@ -15,6 +15,7 @@ export interface TPFormValidator {
  * Window.
  */
 declare global {
+	// Declare interface for validators and errors.
 	interface Window {
 		tpFormValidators: {
 			[ key: string ]: TPFormValidator;

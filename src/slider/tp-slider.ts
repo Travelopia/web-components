@@ -15,6 +15,8 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
+	protected touchStartY: number = 0;
+	protected swipeThreshold: number = 200;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -31,12 +33,16 @@ export class TPSliderElement extends HTMLElement {
 	 * Constructor.
 	 */
 	constructor() {
+		// Initialize parent.
 		super();
 
 		// Set current slide.
 		if ( ! this.getAttribute( 'current-slide' ) ) {
 			this.setAttribute( 'current-slide', '1' );
 		}
+
+		// Threshold Setting.
+		this.swipeThreshold = Number( this?.getAttribute( 'swipe-threshold' ) ?? '200' );
 
 		// Initialize slider.
 		this.slide();
@@ -49,14 +55,18 @@ export class TPSliderElement extends HTMLElement {
 
 		// Event listeners.
 		if ( ! ( 'ResizeObserver' in window ) ) {
-			// We set the resize observer in `tp-slider-slide`
-			// These are just fallbacks for browsers that don't support ResizeObserver.
+			/**
+			 * We set the resize observer in `tp-slider-slide`
+			 * because These are just fallbacks for browsers that don't support ResizeObserver.
+			 */
+
 			// @ts-ignore
 			window.addEventListener( 'resize', this.handleResize.bind( this ) );
 			document.fonts.ready.then( () => this.handleResize() );
 		}
 
-		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+		// Touch listeners.
+		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
 
@@ -80,6 +90,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
+		// Observed attributes.
 		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'per-view', 'step' ];
 	}
 
@@ -91,11 +102,13 @@ export class TPSliderElement extends HTMLElement {
 	 * @param {string} newValue New value.
 	 */
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		// Keep an eye on current slide.
 		if ( 'current-slide' === name && oldValue !== newValue ) {
 			this.slide();
 			this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
 		}
 
+		// Update the component after the attribute change.
 		this.update();
 	}
 
@@ -105,6 +118,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {number} Current slide index.
 	 */
 	get currentSlideIndex(): number {
+		// To get the current slide index.
 		return parseInt( this.getAttribute( 'current-slide' ) ?? '1' );
 	}
 
@@ -114,6 +128,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @param {number} index Slide index.
 	 */
 	set currentSlideIndex( index: number ) {
+		// Set the current slide index.
 		this.setCurrentSlide( index );
 	}
 
@@ -123,6 +138,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {number} Current step.
 	 */
 	get step(): number {
+		// To get the current step.
 		return parseInt( this.getAttribute( 'step' ) ?? '1' );
 	}
 
@@ -132,6 +148,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @param {number} step Step.
 	 */
 	set step( step: number ) {
+		// Set the current step.
 		this.setAttribute( 'step', step.toString() );
 	}
 
@@ -141,6 +158,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {number} Current step.
 	 */
 	get perView(): number {
+		// To get number of slides per view.
 		return parseInt( this.getAttribute( 'per-view' ) ?? '1' );
 	}
 
@@ -150,6 +168,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @param {number} perView Per view.
 	 */
 	set perView( perView: number ) {
+		// Set the number of slides per view.
 		this.setAttribute( 'per-view', perView.toString() );
 	}
 
@@ -159,12 +178,16 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {number} Total slides.
 	 */
 	getTotalSlides(): number {
+		// To get the total number of slides.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
 
+		// Check if slides are available.
 		if ( slides ) {
+			// Tell the total number of slides.
 			return slides.length;
 		}
 
+		// Else return 0.
 		return 0;
 	}
 
@@ -172,9 +195,11 @@ export class TPSliderElement extends HTMLElement {
 	 * Get Slide Elements.
 	 */
 	getSlideElements() {
+		// Get slides.
 		const slidesElement: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = slidesElement?.querySelectorAll( ':scope > tp-slider-slide' );
 
+		// Return array of slides.
 		return slides;
 	}
 
@@ -182,23 +207,31 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the next slide.
 	 */
 	next(): void {
+		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
 
+		// Check if we are at the last slide considering per view attribute.
 		if ( this.currentSlideIndex  >= totalSlides - this.perView + 1 ) {
+			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
+				// Yes, we are, and go back to first slide.
 				this.setCurrentSlide( 1 );
 			}
 
+			// Terminate.
 			return;
 		}
 
+		// Get next slide index.
 		const nextSlideIndex: number = this.currentSlideIndex + this.step;
 
 		// Check if the next slide step is not taking it beyond the last slide.
 		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
+			// Yes, it is.
 			return;
 		}
 
+		// Everything is good, go to next slide.
 		this.setCurrentSlide( nextSlideIndex );
 	}
 
@@ -206,14 +239,18 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
+		// Check if we are at the first slide.
 		if ( this.currentSlideIndex <= 1 ) {
+			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
 				this.setCurrentSlide( this.getTotalSlides() - this.perView + 1 );
 			}
 
+			// Terminate.
 			return;
 		}
 
+		// Get previous slide index.
 		const previousSlideNumber: number = this.currentSlideIndex - this.step;
 
 		// Check if the previous slide step is not taking it beyond the first slide.
@@ -230,6 +267,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @return {number} Current slide index.
 	 */
 	getCurrentSlide(): number {
+		// Get current slide index.
 		return this.currentSlideIndex;
 	}
 
@@ -239,16 +277,21 @@ export class TPSliderElement extends HTMLElement {
 	 * @param {number} index Slide index.
 	 */
 	setCurrentSlide( index: number ): void {
+		// Check if slide index is valid.
 		if ( index > this.getTotalSlides() || index <= 0 ) {
+			// Stop! It's not valid.
 			return;
 		}
 
+		// dispatch slide-set event.
 		this.dispatchEvent( new CustomEvent( 'slide-set', {
 			bubbles: true,
 			detail: {
 				slideIndex: index,
 			},
 		} ) );
+
+		// Set current slide index.
 		this.setAttribute( 'current-slide', index.toString() );
 	}
 
@@ -260,13 +303,17 @@ export class TPSliderElement extends HTMLElement {
 	protected slide(): void {
 		// Check if slider is disabled.
 		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
+			// Yes, it is. So stop.
 			return;
 		}
 
 		// Get slides.
 		const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
+		// Check if we have slide container and slides.
 		if ( ! slidesContainer || ! slides ) {
+			// No, we don't. Either one of them or both are missing. So stop.
 			return;
 		}
 
@@ -275,7 +322,10 @@ export class TPSliderElement extends HTMLElement {
 
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
+
+		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
 		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
+			// Yes, it is. So slide to the current slide.
 			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
 		}
 	}
@@ -313,10 +363,10 @@ export class TPSliderElement extends HTMLElement {
 
 	/**
 	 * Update stuff when any attribute has changed.
-	 * Example: Update subcomponents.
+	 * Example: Update sub-components.
 	 */
 	update(): void {
-		// Get subcomponents.
+		// Get sub-components.
 		const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
 		const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
 		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
@@ -328,6 +378,7 @@ export class TPSliderElement extends HTMLElement {
 		// Check if slides are available.
 		if ( slides ) {
 			slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
+				// Update active attribute.
 				if ( this.currentSlideIndex - 1 === index ) {
 					slide.setAttribute( 'active', 'yes' );
 				} else {
@@ -339,6 +390,7 @@ export class TPSliderElement extends HTMLElement {
 		// Set current slider nav item.
 		if ( sliderNavItems ) {
 			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
+				// Update current attribute.
 				if ( this.currentSlideIndex - 1 === index ) {
 					navItem.setAttribute( 'current', 'yes' );
 				} else {
@@ -364,12 +416,14 @@ export class TPSliderElement extends HTMLElement {
 
 		// Enable / disable arrows.
 		if ( 'yes' !== this.getAttribute( 'infinite' ) ) {
+			// For the last slide.
 			if ( this.getCurrentSlide() === this.getTotalSlides() ) {
 				rightArrow?.setAttribute( 'disabled', 'yes' );
 			} else {
 				rightArrow?.removeAttribute( 'disabled' );
 			}
 
+			// For the first slide.
 			if ( 1 === this.getCurrentSlide() ) {
 				leftArrow?.setAttribute( 'disabled', 'yes' );
 			} else {
@@ -387,7 +441,10 @@ export class TPSliderElement extends HTMLElement {
 	updateHeight(): void {
 		// Get slides container to resize.
 		const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
+
+		// Check if slides container is available.
 		if ( ! slidesContainer ) {
+			// Early return.
 			return;
 		}
 
@@ -395,12 +452,17 @@ export class TPSliderElement extends HTMLElement {
 		if ( 'yes' !== this.getAttribute( 'flexible-height' ) && 'fade' !== this.getAttribute( 'behaviour' ) ) {
 			// Remove height property for good measure!
 			slidesContainer.style.removeProperty( 'height' );
+
+			// Bail early.
 			return;
 		}
 
 		// Get slides.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
+		// Check if slides are available.
 		if ( ! slides ) {
+			// No slides to resize.
 			return;
 		}
 
@@ -414,6 +476,7 @@ export class TPSliderElement extends HTMLElement {
 
 				// Traverse all slides in the current view and add their height to the array.
 				for ( let i: number = currentIndex; i < slidesOnCurrentView; i++ ) {
+					// Check if the slide exists.
 					if ( slides[ i ].scrollHeight > maxHeight ) {
 						maxHeight = slides[ i ].scrollHeight;
 					}
@@ -429,12 +492,16 @@ export class TPSliderElement extends HTMLElement {
 		} else {
 			// Set the height of the container to be the height of the tallest slide.
 			let height: number = 0;
+
+			// Traverse all slides and add their height to the array.
 			slides.forEach( ( slide: TPSliderSlideElement ): void => {
+				// Set the height of the container to be the height of the tallest slide.
 				if ( slide.scrollHeight > height ) {
 					height = slide.scrollHeight;
 				}
 			} );
 
+			// Set the height of the container to be the height of the tallest slide.
 			slidesContainer.style.height = `${ height }px`;
 		}
 	}
@@ -447,11 +514,13 @@ export class TPSliderElement extends HTMLElement {
 	handleResize(): void {
 		// Update responsive settings. We are using setTimeout for INP( Interaction for Next Paint ).
 		setTimeout( () => {
+			// Update attributes responsive settings.
 			this.updateAttributesResponsively();
 		}, 0 );
 
 		// Check if we're already resizing.
 		if ( this.getAttribute( 'resizing' ) ) {
+			// Yes we are, early return.
 			return;
 		}
 
@@ -477,6 +546,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Step 2: First remove all the allowed responsive keys.
 		this.allowedResponsiveKeys.forEach( ( key: string ) => {
+			// Remove.
 			this.removeAttribute( key );
 		} );
 
@@ -510,8 +580,10 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected handleTouchStart( e: TouchEvent ): void {
+		// initialize touch start coordinates
 		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
 			this.touchStartX = e.touches[ 0 ].clientX;
+			this.touchStartY = e.touches[ 0 ].clientY;
 		}
 	}
 
@@ -523,17 +595,38 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected handleTouchEnd( e: TouchEvent ): void {
+		// Early return if swipe is not enabled.
 		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			// Early return.
 			return;
 		}
 
+		// Calculate the horizontal and vertical distance moved.
 		const touchEndX: number = e.changedTouches[ 0 ].clientX;
-		const swipeDistance: number = touchEndX - this.touchStartX;
+		const touchEndY: number = e.changedTouches[ 0 ].clientY;
+		const swipeDistanceX: number = touchEndX - this.touchStartX;
+		const swipeDistanceY: number = touchEndY - this.touchStartY;
 
-		if ( swipeDistance > 0 ) {
-			this.previous();
-		} else if ( swipeDistance < 0 ) {
-			this.next();
+		// Determine if the swipe is predominantly horizontal or vertical.
+		const isHorizontalSwipe: boolean = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
+
+		// If it's not horizontal swipe, return
+		if ( ! isHorizontalSwipe ) {
+			// Early return.
+			return;
+		}
+
+		// Check if it's a right or left swipe.
+		if ( swipeDistanceX > 0 ) {
+			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
+			if ( swipeDistanceX < this.swipeThreshold ) {
+				this.previous();
+			}
+		} else if ( swipeDistanceX < 0 ) {
+			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
+			if ( swipeDistanceX > -this.swipeThreshold ) {
+				this.next();
+			}
 		}
 	}
 
@@ -546,18 +639,22 @@ export class TPSliderElement extends HTMLElement {
 
 		// Check if we have an auto slider interval.
 		if ( ! autoSlideInterval ) {
+			// Early return.
 			return;
 		}
 
 		// Check for a valid interval.
 		const interval: number = parseInt( autoSlideInterval );
+
+		// Check if interval is valid.
 		if ( interval <= 0 ) {
+			// Early return.
 			return;
 		}
 
-		// Run this on a timeout, rather than interval, so the interval can be controlled after
-		// the component is initialised.
+		// Run this on a timeout, rather than interval, so the interval can be controlled after the component is initialized.
 		setTimeout( (): void => {
+			// Run the next slide.
 			this.next();
 			this.autoSlide();
 			this.dispatchEvent( new CustomEvent( 'auto-slide-complete' ) );

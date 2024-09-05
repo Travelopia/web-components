@@ -8,22 +8,13 @@ import { TPMultiSelectElement } from './tp-multi-select';
  */
 export class TPMultiSelectFieldElement extends HTMLElement {
 	/**
-	 * Properties.
+	 * Constructor.
 	 */
-	private initialized: boolean = false;
+	constructor() {
+		// Initialize parent.
+		super();
 
-	/**
-	 * Connected callback.
-	 */
-	connectedCallback(): void {
-		// Return early if already initialized.
-		if ( true === this.initialized ) {
-			return;
-		}
-
-		// Set initialized flag to true.
-		this.initialized = true;
-
+		// Add event listener.
 		this.addEventListener( 'click', this.toggleOpen.bind( this ) );
 	}
 
@@ -31,11 +22,16 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 	 * Toggle opening this component.
 	 */
 	toggleOpen(): void {
+		// Get multi-select.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Bail early if we don't have a multi-select.
 		if ( ! multiSelect ) {
+			// Bail early.
 			return;
 		}
 
+		// Toggle open.
 		if ( 'yes' === multiSelect.getAttribute( 'open' ) ) {
 			multiSelect.removeAttribute( 'open' );
 		} else {

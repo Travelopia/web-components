@@ -1,6 +1,6 @@
 {
   "name": "@travelopia/web-components",
-  "version": "0.5.25",
+  "version": "0.6.9",
   "description": "Accessible web components for the modern web",
   "files": [
     "dist"
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/Travelopia/web-components#readme",
   "devDependencies": {
-    "@wordpress/eslint-plugin": "^17.1.0",
+    "@travelopia/eslint-plugin-wordpress-coding-standards": "^1.0.0",
     "css-loader": "^6.8.1",
     "mini-css-extract-plugin": "^2.7.6",
     "postcss-loader": "^7.3.3",

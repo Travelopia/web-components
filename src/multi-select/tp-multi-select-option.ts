@@ -8,22 +8,13 @@ import { TPMultiSelectElement } from './tp-multi-select';
  */
 export class TPMultiSelectOptionElement extends HTMLElement {
 	/**
-	 * Properties.
+	 * Constructor.
 	 */
-	private initialized: boolean = false;
+	constructor() {
+		// Initialize parent.
+		super();
 
-	/**
-	 * Connected callback.
-	 */
-	connectedCallback(): void {
-		// Return early if already initialized.
-		if ( true === this.initialized ) {
-			return;
-		}
-
-		// Set initialized flag to true.
-		this.initialized = true;
-
+		// Add event listener to toggle the selected state.
 		this.addEventListener( 'click', this.toggle.bind( this ) );
 	}
 
@@ -33,12 +24,15 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 	 * @param {Event} e Click event.
 	 */
 	toggle( e: Event | null ): void {
+		// Prevent default behavior and stop propagation.
 		e?.preventDefault();
 		e?.stopPropagation();
 
+		// Get multi-select element and value of option.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		const value: string = this.getAttribute( 'value' ) ?? '';
 
+		// Toggle selected state. Dispatch custom events accordingly.
 		if ( 'yes' !== this.getAttribute( 'selected' ) ) {
 			multiSelect?.select( value );
 			multiSelect?.dispatchEvent( new CustomEvent( 'select', {
@@ -52,6 +46,8 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 				detail: { value },
 			} ) );
 		}
+
+		// Dispatch change event.
 		multiSelect?.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}
 }

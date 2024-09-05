@@ -1,19 +1,19 @@
 /**
  * Internal dependencies.
  */
-import { TPSliderElement } from './tp-slider';
+import { TPLightboxElement } from './tp-lightbox';
 
 /**
  * TP Slider Count.
  */
-export class TPSliderCountElement extends HTMLElement {
+export class TPLightboxCountElement extends HTMLElement {
 	/**
 	 * Get observed attributes.
 	 *
 	 * @return {Array} Observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		// Attributes observed by this component.
+		// Attributes to observe.
 		return [ 'format' ];
 	}
 
@@ -23,7 +23,7 @@ export class TPSliderCountElement extends HTMLElement {
 	 * @return {string} Format.
 	 */
 	get format(): string {
-		// Get the 'format' attribute value.
+		// Get format.
 		return this.getAttribute( 'format' ) ?? '$current / $total';
 	}
 
@@ -49,27 +49,27 @@ export class TPSliderCountElement extends HTMLElement {
 	 * Update component.
 	 */
 	update(): void {
-		// Get slider.
-		const slider: TPSliderElement | null = this.closest( 'tp-slider' );
+		// Get lightbox.
+		const lightbox: TPLightboxElement | null = this.closest( 'tp-lightbox' );
 
-		// Check if slider exists.
-		if ( ! slider ) {
-			// No its not! Terminate.
+		// Check if we have a lightbox.
+		if ( ! lightbox ) {
+			// Exit.
 			return;
 		}
 
-		// Initializing current and total variables.
-		const current: number = slider.currentSlideIndex - 1 + slider.step;
-		const total: string = slider.getAttribute( 'total' ) ?? '';
+		// Get current and total.
+		const current: string = lightbox.currentIndex.toString();
+		const total: string = lightbox.getAttribute( 'total' ) ?? '';
 
-		// Updating variables in format attribute.
+		// Update variables in format attribute.
 		this.innerHTML =
 			this.format
-				.replace( '$current', current.toString() )
-				.replace( '$total', total || '' );
+				.replace( '$current', current )
+				.replace( '$total', total );
 
-		// Updating current and total attributes.
-		this.setAttribute( 'current', current.toString() );
-		this.setAttribute( 'total', total || '' );
+		// Update current and total attributes.
+		this.setAttribute( 'current', current );
+		this.setAttribute( 'total', total );
 	}
 }

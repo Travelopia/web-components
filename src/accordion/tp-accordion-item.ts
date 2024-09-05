@@ -9,9 +9,13 @@ import { slideElementDown, slideElementUp } from '../utility';
  */
 export class TPAccordionItemElement extends HTMLElement {
 	/**
-	 * Connected callbacl.
+	 * Constructor.
 	 */
-	connectedCallback(): void {
+	constructor() {
+		// Initialize parent.
+		super();
+
+		// Check if by default accordion item is open.
 		if ( 'yes' === this.getAttribute( 'open-by-default' ) ) {
 			this.setAttribute( 'open', 'yes' );
 		}
@@ -23,6 +27,7 @@ export class TPAccordionItemElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
+		// Attributes observed in the TPAccordionItemElement web-component.
 		return [ 'open' ];
 	}
 
@@ -36,16 +41,22 @@ export class TPAccordionItemElement extends HTMLElement {
 	 * @param {string} newValue New Value.
 	 */
 	attributeChangedCallback( name: string, oldValue: string, newValue: string ): void {
+		// To check if observed attributes are changed.
+
+		//Early return if no change in attributes.
 		if ( oldValue === newValue || 'open' !== name ) {
+			// Early return.
 			return;
 		}
 
+		// Conditionally open or close based on changed value.
 		if ( 'yes' === newValue ) {
 			this.open();
 		} else {
 			this.close();
 		}
 
+		// Removing default value.
 		this.removeAttribute( 'open-by-default' );
 	}
 
@@ -53,7 +64,10 @@ export class TPAccordionItemElement extends HTMLElement {
 	 * Open accordion item.
 	 */
 	open(): void {
+		// Initializing variables.
 		const content: TPAccordionContentElement | null = this.querySelector( 'tp-accordion-content' );
+
+		// Open the accordion.
 		if ( content ) {
 			this.dispatchEvent( new CustomEvent( 'before-open', { bubbles: true } ) );
 			slideElementDown( content, 600 );
@@ -65,7 +79,10 @@ export class TPAccordionItemElement extends HTMLElement {
 	 * Close accordion item.
 	 */
 	close(): void {
+		// Initializing variables.
 		const content: TPAccordionContentElement | null = this.querySelector( 'tp-accordion-content' );
+
+		// Close the accordion.
 		if ( content ) {
 			this.dispatchEvent( new CustomEvent( 'before-close', { bubbles: true } ) );
 			slideElementUp( content, 600 );

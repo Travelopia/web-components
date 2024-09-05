@@ -8,6 +8,7 @@ export class TPFormSubmitElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
+		// Attributes observed in the TPFormSubmitElement web-component.
 		return [ 'submitting-text', 'original-text', 'submitting' ];
 	}
 
@@ -19,6 +20,7 @@ export class TPFormSubmitElement extends HTMLElement {
 	 * @param {string} newValue New value.
 	 */
 	attributeChangedCallback( _name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		// Update component if attribute has changed.
 		if ( oldValue !== newValue ) {
 			this.update();
 		}
@@ -30,7 +32,10 @@ export class TPFormSubmitElement extends HTMLElement {
 	update(): void {
 		// Get submit button.
 		const submitButton: HTMLButtonElement | null = this.querySelector( 'button[type="submit"]' );
+
+		// Check if we have a submit button.
 		if ( ! submitButton ) {
+			// No, we don't. Exit.
 			return;
 		}
 
