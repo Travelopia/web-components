@@ -184,7 +184,7 @@ export class TPSliderElement extends HTMLElement {
 	next(): void {
 		const totalSlides: number = this.getTotalSlides();
 
-		if ( this.currentSlideIndex >= totalSlides ) {
+		if ( this.currentSlideIndex  >= totalSlides - this.perView + 1 ) {
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
 				this.setCurrentSlide( 1 );
 			}
