@@ -9,11 +9,17 @@ import { TPSliderNavElement } from './tp-slider-nav';
  */
 export class TPSliderNavItemElement extends HTMLElement {
 	/**
+	 * Properties.
+	 */
+	protected slider : TPSliderElement | null;
+
+	/**
 	 * Constructor.
 	 */
 	constructor() {
 		// Initialize parent.
 		super();
+		this.slider = this.closest( 'tp-slider' );
 
 		// Get the nav-item button.
 		this.querySelector( 'button' )?.addEventListener( 'click', this.handleClick.bind( this ) );
@@ -23,17 +29,14 @@ export class TPSliderNavItemElement extends HTMLElement {
 	 * Handle when the button is clicked.
 	 */
 	handleClick(): void {
-		// Get the slider.
-		const slider: TPSliderElement | null = this.closest( 'tp-slider' );
-
 		// Check if slider exists.
-		if ( ! slider ) {
+		if ( ! this.slider ) {
 			// No its not! Terminate.
 			return;
 		}
 
 		// Set current slide.
-		slider.setCurrentSlide( this.getIndex() );
+		this.slider.setCurrentSlide( this.getIndex() );
 	}
 
 	/**
@@ -50,8 +53,9 @@ export class TPSliderNavItemElement extends HTMLElement {
 
 		// No, find it in the navigation.
 		const slideNav: TPSliderNavElement | null = this.closest( 'tp-slider-nav' );
+		const step = this.slider?.step;
 
-		// Return index of this element.
-		return Array.from( slideNav?.children ?? [] ).indexOf( this ) + 1;
+		// Return index of this element considering the step value.
+		return ( Array.from( slideNav?.children ?? [] ).indexOf( this ) * ( step ?? 1 ) ) + 1;
 	}
 }

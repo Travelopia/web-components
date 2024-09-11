@@ -222,8 +222,8 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Get next slide index.
-		const nextSlideIndex: number = this.currentSlideIndex + this.step;
+		// Get next slide index by adding minimum of step or remaining number of slides.
+		const nextSlideIndex: number = this.currentSlideIndex + Math.min( this.step, totalSlides - this.currentSlideIndex - this.perView + 1 );
 
 		// Check if the next slide step is not taking it beyond the last slide.
 		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
@@ -390,8 +390,8 @@ export class TPSliderElement extends HTMLElement {
 		// Set current slider nav item.
 		if ( sliderNavItems ) {
 			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
-				// Update current attribute.
-				if ( this.currentSlideIndex - 1 === index ) {
+				// Update current attribute after considering step.
+				if ( Math.ceil( this.currentSlideIndex / this.step ) - 1 === index ) {
 					navItem.setAttribute( 'current', 'yes' );
 				} else {
 					navItem.removeAttribute( 'current' );
@@ -417,7 +417,7 @@ export class TPSliderElement extends HTMLElement {
 		// Enable / disable arrows.
 		if ( 'yes' !== this.getAttribute( 'infinite' ) ) {
 			// For the last slide.
-			if ( this.getCurrentSlide() === this.getTotalSlides() ) {
+			if ( this.getCurrentSlide() === this.getTotalSlides() - this.perView + 1 ) {
 				rightArrow?.setAttribute( 'disabled', 'yes' );
 			} else {
 				rightArrow?.removeAttribute( 'disabled' );
