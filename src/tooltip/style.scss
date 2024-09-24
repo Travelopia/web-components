@@ -1,0 +1,29 @@
+tp-tooltip-trigger > button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+tp-tooltip-popover {
+	--arrow-top-positioning: 0;
+	--arrow-left-positioning: 0;
+	--border-top-color: transparent;
+	--border-bottom-color: transparent;
+	background-color: #fff;
+
+	&::backdrop {
+		width: 0;
+		height: 0;
+		border-width: 8px;
+		border-style: solid;
+		border-top-color: var(--border-top-color);
+		border-bottom-color: var(--border-bottom-color);
+		border-left-color: transparent;
+		border-right-color: transparent;
+		top: var(--arrow-top-positioning);
+		left: var(--arrow-left-positioning);
+		transform: translateX(-50%);
+	}
+}
