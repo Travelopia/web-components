@@ -1,0 +1,16 @@
+tp-phone-input-search {
+	display: none;
+
+	tp-phone-input[country-dropdown="open"] & {
+		display: block;
+	}
+}
+
+tp-phone-input-countries {
+	display: none;
+
+	tp-phone-input[country-dropdown="open"] & {
+		display: block;
+		max-height: 200px;
+	}
+}

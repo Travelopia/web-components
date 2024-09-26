@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Phone Input</title>
+
+	<link rel="stylesheet" href="../../dist/phone-input/style.css" media="all">
+	<script type="module" src="../../dist/phone-input/index.js"></script>
+
+	<style>
+
+	</style>
+</head>
+<body>
+	<main>
+
+		<tp-phone-input name="test_intl_ph">
+			<tp-phone-input-select>
+				<tp-phone-input-toggle>
+					<button></button>
+				</tp-phone-input-toggle>
+				<tp-phone-input-search>
+					<input type="text">
+				</tp-phone-input-search>
+				<tp-phone-input-countries>
+					<tp-phone-input-country code="us" prefix="+1" format="(XXX) XXX-XXXX">
+						<button>USA</button>
+					</tp-phone-input-country>
+					<tp-phone-input-country code="au" prefix="+61" format="XXXX XXX XXX">
+						<button>Australia</button>
+					</tp-phone-input-country>
+				</tp-phone-input-countries>
+			</tp-phone-input-select>
+		</tp-phone-input>
+
+	</main>
+</body>
+</html>
