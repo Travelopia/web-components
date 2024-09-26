@@ -1,7 +1,58 @@
+tp-phone-input {
+	position: relative;
+    display: inline-block;
+}
+tp-phone-input input[type="tel"] {
+	width: 100%;
+    padding-left: 48px;
+}
+
+tp-phone-input-select {
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    padding: 1px;
+    cursor: pointer;
+
+	button {
+		z-index: 1;
+		position: relative;
+		display: flex;
+		align-items: center;
+		height: 100%;
+		background: none;
+		border: 0;
+		margin: 0;
+		padding: 0;
+		font-family: inherit;
+		font-size: inherit;
+		color: inherit;
+		border-radius: 0;
+		font-weight: inherit;
+		line-height: inherit;
+		text-decoration: none;
+	}
+}
+
+tp-phone-input-countries {
+	max-height: 200px;
+	overflow-y: scroll;
+	border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, .2);
+}
+
+tp-phone-input-country {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    outline: none;
+}
+
 tp-phone-input-search {
 	display: none;
 
-	tp-phone-input[country-dropdown="open"] & {
+	tp-phone-input-select[country-dropdown="open"] & {
 		display: block;
 	}
 }
@@ -9,8 +60,7 @@ tp-phone-input-search {
 tp-phone-input-countries {
 	display: none;
 
-	tp-phone-input[country-dropdown="open"] & {
+	tp-phone-input-select[country-dropdown="open"] & {
 		display: block;
-		max-height: 200px;
 	}
 }

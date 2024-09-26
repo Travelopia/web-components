@@ -1,6 +1,7 @@
 /**
  * Internal dependencies.
  */
+import { getCountries } from "./actions";
 
 /**
  * TP Phone Input.
@@ -10,6 +11,7 @@ export class TPPhoneInputElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected phoneInputElement: HTMLInputElement | null;
+	protected phoneInputCountriesElement: HTMLElement | null;
 
 	/**
 	 * Constructor.
@@ -18,6 +20,7 @@ export class TPPhoneInputElement extends HTMLElement {
 		// Initialize parent.
 		super();
 		this.phoneInputElement = this.querySelector( 'input[type="tel"]' );
+		this.phoneInputCountriesElement = this.querySelector( 'tp-phone-input-countries' );
 
 		// Initialize component.
 		this.initialize();
@@ -50,72 +53,31 @@ export class TPPhoneInputElement extends HTMLElement {
 		} else {
 			this.phoneInputElement.innerHTML = '';
 		}
-	}
-}
 
-/**
- * TP Phone Input Country.
- */
-class TPPhoneInputCountry extends HTMLElement {
-	constructor() {
-		// Initialize parent.
-		super();
-	}
-}
-
-/**
- * TP Phone Input Toggle.
- */
-class TPPhoneInputToggle extends HTMLElement {
-	constructor() {
-		// Initialize parent.
-		super();
-
-		// Events.
-		this.addEventListener( 'click', this.toggleCountriesDropdown.bind( this ) );
+		// Render Countries.
+		this.renderCountries();
 	}
 
 	/**
-	 * Toggle Countries Dropdown.
-	 *
-	 * @param {Event} e Click event.
+	 * Render component.
 	 */
-	protected toggleCountriesDropdown( e: Event ): void {
-		// First, prevent propagation to avoid document.click set on `tp-multi-select`.
-		e.preventDefault();
-		e.stopPropagation();
+	renderCountries(): void {
+		if ( ! this.phoneInputCountriesElement ) {
+			return;
+		}
 
-		// Now send the event so other stuff can work as per normal, and another event for good measure.
-		this.dispatchEvent( new CustomEvent( 'phone-input-toggle' ) );
-		document.dispatchEvent( new Event( 'click' ) );
+		// Get the countries.
+		const countries = getCountries();
+		if ( ! countries ) {
+			return;
+		}
 
-		// Set dropdown open
-		this.closest( 'tp-phone-input' )?.setAttribute( 'country-dropdown', 'open' );
+		countries.forEach( ( country ) => {
+			const countryElement = document.createElement( 'tp-phone-input-country' );
+			countryElement.setAttribute( 'code', country.code );
+			countryElement.setAttribute( 'prefix', country.prefix );
+			countryElement.innerHTML = `<button>(${country.prefix}) ${country.name}</button>`;
+			this.phoneInputCountriesElement?.appendChild( countryElement );
+		} );
 	}
 }
-
-/**
- * TP Phone Input Field.
- */
-class TPPhoneInputField extends HTMLElement {
-	constructor() {
-		// Initialize parent.
-		super();
-	}
-}
-
-/**
- * TP Phone Input Select.
- */
-class TPPhoneInputSelect extends HTMLElement {
-	constructor() {
-		// Initialize parent.
-		super();
-	}
-}
-
-// Define elements.
-customElements.define( 'tp-phone-input-country', TPPhoneInputCountry );
-customElements.define( 'tp-phone-input-toggle', TPPhoneInputToggle );
-customElements.define( 'tp-phone-input-field', TPPhoneInputField );
-customElements.define( 'tp-phone-input-select', TPPhoneInputSelect );

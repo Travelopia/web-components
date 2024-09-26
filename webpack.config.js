@@ -84,6 +84,7 @@ module.exports = ( env ) => {
 			'multi-select': './src/multi-select/index.ts',
 			lightbox: './src/lightbox/index.ts',
 			'toggle-attribute': './src/toggle-attribute/index.ts',
+			'phone-input': './src/phone-input/index.ts',
 		},
 		module: {
 			rules: [

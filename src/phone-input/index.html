@@ -10,7 +10,14 @@
 	<script type="module" src="../../dist/phone-input/index.js"></script>
 
 	<style>
+		* {
+			box-sizing: border-box;
+		}
 
+		main {
+			max-width: 400px;
+			margin: 0 auto;
+		}
 	</style>
 </head>
 <body>
@@ -19,18 +26,18 @@
 		<tp-phone-input name="test_intl_ph">
 			<tp-phone-input-select>
 				<tp-phone-input-toggle>
-					<button></button>
+					<button>+1</button>
 				</tp-phone-input-toggle>
 				<tp-phone-input-search>
 					<input type="text">
 				</tp-phone-input-search>
 				<tp-phone-input-countries>
-					<tp-phone-input-country code="us" prefix="+1" format="(XXX) XXX-XXXX">
+					<!-- <tp-phone-input-country code="us" prefix="+1" format="(XXX) XXX-XXXX">
 						<button>USA</button>
 					</tp-phone-input-country>
 					<tp-phone-input-country code="au" prefix="+61" format="XXXX XXX XXX">
 						<button>Australia</button>
-					</tp-phone-input-country>
+					</tp-phone-input-country> -->
 				</tp-phone-input-countries>
 			</tp-phone-input-select>
 		</tp-phone-input>
