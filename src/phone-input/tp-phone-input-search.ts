@@ -1,4 +1,9 @@
 /**
+ * Internal dependencies.
+ */
+import { filterCountries } from "./actions";
+
+/**
  * TP Phone Input Search.
  */
 export class TPPhoneInputSearch extends HTMLElement {
@@ -24,16 +29,29 @@ export class TPPhoneInputSearch extends HTMLElement {
 	 *
 	 * @param {Event} e Click event.
 	 */
-	protected handleSearchQuery( e: Event ): void {
-		// First, prevent propagation.
-		e.preventDefault();
-		e.stopPropagation();
+	protected handleSearchQuery(): void {
+		const searchInput = this.querySelector( 'input' );
+		if ( ! searchInput ) {
+			return;
+		}
 
-		// Now send the event so other stuff can work as per normal, and another event for good measure.
-		this.dispatchEvent( new CustomEvent( 'phone-input-select-toggle' ) );
-		document.dispatchEvent( new Event( 'click' ) );
+		// Search keyword.
+		const searchQuery = searchInput.value;
+		const countryList = filterCountries( searchQuery );
+		const phoneInputCountriesElement = this.closest( 'tp-phone-input' )?.querySelector( 'tp-phone-input-countries' );
+		console.log( countryList, phoneInputCountriesElement )
+		if ( ! countryList || ! phoneInputCountriesElement ) {
+			return;
+		}
 
-		// Set country dropdowm attribute.
-		this.setAttribute( 'country-dropdown', 'open' );
+		// Build filter countries List.
+		phoneInputCountriesElement.innerHTML = '';
+		countryList.forEach( ( country ) => {
+			const countryElement = document.createElement( 'tp-phone-input-country' );
+			countryElement.setAttribute( 'code', country.code );
+			countryElement.setAttribute( 'prefix', country.prefix );
+			countryElement.innerHTML = `<button>(${country.prefix}) ${country.name}</button>`;
+			phoneInputCountriesElement?.appendChild( countryElement );
+		} );
 	}
 }
