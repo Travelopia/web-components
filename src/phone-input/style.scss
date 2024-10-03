@@ -19,6 +19,7 @@ tp-phone-input-select {
 		position: relative;
 		display: flex;
 		align-items: center;
+		cursor: pointer;
 		height: 100%;
 		background: none;
 		border: 0;
@@ -31,6 +32,14 @@ tp-phone-input-select {
 		font-weight: inherit;
 		line-height: inherit;
 		text-decoration: none;
+	}
+
+	span.flag {
+		width: 32px;
+		height: 20px;
+		background-image: none; // replay with actual image path
+		background-repeat: no-repeat;
+		margin-right: 8px;
 	}
 }
 

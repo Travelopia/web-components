@@ -39,7 +39,7 @@ export class TPPhoneInputSearch extends HTMLElement {
 		const searchQuery = searchInput.value;
 		const countryList = filterCountries( searchQuery );
 		const phoneInputCountriesElement = this.closest( 'tp-phone-input' )?.querySelector( 'tp-phone-input-countries' );
-		console.log( countryList, phoneInputCountriesElement )
+
 		if ( ! countryList || ! phoneInputCountriesElement ) {
 			return;
 		}
