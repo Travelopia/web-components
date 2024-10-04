@@ -119,10 +119,26 @@ export class TPToggleAttributeElement extends HTMLElement {
 		// Toggle the target elements.
 		targetElements.forEach( ( target: HTMLElement ): void => {
 			// Get values and split them. Set an empty array otherwise.
-			const values: string[] = ( target.getAttribute( 'data-toggle-value' ) )?.split( ',' ) ?? [];
+			const valuesAttribute = target.getAttribute( 'data-toggle-value' );
+			const nonEmptyValuesAttribute = target.hasAttribute( 'data-toggle-value-non-empty' );
+
+			// Can we proceed?
+			if ( ! valuesAttribute && ! nonEmptyValuesAttribute ) {
+				// Nope, bail.
+				return;
+			}
+
+			// Initialize values.
+			let values: string[] = [];
+
+			// Null check.
+			if ( valuesAttribute ) {
+				// Assign the values.
+				values = valuesAttribute.split( ',' );
+			}
 
 			// Toggle on element attribute if it matches value or it does not have a data-toggle-value attribute in which case it will match with all non empty values.
-			if ( values.includes( value ) || ( ! values.length && value ) ) {
+			if ( ( values.length && value && values.includes( value ) ) || ( nonEmptyValuesAttribute && value ) ) {
 				this.toggleTargetAttribute( target, 'on' );
 			} else {
 				this.toggleTargetAttribute( target, 'off' );
