@@ -66,12 +66,19 @@
 				<option value="">Select</option>
 				<option value="First">First</option>
 				<option value="Second">Second</option>
+				<option value="Third">Third</option>
+				<option value="Fourth">Fourth</option>
+				<option value="Fifth">Fifth</option>
 				<option value="All">All</option>
 			</select>
 		</tp-toggle-attribute>
 
 		<div class="toggle-target-variable" data-toggle-value="First,All">
 			Toggled First
+		</div>
+		<div class="toggle-target-variable">
+			<!-- omit the data-toggle-value attribute to toggle on with all non empty values. -->
+			This will be toggled for all non empty values.
 		</div>
 		<div class="toggle-target-variable" data-toggle-value="Second,All">
 			Toggled Second
