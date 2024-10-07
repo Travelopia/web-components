@@ -82,6 +82,26 @@ import '@travelopia/web-components/dist/toggle-attribute/style.css';
 	Toggled Second
 </div>
 
+<!-- Toggle for non empty values. -->
+<p>Toggle with non empty values</p>
+
+<!-- Select value -->
+<tp-toggle-attribute target=".toggle-target-non-empty" value-non-empty>
+	<select>
+		<option value="">Select</option>
+		<option value="First">First</option>
+		<option value="Second">Second</option>
+		<option value="Third">Third</option>
+		<option value="Fourth">Fourth</option>
+		<option value="Fifth">Fifth</option>
+		<option value="All">All</option>
+	</select>
+</tp-toggle-attribute>
+
+<div class="toggle-target-non-empty">
+	Toggle for all non empty values.
+</div>
+
 <p>Button with click event</p>
 <tp-toggle-attribute event="click" target=".button-target">
 	<button>Toggle using class</button>
@@ -111,9 +131,10 @@ import '@travelopia/web-components/dist/toggle-attribute/style.css';
 | target                 | Yes    | <selector or the target>           | This is required if group is not mentioned                                                                                              |
 | attribute              | No       | <attribute key>                    | The attribute to toggle. Default: `toggled`                                                                                             |
 | attribute-value        | No       | <attribute value>                  | The attribute value when its. Default: `yes`                                                                                            |
-| values                  | No       | <comma separated values to match>                   | If this is specified, these comma separated values are matched with the value of the trigger. If they match, the target(s) is/are toggled. Same goes for having a `data-toggle-value` attribute on a target.                         |
+| value                  | No       | <comma separated values to match>  | If this is specified, these comma separated values are matched with the value of the trigger. If they match, the target(s) is/are toggled. Same goes for having a `data-toggle-value` attribute on a target.                         |
 | trigger                | No       | <selector of the trigger>          | If this is not specified, the direct child is treated as the trigger. If it is mentioned, it looks for this selector within the context |
 | closest-ancestor       | No       | <selector of the closest ancestor> | Default: `body`. If this is specified, the target is searched for within this selector, not on `body`.                                  |
+| value-non-empty        | No       | <none>                             | A boolean attribute that signifies whether or not the targets should be toggled for all non empty values on the trigger.
 
 ## Events
 
