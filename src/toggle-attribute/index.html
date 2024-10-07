@@ -84,6 +84,26 @@
 			Toggled Second
 		</div>
 
+		<!-- Toggle for non empty values. -->
+		<p>Toggle with non empty values</p>
+
+		<!-- Select value -->
+		<tp-toggle-attribute target=".toggle-target-non-empty" value-non-empty>
+			<select>
+				<option value="">Select</option>
+				<option value="First">First</option>
+				<option value="Second">Second</option>
+				<option value="Third">Third</option>
+				<option value="Fourth">Fourth</option>
+				<option value="Fifth">Fifth</option>
+				<option value="All">All</option>
+			</select>
+		</tp-toggle-attribute>
+
+		<div class="toggle-target-non-empty">
+			Toggle for all non empty values.
+		</div>
+
 		<p>Button with click event</p>
 		<tp-toggle-attribute event="click" target=".button-target">
 			<button>Toggle using class</button>
