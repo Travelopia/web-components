@@ -27,11 +27,19 @@ import { TPNumberSpinner, TPNumberSpinnerInput, TPNumberSpinnerIncrement, TPNumb
 ```
 
 ```html
-<tp-number-spinner>
+<tp-number-spinner min="0" max="10" step="2">
 	<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
 	<tp-number-spinner-input>
-		<input type="number" min="0" max="100" step="1" value="0" readonly />
+		<input type="number" value="0" readonly />
 	</tp-number-spinner-input>
 	<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
 </tp-number-spinner>
 ```
+
+## Attributes
+
+| Attribute | Required | Values                | Notes                                  |
+|-----------|----------|-----------------------|----------------------------------------|
+| min       | No       | <integer>             | The minimum value of the spinner       |
+| max       | No       | <integer>             | The maxium value of the spinner        |
+| step      | No       | <integer>             | The step of the spinner. Defaults to 1 |
