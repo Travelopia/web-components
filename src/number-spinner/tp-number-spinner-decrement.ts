@@ -19,8 +19,9 @@ export class TPNumberSpinnerDecrement extends HTMLElement {
 
 		// If the input element is found, initialize min, max, step, and value.
 		if ( this.inputElement ) {
-			this.min = parseInt( this.inputElement.getAttribute('min') || '0', 10 );
-			this.step = parseInt( this.inputElement.getAttribute('step') || '1', 10 );
+			// set the values.
+			this.min = parseInt( this.inputElement.getAttribute( 'min' ) || '0', 10 );
+			this.step = parseInt( this.inputElement.getAttribute( 'step' ) || '1', 10 );
 			this.value = parseInt( this.inputElement.value || '0', 10 );
 
 			// Initialize the input element with the value.
@@ -35,8 +36,9 @@ export class TPNumberSpinnerDecrement extends HTMLElement {
 	 * Decrement the value.
 	 */
 	decrement(): void {
-		// Check for input element.
+		// Check if the input element exists.
 		if ( ! this.inputElement ) {
+			// Return if the input element does not exist.
 			return;
 		}
 

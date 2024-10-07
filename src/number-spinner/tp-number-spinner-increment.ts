@@ -20,6 +20,7 @@ export class TPNumberSpinnerIncrement extends HTMLElement {
 
 		// If the input element is found, initialize min, max, step, and value from the input attributes.
 		if ( this.inputElement ) {
+			// set the values.
 			this.min = parseInt( this.inputElement.getAttribute( 'min' ) || '0', 10 );
 			this.max = parseInt( this.inputElement.getAttribute( 'max' ) || '100', 10 );
 			this.step = parseInt( this.inputElement.getAttribute( 'step' ) || '1', 10 );
@@ -37,7 +38,9 @@ export class TPNumberSpinnerIncrement extends HTMLElement {
 	 * Increment the value.
 	 */
 	increment(): void {
+		// Check if the input element exists.
 		if ( ! this.inputElement ) {
+			// Return if the input element does not exist.
 			return;
 		}
 
