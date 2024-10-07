@@ -24,18 +24,14 @@ import '@travelopia/web-components/dist/number-spinner';
 // TypeScript usage:
 import { TPNumberSpinner, TPNumberSpinnerInput, TPNumberSpinnerIncrement, TPNumberSpinnerDecrement } from '@travelopia/web-components';
 
-...
-
-const form: TPFormElement = document.querySelector( 'tp-form' );
-form.resetValidation();
 ```
 
 ```html
-	<tp-number-spinner>
-		<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
-		<tp-number-spinner-input>
-			<input type="number" min="0" max="100" step="1" value="0" readonly />
-		</tp-number-spinner-input>
-		<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
-	</tp-number-spinner>
+<tp-number-spinner>
+	<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
+	<tp-number-spinner-input>
+		<input type="number" min="0" max="100" step="1" value="0" readonly />
+	</tp-number-spinner-input>
+	<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
+</tp-number-spinner>
 ```
