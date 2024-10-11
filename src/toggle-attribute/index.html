@@ -76,8 +76,8 @@
 		<div class="toggle-target-variable" data-toggle-value="First,All">
 			Toggled First
 		</div>
-		<div class="toggle-target-variable" data-toggle-value-non-empty>
-			<!-- add the data-toggle-value-non-empty attribute to toggle on with all non empty values. -->
+		<div class="toggle-target-variable" data-toggle-value-non-empty="yes">
+			<!-- add the data-toggle-value-non-empty="yes" attribute to toggle on with all non empty values. -->
 			This will be toggled for all non empty values.
 		</div>
 		<div class="toggle-target-variable" data-toggle-value="Second,All">
@@ -88,7 +88,7 @@
 		<p>Toggle with non empty values</p>
 
 		<!-- Select value -->
-		<tp-toggle-attribute target=".toggle-target-non-empty" value-non-empty>
+		<tp-toggle-attribute target=".toggle-target-non-empty" value-non-empty="yes">
 			<select>
 				<option value="">Select</option>
 				<option value="First">First</option>
