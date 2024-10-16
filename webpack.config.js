@@ -1,5 +1,6 @@
 // External dependencies.
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const WebpackNotifierPlugin = require( 'webpack-notifier' );
 const { Compilation, sources } = require( 'webpack' );
 
@@ -117,6 +118,18 @@ module.exports = ( env ) => {
 						},
 					],
 				},
+				{
+					test: /\.(png|jpg|gif|svg|webp)$/,
+					use: [
+					  {
+						loader: 'file-loader',
+						options: {
+						  name: '[name].[ext]',
+						  outputPath: 'dist/',
+						},
+					  },
+					],
+				},
 			],
 		},
 		resolve: {
@@ -133,6 +146,11 @@ module.exports = ( env ) => {
 			} ),
 			new DeclarationBundlerPlugin( {
 				out: 'dist/declarations.d.ts',
+			} ),
+			new CopyWebpackPlugin({
+				patterns: [
+				  	{ from: 'src/phone-input/flags.webp', to: 'dist/phone-input/' },
+				],
 			} ),
 		],
 		performance: {
