@@ -24,17 +24,18 @@ export class TPPhoneInputCountry extends HTMLElement {
 		const phoneInput = this.closest( 'tp-phone-input' );
 		const phoneInputSelectElement = phoneInput?.querySelector( 'tp-phone-input-select' );
 		const phoneInputToggleButton = phoneInput?.querySelector( 'tp-phone-input-toggle button' );
-		// const selectedCountryCode = this.getAttribute( 'code' );
 		const selectedCountryPrefix = this.getAttribute( 'prefix' );
-		
+
+		// On select toggle.
 		if ( selectedCountryPrefix && phoneInputToggleButton ) {
 			phoneInputToggleButton.innerHTML = selectedCountryPrefix.toString();
 
-			if ( phoneInputSelectElement?.getAttribute( 'country-dropdown') ) {
-				phoneInputSelectElement.removeAttribute( 'country-dropdown');
+			// Remove attribute from select input.
+			if ( phoneInputSelectElement?.getAttribute( 'country-dropdown' ) ) {
+				phoneInputSelectElement.removeAttribute( 'country-dropdown' );
 			}
 		}
-		
+
 		// Dispatch change event.
 		phoneInput?.dispatchEvent( new CustomEvent( 'change', { bubbles: true } ) );
 	}

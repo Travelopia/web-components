@@ -1,7 +1,7 @@
 /**
  * Internal dependencies.
  */
-import { getCountries } from "./actions";
+import { getCountries } from './actions';
 
 /**
  * TP Phone Input.
@@ -62,24 +62,31 @@ export class TPPhoneInputElement extends HTMLElement {
 	 * Render component.
 	 */
 	renderCountries(): void {
+		// Bail: if no element.
 		if ( ! this.phoneInputCountriesElement ) {
+			// Do nothing.
 			return;
 		}
 
 		// Get the countries.
 		const countries = getCountries();
+
+		// Bail: if no data.
 		if ( ! countries ) {
+			// Do nothing.
 			return;
 		}
 
+		// Loop through countries data.
 		countries.forEach( ( country ) => {
+			// Create TPPhoneInputCountry element.
 			const countryElement = document.createElement( 'tp-phone-input-country' );
 			countryElement.setAttribute( 'code', country.code );
 			countryElement.setAttribute( 'prefix', country.prefix );
 			countryElement.innerHTML = `<button>
 				<span class="flag"></span>
-				<span class="prefix">(${country.prefix})</span> 
-				<span class="name">${country.name}</span>
+				<span class="prefix">(${ country.prefix })</span> 
+				<span class="name">${ country.name }</span>
 			</button>`;
 			this.phoneInputCountriesElement?.appendChild( countryElement );
 		} );

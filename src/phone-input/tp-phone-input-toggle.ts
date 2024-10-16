@@ -24,8 +24,8 @@ export class TPPhoneInputToggle extends HTMLElement {
 		const phoneInputSelectElement = this.closest( 'tp-phone-input-select' );
 
 		// toggle select country dropdowm.
-		if ( phoneInputSelectElement?.getAttribute( 'country-dropdown') ) {
-			phoneInputSelectElement.removeAttribute( 'country-dropdown');
+		if ( phoneInputSelectElement?.getAttribute( 'country-dropdown' ) ) {
+			phoneInputSelectElement.removeAttribute( 'country-dropdown' );
 		} else {
 			phoneInputSelectElement?.setAttribute( 'country-dropdown', 'open' );
 		}

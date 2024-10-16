@@ -1,4 +1,7 @@
-import countries, { Country } from "./data";
+/**
+ * Import data.
+ */
+import countries, { Country } from './data';
 
 /**
  * Get countries date.
@@ -6,7 +9,7 @@ import countries, { Country } from "./data";
  * @return {Country} Array Country Object.
  */
 export const getCountries = (): Country[] => {
-    // return countries data.
+	// return countries data.
 	return countries;
 };
 
@@ -17,17 +20,19 @@ export const getCountries = (): Country[] => {
  * @return {Country} Array Country Object.
  */
 export const filterCountries = ( keyword: string ): Country[] => {
-    if ( ! keyword ) {
-        return countries;
-    }
+	// Return all if no keyword.
+	if ( ! keyword ) {
+		// Return countries.
+		return countries;
+	}
 
-    // Let makes the query serach to lowercase.
-    const query = keyword.toLowerCase();
-    const filteredCountries = countries.filter( country =>
-        country.name.toLowerCase().includes( query ) ||
+	// Let makes the query serach to lowercase.
+	const query = keyword.toLowerCase();
+	const filteredCountries = countries.filter( ( country ) =>
+		country.name.toLowerCase().includes( query ) ||
         country.code.toLowerCase().includes( query )
-    );
+	);
 
-    // return filtered countries data.
+	// return filtered countries data.
 	return filteredCountries;
 };
