@@ -1,3 +1,5 @@
+@import "flags";
+
 tp-phone-input {
 	position: relative;
     display: inline-block;
@@ -32,14 +34,6 @@ tp-phone-input-select {
 		font-weight: inherit;
 		line-height: inherit;
 		text-decoration: none;
-	}
-
-	span.flag {
-		width: 32px;
-		height: 20px;
-		background-image: none; // replay with actual image path
-		background-repeat: no-repeat;
-		margin-right: 8px;
 	}
 }
 

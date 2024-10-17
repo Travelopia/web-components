@@ -84,7 +84,7 @@ export class TPPhoneInputElement extends HTMLElement {
 			countryElement.setAttribute( 'code', country.code );
 			countryElement.setAttribute( 'prefix', country.prefix );
 			countryElement.innerHTML = `<button>
-				<span class="flag"></span>
+				<span class="flag ${ country.code.toLowerCase() }"></span>
 				<span class="prefix">(${ country.prefix })</span> 
 				<span class="name">${ country.name }</span>
 			</button>`;

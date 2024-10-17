@@ -57,7 +57,11 @@ export class TPPhoneInputSearch extends HTMLElement {
 			const countryElement = document.createElement( 'tp-phone-input-country' );
 			countryElement.setAttribute( 'code', country.code );
 			countryElement.setAttribute( 'prefix', country.prefix );
-			countryElement.innerHTML = `<button>(${ country.prefix }) ${ country.name }</button>`;
+			countryElement.innerHTML = `<button>
+				<span class="flag ${ country.code.toLowerCase() }"></span>
+				<span class="prefix">(${ country.prefix })</span> 
+				<span class="name">${ country.name }</span>
+			</button>`;
 			phoneInputCountriesElement?.appendChild( countryElement );
 		} );
 	}
