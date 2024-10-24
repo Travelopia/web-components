@@ -39,7 +39,7 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 
 		// Determine pills.
 		const pills: NodeListOf<TPMultiSelectPillElement> | null = this.querySelectorAll( 'tp-multi-select-pill' );
-		const values: string[] = multiSelect.value ?? [];
+		const values: string[] = [ ...new Set( multiSelect.value ) ] ?? [];
 		const pillValues: string[] = [];
 
 		// Remove pills that shouldn't exist.

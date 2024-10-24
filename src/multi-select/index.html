@@ -46,7 +46,7 @@
 		}
 
 		tp-multi-select-option + tp-multi-select-option {
-			border-top: 1px solid #000;
+			background-color: gainsboro;
 		}
 
 		tp-multi-select-select-all[selected="yes"]::after,
@@ -97,14 +97,18 @@
 				</tp-multi-select-search>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
-				<tp-multi-select-select-all select-text="Select All" unselect-text="Un-Select All">Select All</tp-multi-select-select-all>
-				<tp-multi-select-option value="priya" label="Priya">Priya</tp-multi-select-option>
-				<tp-multi-select-option value="varun" label="Varun">Varun</tp-multi-select-option>
-				<tp-multi-select-option value="john" label="John">John</tp-multi-select-option>
-				<tp-multi-select-option value="jane" label="Jane">Jane</tp-multi-select-option>
-				<tp-multi-select-option value="jack" label="Jack">Jack</tp-multi-select-option>
-				<tp-multi-select-option value="jill" label="Jill" disabled="yes">Jill</tp-multi-select-option>
-			</tp-multi-select-options>
+				<div>
+					<div> Most Popular </div>
+					<tp-multi-select-option value="Japan" label="Japan"> Japan </tp-multi-select-option> 
+					<tp-multi-select-option value="Maldiverna" label="Maldiverna"> Maldiverna </tp-multi-select-option> 
+					<tp-multi-select-option value="USA" label="USA"> USA </tp-multi-select-option> 
+				</div>
+				<div>
+					<div> Asia</div>
+					<tp-multi-select-option value="Japan" label="Japan"> Japan </tp-multi-select-option>
+					<tp-multi-select-option value="India" label="India"> India </tp-multi-select-option>
+				</div>
+			 </tp-multi-select-options>
 		</tp-multi-select>
 	</main>
 </body>
