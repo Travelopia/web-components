@@ -58,6 +58,20 @@ export class TPFormElement extends HTMLElement {
 		// If form is valid then dispatch a custom 'submit-validation-success' event.
 		if ( formValid ) {
 			this.dispatchEvent( new CustomEvent( 'submit-validation-success', { bubbles: true } ) );
+
+			// If reset form is enabled then reset the form.
+			if ( 'yes' === this.getAttribute( 'submit-reset' ) && this.form ) {
+				// Reset form validation.
+				this.resetValidation();
+
+				// Reset the form.
+				this.form.reset();
+
+				// Reset submit button if present.
+				if ( submit ) {
+					submit.removeAttribute( 'submitting' );
+				}
+			}
 		}
 	}
 
