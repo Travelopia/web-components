@@ -18,8 +18,8 @@ import { TPSliderCountElement } from './tp-slider-count';
 /**
  * Register Components.
  */
-customElements.define( 'tp-slider-count', TPSliderCountElement );
 customElements.define( 'tp-slider', TPSliderElement );
+customElements.define( 'tp-slider-count', TPSliderCountElement );
 customElements.define( 'tp-slider-track', TPSliderTrackElement );
 customElements.define( 'tp-slider-slides', TPSliderSlidesElement );
 customElements.define( 'tp-slider-slide', TPSliderSlideElement );
