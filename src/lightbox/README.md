@@ -20,7 +20,7 @@ Example:
 First, create the lightbox and give it an ID. Style as needed:
 
 ```html
-<tp-lightbox id="my-lightbox" close-on-overlay-click="yes">
+<tp-lightbox id="my-lightbox" close-on-overlay-click="yes" swipe="yes" swipe-threshold="300">
 	<dialog>
 		<tp-lightbox-close>
 			<button>Close</button> <-- There must be a button inside this component.
@@ -53,6 +53,8 @@ Next, we need to trigger the lightbox with and give it some content. Any content
 | Attribute              | Required  | Values   | Notes                                        |
 |------------------------|-----------|----------|----------------------------------------------|
 | close-on-overlay-click | No        | `yes`    | Closes the modal when the overlay is clicked |
+| swipe                  | No        | `yes`    | Enables swiping                              |
+| swipe-threshold        | No        | `200`    | Prevent swiping if more than this is swiped  |
 
 ## Events
 

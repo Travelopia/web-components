@@ -17,6 +17,10 @@ export class TPLightboxElement extends HTMLElement {
 	protected currentTemplate: HTMLTemplateElement | null = null;
 	protected currentGroup: string = '';
 	protected allGroups: NodeListOf<TPLightboxTriggerElement> | null = null;
+	protected touchStartX: number = 0;
+	protected touchStartY: number = 0;
+	protected swipeThreshold: number = 200;
+	protected dialogElement: HTMLDialogElement | null;
 
 	/**
 	 * Constructor.
@@ -25,8 +29,13 @@ export class TPLightboxElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
+		// Initialize
+		this.dialogElement = this.querySelector( 'dialog' );
+
 		// Event listeners.
-		this.querySelector( 'dialog' )?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
+		this.dialogElement?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
+		this.dialogElement?.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+		this.dialogElement?.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
 
 	/**
@@ -410,6 +419,67 @@ export class TPLightboxElement extends HTMLElement {
 			this.querySelector( 'dialog' ) === e.target
 		) {
 			this.close();
+		}
+	}
+
+	/**
+	 * Handles the touch start event.
+	 *
+	 * @param { TouchEvent } evt The touch event.
+	 */
+	handleTouchStart( evt: TouchEvent ): void {
+		// Check if we should allow swiping?
+		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			// Nope.
+			return;
+		}
+
+		// Set the start points.
+		this.touchStartX = evt.touches[ 0 ].clientX;
+		this.touchStartY = evt.touches[ 0 ].clientY;
+	}
+
+	/**
+	 * Handles the touch end event.
+	 *
+	 * @param { TouchEvent } evt The touch event.
+	 */
+	handleTouchEnd( evt: TouchEvent ): void {
+		// Check if we should allow swiping?
+		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			// Nope.
+			return;
+		}
+
+		// Calculate the distances.
+		const touchEndX: number = evt.changedTouches[ 0 ].clientX;
+		const touchEndY: number = evt.changedTouches[ 0 ].clientY;
+		const swipeDistanceX: number = touchEndX - this.touchStartX;
+		const swipeDistanceY: number = touchEndY - this.touchStartY;
+
+		// Is this horizontal swipe?
+		const isHorizontalSwipe = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
+
+		// Check if this was a horizontal swipe?
+		if ( ! isHorizontalSwipe ) {
+			// Bail.
+			return;
+		}
+
+		// Swipe settings
+		this.swipeThreshold = Number( this.getAttribute( 'swipe-threshold' ) ?? '200' );
+
+		// Check if it's a right or left swipe.
+		if ( swipeDistanceX > 0 ) {
+			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
+			if ( swipeDistanceX < this.swipeThreshold ) {
+				this.previous();
+			}
+		} else if ( swipeDistanceX < 0 ) {
+			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
+			if ( swipeDistanceX > -this.swipeThreshold ) {
+				this.next();
+			}
 		}
 	}
 }
