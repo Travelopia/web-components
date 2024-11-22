@@ -32,9 +32,6 @@ export class TPLightboxElement extends HTMLElement {
 		// Initialize
 		this.dialogElement = this.querySelector( 'dialog' );
 
-		// Swipe settings
-		this.swipeThreshold = Number( this?.getAttribute( 'swipe-threshold' ) ?? '200' );
-
 		// Event listeners.
 		this.dialogElement?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
 		this.dialogElement?.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
@@ -468,6 +465,9 @@ export class TPLightboxElement extends HTMLElement {
 			// Bail.
 			return;
 		}
+
+		// Swipe settings
+		this.swipeThreshold = Number( this.getAttribute( 'swipe-threshold' ) ?? '200' );
 
 		// Check if it's a right or left swipe.
 		if ( swipeDistanceX > 0 ) {
