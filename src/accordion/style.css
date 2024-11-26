@@ -1,0 +1,29 @@
+tp-accordion {
+  display: block;
+}
+
+tp-accordion-expand-all,
+tp-accordion-collapse-all {
+  display: inline-block;
+}
+
+tp-accordion-item {
+  display: block;
+}
+
+tp-accordion-handle {
+  display: block;
+}
+
+tp-accordion-content {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  transition-property: height;
+  transition-duration: 0.6s;
+  transition-timing-function: ease;
+}
+tp-accordion-item[open-by-default=yes] tp-accordion-content {
+  display: block;
+  height: auto;
+}/*# sourceMappingURL=style.css.map */

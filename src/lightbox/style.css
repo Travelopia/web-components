@@ -1,0 +1,37 @@
+:root:has(tp-lightbox dialog[open]) {
+  overflow: clip;
+}
+
+@keyframes show-tp-lightbox {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+tp-lightbox dialog {
+  border: 0;
+  padding: 0;
+}
+tp-lightbox dialog[open] {
+  animation-name: show-tp-lightbox;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+}
+tp-lightbox dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+tp-lightbox-content {
+  display: block;
+  position: relative;
+}
+
+tp-lightbox[loading] tp-lightbox-content::after {
+  position: absolute;
+  content: "Loading...";
+  z-index: 5;
+  top: 50px;
+  left: 50px;
+}/*# sourceMappingURL=style.css.map */

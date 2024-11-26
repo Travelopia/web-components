@@ -1,0 +1,72 @@
+tp-multi-select {
+  display: block;
+  position: relative;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+tp-multi-select select {
+  visibility: hidden;
+  position: absolute;
+}
+
+tp-multi-select-field {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+tp-multi-select-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 2;
+}
+tp-multi-select[open=yes] tp-multi-select-options {
+  display: block;
+}
+
+tp-multi-select-option {
+  display: block;
+}
+tp-multi-select-option[hidden=yes] {
+  display: none;
+}
+tp-multi-select-option[disabled=yes] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+tp-multi-select-option[disabled=yes]:active {
+  pointer-events: none;
+}
+
+tp-multi-select-placeholder {
+  display: block;
+}
+tp-multi-select[selected=yes] tp-multi-select-placeholder {
+  display: none;
+}
+
+tp-multi-select-status {
+  display: none;
+}
+tp-multi-select[selected=yes] tp-multi-select-status {
+  display: block;
+}
+
+tp-multi-select-search input {
+  box-sizing: border-box;
+  border: 0;
+  outline: none;
+  min-width: 3ch;
+}
+
+tp-multi-select-pills {
+  display: inline-block;
+}
+
+tp-multi-select-select-all {
+  display: block;
+}/*# sourceMappingURL=style.css.map */

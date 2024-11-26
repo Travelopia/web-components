@@ -616,17 +616,13 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Check if it's a right or left swipe.
-		if ( swipeDistanceX > 0 ) {
-			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX < this.swipeThreshold ) {
-				this.previous();
-			}
-		} else if ( swipeDistanceX < 0 ) {
-			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX > -this.swipeThreshold ) {
-				this.next();
-			}
+		// Check if the swipe distance is positive (right swipe) and exceeds the threshold.
+		if ( swipeDistanceX > 0 && swipeDistanceX > this.swipeThreshold ) {
+			// Trigger the "previous" action for a right swipe that meets the threshold.
+			this.previous();
+		} else if ( swipeDistanceX < 0 && Math.abs( swipeDistanceX ) > this.swipeThreshold ) {
+			// Trigger the "next" action for a left swipe that meets the threshold.
+			this.next();
 		}
 	}
 

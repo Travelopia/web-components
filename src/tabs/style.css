@@ -1,0 +1,6 @@
+tp-tabs-tab {
+  display: none;
+}
+tp-tabs-tab[open=yes] {
+  display: block;
+}/*# sourceMappingURL=style.css.map */
