@@ -27,7 +27,11 @@ export class TPSliderElement extends HTMLElement {
 		'per-view',
 		'step',
 		'responsive',
+		'draggable',
 	];
+	protected isDragging: boolean = false;
+	protected dragStartX: number = 0;
+	protected dragOffsetX: number = 0;
 
 	/**
 	 * Constructor.
@@ -68,6 +72,9 @@ export class TPSliderElement extends HTMLElement {
 		// Touch listeners.
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+
+		// Check for draggable initialization.
+		this.checkDraggable();
 	}
 
 	/**
@@ -91,7 +98,130 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'per-view', 'step' ];
+		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'per-view', 'step', 'draggable' ];
+	}
+
+	/**
+	 * Check and initialize draggable behavior.
+	 */
+	checkDraggable() {
+		// Check if draggable attribute is set to "yes".
+		if ( 'yes' === this.getAttribute( 'draggable' ) ) {
+			this.initializeDraggableEvents();
+		}
+	}
+
+	/**
+	 * Initialize draggable event listeners.
+	 */
+	initializeDraggableEvents() {
+		// Add event listeners to handle dragging behavior (start, move, stop) for the slider.
+		this.addEventListener( 'mousedown', this.handleMouseDown.bind( this ) );
+		this.addEventListener( 'mousemove', this.handleMouseMove.bind( this ) );
+		this.addEventListener( 'mouseup', this.handleMouseUp.bind( this ) );
+		this.addEventListener( 'mouseleave', this.handleMouseUp.bind( this ) );
+
+		// Add cursor changes for grab on hover
+		this.addEventListener( 'mouseover', this.handleMouseOver.bind( this ) );
+		this.addEventListener( 'mouseout', this.handleMouseOut.bind( this ) );
+	}
+
+	/**
+	 * Mouse down event - Start dragging.
+	 *
+	 * @param {MouseEvent} event - The mouse event object.
+	 */
+	handleMouseDown( event: MouseEvent ) {
+		// Set dragging state to true
+		this.isDragging = true;
+
+		// Store the initial X position when the mouse is pressed
+		this.dragStartX = event.clientX;
+
+		// Prevent the default behavior (e.g., text selection)
+		event.preventDefault();
+
+		// Apply the grabbing cursor class
+		this.classList.add( 'tp-slider--grabbing' );
+		this.classList.remove( 'tp-slider--grab' );
+
+		// Prevent text selection
+		this.classList.add( 'tp-slider--dragging' );
+	}
+
+	/**
+	 * Mouse move event - Drag the slider.
+	 *
+	 * @param {MouseEvent} event - The mouse event object.
+	 */
+	handleMouseMove( event: MouseEvent ) {
+		// Check if the dragging is active
+		if ( this.isDragging ) {
+			const deltaX: number = this.dragStartX - event.clientX;
+			this.dragOffsetX = deltaX;
+
+			// Find the slides container element and apply the transformation
+			const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
+
+			// Ensure slidesContainer exists before applying the transformation
+			if ( slidesContainer ) {
+				slidesContainer.style.transform = `translateX(${ this.dragOffsetX }px)`;
+			}
+		}
+	}
+
+	/**
+	 * Mouse up or mouse leave event - End dragging.
+	 */
+	handleMouseUp() {
+		// Check if the dragging is active
+		if ( this.isDragging ) {
+			this.isDragging = false;
+
+			// Find the slides container element and apply the transformation
+			const slidesContainer: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
+
+			// Ensure slidesContainer exists before applying the transformation
+			if ( slidesContainer ) {
+				slidesContainer.style.transform = `translateX(0)`;
+
+				// Determine the next or previous slide based on the drag offset
+				if ( 100 < this.dragOffsetX ) {
+					this.next();
+				} else if ( -100 > this.dragOffsetX ) {
+					this.previous();
+				}
+			}
+
+			// Reset draggable state
+			this.isDragging = false;
+			this.dragOffsetX = 0;
+
+			// Reset cursor and user-select styles
+			this.classList.remove( 'tp-slider--grabbing' );
+			this.classList.add( 'tp-slider--grab' );
+			this.classList.remove( 'tp-slider--dragging' );
+		}
+	}
+
+	/**
+	 * Handle mouse over - Set cursor to grab.
+	 */
+	handleMouseOver() {
+		// Only styles when the draggable will be yes.
+		if ( this.getAttribute( 'draggable' ) === 'yes' ) {
+			this.classList.add( 'tp-slider--grab' );
+		}
+	}
+
+	/**
+	 * Handle mouse out - Reset cursor.
+	 */
+	handleMouseOut() {
+		// Reset cursor if not dragging.
+		if ( ! this.isDragging ) {
+			this.classList.remove( 'tp-slider--grab' );
+		}
 	}
 
 	/**
