@@ -48,9 +48,9 @@ export class TPLightboxNavItemElement extends HTMLElement {
 	 * @return {number} Index.
 	 */
 	getIndex(): number {
-
 		// Bail if no lightbox.
 		if ( ! this.lightbox ) {
+			// Exit.
 			return 0;
 		}
 

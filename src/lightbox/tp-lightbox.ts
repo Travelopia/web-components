@@ -22,7 +22,7 @@ export class TPLightboxElement extends HTMLElement {
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
 	protected dialogElement: HTMLDialogElement | null;
-	protected lightboxNavItems: NodeListOf<TPLightboxNavItemElement> | null
+	protected lightboxNavItems: NodeListOf<TPLightboxNavItemElement> | null;
 
 	/**
 	 * Constructor.
@@ -502,7 +502,7 @@ export class TPLightboxElement extends HTMLElement {
 	 */
 	setCurrentSlide( index: number ): void {
 		// Check if slide index is valid.
-		if ( index > Number( this.getAttribute('total') ) || index <= 0 ) {
+		if ( index > Number( this.getAttribute( 'total' ) ) || index <= 0 ) {
 			// Stop! It's not valid.
 			return;
 		}
@@ -523,9 +523,9 @@ export class TPLightboxElement extends HTMLElement {
 	 * Update current item in navigation.
 	 */
 	updateNavCurrentItem(): void {
-
 		// Bail if we don't have nav items.
 		if ( ! this.lightboxNavItems ) {
+			// Exit.
 			return;
 		}
 
