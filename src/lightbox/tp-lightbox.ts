@@ -6,6 +6,7 @@ import { TPLightboxPreviousElement } from './tp-lightbox-previous';
 import { TPLightboxNextElement } from './tp-lightbox-next';
 import { TPLightboxTriggerElement } from './tp-lightbox-trigger';
 import { TPLightboxCountElement } from './tp-lightbox-count';
+import { TPLightboxNavItemElement } from './tp-lightbox-nav-item';
 
 /**
  * TP Lightbox.
@@ -21,6 +22,7 @@ export class TPLightboxElement extends HTMLElement {
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
 	protected dialogElement: HTMLDialogElement | null;
+	protected lightboxNavItems: NodeListOf<TPLightboxNavItemElement> | null
 
 	/**
 	 * Constructor.
@@ -31,6 +33,7 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Initialize
 		this.dialogElement = this.querySelector( 'dialog' );
+		this.lightboxNavItems = this.querySelectorAll( 'tp-lightbox-nav-item' );
 
 		// Event listeners.
 		this.dialogElement?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
@@ -199,6 +202,9 @@ export class TPLightboxElement extends HTMLElement {
 		// Now, show the modal.
 		dialog.showModal();
 		this.setAttribute( 'open', 'yes' );
+
+		// Update navigation current item.
+		this.updateNavCurrentItem();
 	}
 
 	/**
@@ -237,6 +243,9 @@ export class TPLightboxElement extends HTMLElement {
 		if ( this.currentIndex > 1 ) {
 			this.currentIndex--;
 		}
+
+		// Update navigation current item.
+		this.updateNavCurrentItem();
 	}
 
 	/**
@@ -262,6 +271,9 @@ export class TPLightboxElement extends HTMLElement {
 		if ( this.currentIndex < allGroups.length ) {
 			this.currentIndex++;
 		}
+
+		// Update navigation current item.
+		this.updateNavCurrentItem();
 	}
 
 	/**
@@ -481,5 +493,50 @@ export class TPLightboxElement extends HTMLElement {
 				this.next();
 			}
 		}
+	}
+
+	/**
+	 * Set the current slide index.
+	 *
+	 * @param {number} index Slide index.
+	 */
+	setCurrentSlide( index: number ): void {
+		// Check if slide index is valid.
+		if ( index > Number( this.getAttribute('total') ) || index <= 0 ) {
+			// Stop! It's not valid.
+			return;
+		}
+
+		// dispatch slide-set event.
+		this.dispatchEvent( new CustomEvent( 'slide-set', {
+			bubbles: true,
+			detail: {
+				slideIndex: index,
+			},
+		} ) );
+
+		// Set current slide index.
+		this.setAttribute( 'index', index.toString() );
+	}
+
+	/**
+	 * Update current item in navigation.
+	 */
+	updateNavCurrentItem(): void {
+
+		// Bail if we don't have nav items.
+		if ( ! this.lightboxNavItems ) {
+			return;
+		}
+
+		// Update current item.
+		this.lightboxNavItems.forEach( ( navItem: TPLightboxNavItemElement, index: number ): void => {
+			// Update current attribute.
+			if ( this.currentIndex - 1 === index ) {
+				navItem.setAttribute( 'current', 'yes' );
+			} else {
+				navItem.removeAttribute( 'current' );
+			}
+		} );
 	}
 }
