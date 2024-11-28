@@ -62,7 +62,8 @@ Next, we need to trigger the lightbox with and give it some content. Any content
 |----------------|-------------------------------------------------------------|
 | change         | When any attribute has changed                              |
 | template-set   | When a template is set, before content has actually updated |
-| content-update | When the content has updated inside the lightbox            |
+| content-change | When the content has updated inside the lightbox            |
+| slide-set      | When slide get updated                                      |
 
 ## Methods
 
@@ -73,3 +74,7 @@ Open the lightbox.
 ### `close`
 
 Close the lightbox.
+
+### `setCurrentSlide`
+
+Set the current slide.
