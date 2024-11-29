@@ -74,7 +74,7 @@ export class TPLightboxElement extends HTMLElement {
 		}
 
 		// Trigger navigation update if open or index has changed.
-		if ( 'open' === name || 'index' === name) {
+		if ( 'open' === name || 'index' === name ) {
 			this.updateNavCurrentItem();
 		}
 	}
