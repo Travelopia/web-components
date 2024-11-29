@@ -72,6 +72,11 @@ export class TPLightboxElement extends HTMLElement {
 		if ( 'index' === name ) {
 			this.triggerCurrentIndexTarget();
 		}
+
+		// Trigger navigation update if open or index has changed.
+		if ( 'open' === name || 'index' === name) {
+			this.updateNavCurrentItem();
+		}
 	}
 
 	/**
@@ -202,9 +207,6 @@ export class TPLightboxElement extends HTMLElement {
 		// Now, show the modal.
 		dialog.showModal();
 		this.setAttribute( 'open', 'yes' );
-
-		// Update navigation current item.
-		this.updateNavCurrentItem();
 	}
 
 	/**
@@ -243,9 +245,6 @@ export class TPLightboxElement extends HTMLElement {
 		if ( this.currentIndex > 1 ) {
 			this.currentIndex--;
 		}
-
-		// Update navigation current item.
-		this.updateNavCurrentItem();
 	}
 
 	/**
@@ -271,9 +270,6 @@ export class TPLightboxElement extends HTMLElement {
 		if ( this.currentIndex < allGroups.length ) {
 			this.currentIndex++;
 		}
-
-		// Update navigation current item.
-		this.updateNavCurrentItem();
 	}
 
 	/**
@@ -509,7 +505,6 @@ export class TPLightboxElement extends HTMLElement {
 
 		// dispatch slide-set event.
 		this.dispatchEvent( new CustomEvent( 'slide-set', {
-			bubbles: true,
 			detail: {
 				slideIndex: index,
 			},
