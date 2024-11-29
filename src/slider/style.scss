@@ -29,18 +29,6 @@ tp-slider-slide {
 	}
 }
 
-.tp-slider--grabbing {
-	cursor: grabbing;
-}
-  
-.tp-slider--grab {
-	cursor: grab;
-}
-  
-.tp-slider--dragging {
-	user-select: none;
-}
-
 tp-slider-nav {
 	display: flex;
 	gap: 10px;

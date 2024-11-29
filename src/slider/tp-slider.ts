@@ -141,12 +141,9 @@ export class TPSliderElement extends HTMLElement {
 		// Prevent the default behavior (e.g., text selection)
 		event.preventDefault();
 
-		// Apply the grabbing cursor class
-		this.classList.add( 'tp-slider--grabbing' );
-		this.classList.remove( 'tp-slider--grab' );
-
-		// Prevent text selection
-		this.classList.add( 'tp-slider--dragging' );
+		// Update styles for grabbing and disable text selection.
+		this.style.cursor = 'grabbing';
+		this.style.userSelect = 'none';
 	}
 
 	/**
@@ -197,10 +194,9 @@ export class TPSliderElement extends HTMLElement {
 			this.isDragging = false;
 			this.dragOffsetX = 0;
 
-			// Reset cursor and user-select styles
-			this.classList.remove( 'tp-slider--grabbing' );
-			this.classList.add( 'tp-slider--grab' );
-			this.classList.remove( 'tp-slider--dragging' );
+			// Update styles for releasing and re-enable text selection.
+			this.style.cursor = 'grab';
+			this.style.userSelect = '';
 		}
 	}
 
@@ -209,8 +205,8 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	handleMouseOver() {
 		// Only styles when the draggable will be yes.
-		if ( this.getAttribute( 'draggable' ) === 'yes' ) {
-			this.classList.add( 'tp-slider--grab' );
+		if ( 'yes' === this.getAttribute( 'draggable' ) ) {
+			this.style.cursor = 'grab';
 		}
 	}
 
@@ -220,7 +216,7 @@ export class TPSliderElement extends HTMLElement {
 	handleMouseOut() {
 		// Reset cursor if not dragging.
 		if ( ! this.isDragging ) {
-			this.classList.remove( 'tp-slider--grab' );
+			this.style.cursor = '';
 		}
 	}
 
