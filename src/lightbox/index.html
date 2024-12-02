@@ -24,6 +24,12 @@
 				</tp-lightbox-next>
 				<tp-lightbox-content></tp-lightbox-content>
 				<tp-lightbox-count format="$current / $total"></tp-lightbox-count>
+				<tp-lightbox-nav>
+					<tp-lightbox-nav-item><button>1</button></tp-lightbox-nav-item>
+					<tp-lightbox-nav-item><button>2</button></tp-lightbox-nav-item>
+					<tp-lightbox-nav-item><button>3</button></tp-lightbox-nav-item>
+					<tp-lightbox-nav-item><button>4</button></tp-lightbox-nav-item>
+				</tp-lightbox-nav>
 			</dialog>
 		</tp-lightbox>
 
@@ -31,6 +37,20 @@
 			<button>Open Lightbox: Group 1</button>
 			<template>
 				<img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="">
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
+			<button>Open Lightbox: Group 1</button>
+			<template>
+				<img src="https://picsum.photos/id/77/600/300" width="600" height="300" alt="">
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
+			<button>Open Lightbox: Group 1</button>
+			<template>
+				<img src="https://picsum.photos/id/78/600/300" width="600" height="300" alt="">
 			</template>
 		</tp-lightbox-trigger>
 

@@ -6,6 +6,7 @@ import { TPLightboxPreviousElement } from './tp-lightbox-previous';
 import { TPLightboxNextElement } from './tp-lightbox-next';
 import { TPLightboxTriggerElement } from './tp-lightbox-trigger';
 import { TPLightboxCountElement } from './tp-lightbox-count';
+import { TPLightboxNavItemElement } from './tp-lightbox-nav-item';
 
 /**
  * TP Lightbox.
@@ -21,6 +22,7 @@ export class TPLightboxElement extends HTMLElement {
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
 	protected dialogElement: HTMLDialogElement | null;
+	protected lightboxNavItems: NodeListOf<TPLightboxNavItemElement> | null;
 
 	/**
 	 * Constructor.
@@ -31,6 +33,7 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Initialize
 		this.dialogElement = this.querySelector( 'dialog' );
+		this.lightboxNavItems = this.querySelectorAll( 'tp-lightbox-nav-item' );
 
 		// Event listeners.
 		this.dialogElement?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
@@ -68,6 +71,11 @@ export class TPLightboxElement extends HTMLElement {
 		// Trigger current index target if index has changed.
 		if ( 'index' === name ) {
 			this.triggerCurrentIndexTarget();
+		}
+
+		// Trigger navigation update if open or index has changed.
+		if ( 'open' === name || 'index' === name ) {
+			this.updateNavCurrentItem();
 		}
 	}
 
@@ -159,6 +167,13 @@ export class TPLightboxElement extends HTMLElement {
 
 		// Setting this attributes triggers a re-trigger.
 		this.setAttribute( 'index', index.toString() );
+
+		// dispatch slide-set event.
+		this.dispatchEvent( new CustomEvent( 'slide-set', {
+			detail: {
+				slideIndex: index,
+			},
+		} ) );
 	}
 
 	/**
@@ -481,5 +496,26 @@ export class TPLightboxElement extends HTMLElement {
 				this.next();
 			}
 		}
+	}
+
+	/**
+	 * Update current item in navigation.
+	 */
+	updateNavCurrentItem(): void {
+		// Bail if we don't have nav items.
+		if ( ! this.lightboxNavItems ) {
+			// Exit.
+			return;
+		}
+
+		// Update current item.
+		this.lightboxNavItems.forEach( ( navItem: TPLightboxNavItemElement, index: number ): void => {
+			// Update current attribute.
+			if ( this.currentIndex - 1 === index ) {
+				navItem.setAttribute( 'current', 'yes' );
+			} else {
+				navItem.removeAttribute( 'current' );
+			}
+		} );
 	}
 }
