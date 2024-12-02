@@ -165,15 +165,15 @@ export class TPLightboxElement extends HTMLElement {
 			index = 1;
 		}
 
+		// Setting this attributes triggers a re-trigger.
+		this.setAttribute( 'index', index.toString() );
+
 		// dispatch slide-set event.
 		this.dispatchEvent( new CustomEvent( 'slide-set', {
 			detail: {
 				slideIndex: index,
 			},
 		} ) );
-
-		// Setting this attributes triggers a re-trigger.
-		this.setAttribute( 'index', index.toString() );
 	}
 
 	/**
