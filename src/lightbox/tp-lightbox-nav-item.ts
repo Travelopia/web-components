@@ -36,7 +36,7 @@ export class TPLightboxNavItemElement extends HTMLElement {
 		}
 
 		// Set current slide.
-		this.lightbox.setCurrentSlide( this.getIndex() );
+		this.lightbox.currentIndex = Number( this.getIndex() ) ?? 1;
 
 		// Update navigation current item.
 		this.lightbox.updateNavCurrentItem();

@@ -165,6 +165,13 @@ export class TPLightboxElement extends HTMLElement {
 			index = 1;
 		}
 
+		// dispatch slide-set event.
+		this.dispatchEvent( new CustomEvent( 'slide-set', {
+			detail: {
+				slideIndex: index,
+			},
+		} ) );
+
 		// Setting this attributes triggers a re-trigger.
 		this.setAttribute( 'index', index.toString() );
 	}
@@ -489,29 +496,6 @@ export class TPLightboxElement extends HTMLElement {
 				this.next();
 			}
 		}
-	}
-
-	/**
-	 * Set the current slide index.
-	 *
-	 * @param {number} index Slide index.
-	 */
-	setCurrentSlide( index: number ): void {
-		// Check if slide index is valid.
-		if ( index > Number( this.getAttribute( 'total' ) ) || index <= 0 ) {
-			// Stop! It's not valid.
-			return;
-		}
-
-		// dispatch slide-set event.
-		this.dispatchEvent( new CustomEvent( 'slide-set', {
-			detail: {
-				slideIndex: index,
-			},
-		} ) );
-
-		// Set current slide index.
-		this.setAttribute( 'index', index.toString() );
 	}
 
 	/**

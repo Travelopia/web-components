@@ -74,7 +74,3 @@ Open the lightbox.
 ### `close`
 
 Close the lightbox.
-
-### `setCurrentSlide`
-
-Set the current slide.
