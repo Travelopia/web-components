@@ -15,9 +15,11 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
+	protected autoSlideInterval: number | undefined;
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
 	protected responsiveSettings: { [ key: string ]: any };
+	protected hoverSlideIntervalID: number | undefined;
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
 		'infinite',
@@ -27,6 +29,7 @@ export class TPSliderElement extends HTMLElement {
 		'per-view',
 		'step',
 		'responsive',
+		'auto-slide-on-hover-interval',
 	];
 
 	/**
@@ -47,6 +50,7 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize slider.
 		this.slide();
 		this.autoSlide();
+		this.autoSlideOnHover();
 		this.setAttribute( 'initialized', 'yes' );
 
 		// Responsive Settings.
@@ -628,6 +632,55 @@ export class TPSliderElement extends HTMLElement {
 				this.next();
 			}
 		}
+	}
+
+	/**
+	 * Auto slide on hover.
+	 */
+	protected autoSlideOnHover(): void {
+		// Check if auto-slide-interval is enabled.
+		const autoSlideInterval: string | null = this.getAttribute( 'auto-slide-interval' );
+
+		// Check if we have an auto slider interval.
+		if ( autoSlideInterval ) {
+			// Early return.
+			return;
+		}
+
+		// Auto Slide On Hover.
+		const autoSlideOnHoverInterval: string | null = this.getAttribute( 'auto-slide-on-hover-interval' );
+
+		// Check if we have an auto slider interval.
+		if ( ! autoSlideOnHoverInterval ) {
+			// Early return.
+			return;
+		}
+
+		// Check for a valid interval.
+		const interval: number = parseInt( autoSlideOnHoverInterval );
+
+		// Check if interval is valid.
+		if ( interval <= 0 ) {
+			// Early return.
+			return;
+		}
+
+		// Add event listeners.
+		this.addEventListener( 'mouseenter', () => {
+			// Clear any existing interval to prevent stacking
+			this.hoverSlideIntervalID ?? clearInterval(this.hoverSlideIntervalID);
+
+			// Auto Slide.
+			this.hoverSlideIntervalID = window.setInterval( () => {
+				// Run the next slide.
+				this.next();
+			}, interval );
+		} );
+
+		this.addEventListener( 'mouseleave', () => {
+			// Clear the interval.
+			clearInterval( this.hoverSlideIntervalID );
+		} );
 	}
 
 	/**
