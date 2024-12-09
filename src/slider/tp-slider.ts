@@ -668,7 +668,10 @@ export class TPSliderElement extends HTMLElement {
 		// Add event listeners.
 		this.addEventListener( 'mouseenter', () => {
 			// Clear any existing interval to prevent stacking
-			this.hoverSlideIntervalID && clearInterval( this.hoverSlideIntervalID );
+			if ( this.hoverSlideIntervalID ) {
+				// Clear the interval.
+				clearInterval( this.hoverSlideIntervalID );
+			}
 
 			// Auto Slide.
 			this.hoverSlideIntervalID = window.setInterval( () => {
