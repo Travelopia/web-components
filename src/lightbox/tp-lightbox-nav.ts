@@ -44,18 +44,12 @@ export class TPLightboxNavElement extends HTMLElement {
 		// Clear the navigation.
 		this.innerHTML = '';
 
+		// Append the navigation items.
 		for ( let i = 0; i < totalSlides; i++ ) {
 			// Clone the template.
-			const clone = document.importNode( this.template.content, true );
-
-			// Set the index.
-			const navItem = clone.querySelector( 'tp-lightbox-nav-item' );
-			if ( navItem ) {
-				navItem.setAttribute( 'index', i.toString() );
-			}
-
-			// Append the clone to the navigation.
-			this.appendChild( clone );
+			const navItem = this.template.content.cloneNode( true );
+			// Append the clone.
+			this.appendChild( navItem );
 		}
 	}
 }
