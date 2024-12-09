@@ -48,6 +48,7 @@ export class TPLightboxNavElement extends HTMLElement {
 		for ( let i = 0; i < totalSlides; i++ ) {
 			// Clone the template.
 			const navItem = this.template.content.cloneNode( true );
+
 			// Append the clone.
 			this.appendChild( navItem );
 		}
