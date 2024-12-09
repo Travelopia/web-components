@@ -20,11 +20,11 @@ export class TPLightboxNavElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
-		// Get the template.
+		// Initialize properties.
 		this.template = this.querySelector( 'template' );
 		this.lightbox = this.closest( 'tp-lightbox' );
 
-		// Set the template.
+		// Add event listener.
 		this.lightbox?.addEventListener( 'template-set', this.setTemplate.bind( this ) );
 	}
 
