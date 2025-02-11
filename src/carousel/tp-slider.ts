@@ -207,33 +207,43 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the next slide.
 	 */
 	next(): void {
+		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
-        let nextSlideIndex = this.currentSlideIndex + this.step;
+		let nextSlideIndex = this.currentSlideIndex + this.step;
 
-        if ('yes' !== this.getAttribute('infinite') && nextSlideIndex > totalSlides - this.perView + 1) {
-            nextSlideIndex = totalSlides - this.perView + 1;
-        } else if ('yes' === this.getAttribute('infinite') && nextSlideIndex > totalSlides) {
-            nextSlideIndex = nextSlideIndex % totalSlides;
-            if(nextSlideIndex === 0) nextSlideIndex = totalSlides;
-        }
+		// Update mextSlide Index.
+		if ( 'yes' !== this.getAttribute( 'infinite' ) && nextSlideIndex > totalSlides - this.perView + 1 ) {
+			nextSlideIndex = totalSlides - this.perView + 1;
+		} else if ( 'yes' === this.getAttribute( 'infinite' ) && nextSlideIndex > totalSlides ) {
+			nextSlideIndex = nextSlideIndex % totalSlides;
 
-        this.setCurrentSlide(nextSlideIndex);
+			// If next slide index is zero set it to total.
+			if ( nextSlideIndex === 0 ) {
+				nextSlideIndex = totalSlides;
+			}
+		}
+
+		// Updating slide.
+		this.setCurrentSlide( nextSlideIndex );
 	}
 
 	/**
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
+		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
-        let previousSlideNumber: number = this.currentSlideIndex - this.step;
+		let previousSlideNumber: number = this.currentSlideIndex - this.step;
 
-        if ('yes' !== this.getAttribute('infinite') && previousSlideNumber < 1) {
-            previousSlideNumber = 1;
-        } else if ('yes' === this.getAttribute('infinite') && previousSlideNumber < 1) {
-            previousSlideNumber = totalSlides + previousSlideNumber;
-        }
+		// Update previouse Slide.
+		if ( 'yes' !== this.getAttribute( 'infinite' ) && previousSlideNumber < 1 ) {
+			previousSlideNumber = 1;
+		} else if ( 'yes' === this.getAttribute( 'infinite' ) && previousSlideNumber < 1 ) {
+			previousSlideNumber = totalSlides + previousSlideNumber;
+		}
 
-        this.setCurrentSlide(previousSlideNumber);
+		// Updating slide.
+		this.setCurrentSlide( previousSlideNumber );
 	}
 
 	/**
@@ -291,6 +301,7 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
+		// Update Height.
 		this.updateHeight();
 	}
 
@@ -339,15 +350,18 @@ export class TPSliderElement extends HTMLElement {
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
 
-        if (slides) {
-            slides.forEach((slide: TPSliderSlideElement, index: number): void => {
-                if (this.currentSlideIndex - 1 === index) {
-                    slide.setAttribute('active', 'yes');
-                } else {
-                    slide.removeAttribute('active');
-                }
-            });
-        }
+		// setting active attribute to slide.
+		if ( slides ) {
+			// Iterating though slides.
+			slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
+				// Checking for current slide.
+				if ( this.currentSlideIndex - 1 === index ) {
+					slide.setAttribute( 'active', 'yes' );
+				} else {
+					slide.removeAttribute( 'active' );
+				}
+			} );
+		}
 
 		// Set current slider nav item.
 		if ( sliderNavItems ) {
@@ -396,6 +410,7 @@ export class TPSliderElement extends HTMLElement {
 			leftArrow?.removeAttribute( 'disabled' );
 		}
 
+		// calling slide.
 		this.slide();
 	}
 
@@ -412,17 +427,22 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		if ('yes' === this.getAttribute('flexible-height')) {
+		// Update height if flexible height is yes.
+		if ( 'yes' === this.getAttribute( 'flexible-height' ) ) {
 			const slides = this.getSlideElements();
-			if (slides) {
-			  let maxHeight = 0;
-			  for(let i = 0; i < slides.length; i++) {
-				maxHeight = Math.max(maxHeight, slides[i].scrollHeight);
-			  }
-			  slidesContainer.style.height = `${maxHeight}px`;
+
+			// If slides available set Height.
+			if ( slides ) {
+				let maxHeight = 0;
+
+				// Iterating throught slides.
+				for ( let i = 0; i < slides.length; i++ ) {
+					maxHeight = Math.max( maxHeight, slides[ i ].scrollHeight );
+				}
+				slidesContainer.style.height = `${ maxHeight }px`;
 			}
 		} else {
-			slidesContainer.style.removeProperty('height');
+			slidesContainer.style.removeProperty( 'height' );
 		}
 	}
 
