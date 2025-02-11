@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Slider</title>
+
+	<link rel="stylesheet" href="../../dist/carousel/style.css" media="all">
+	<script type="module" src="../../dist/carousel/index.js"></script>
+
+	<style>
+		tp-slider-slide {
+			background-color: #eee;
+		}
+
+		tp-slider-slide img {
+			width: 100%;
+			height: auto;
+		}
+
+		img {
+			display: block;
+		}
+
+		main {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<!--Slider that slides horizontally with responsive settings.-->
+		<tp-slider swipe-threshold="210" flexible-height="yes" infinite="yes" swipe="yes" responsive='[{"media":"(min-width: 600px)","flexible-height":"yes","infinite":"no","swipe":"yes","auto-slide-interval":2000,"per-view":1,"step":2},{"media":"(min-width: 300px)","flexible-height":"yes","infinite":"no","swipe":"yes","behaviour":"fade","auto-slide-interval":2000,"per-view":1,"step":1}]'>
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>4</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
+		</tp-slider>
+
+		<br>
+
+		<!--Slider with 'fade in' effect and flexible height-->
+		<tp-slider flexible-height="yes" infinite="yes" swipe="yes" behaviour="fade">
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>4</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
+		</tp-slider>
+
+		<br>
+
+		<!--Slider with 'fade in' effect and not flexible height-->
+		<tp-slider behaviour="fade" infinite="yes" swipe="yes">
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>4</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
+		</tp-slider>
+
+		<br>
+
+		<!--Sliders with multiple visible slides-->
+		<tp-slider>
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides style="gap: 20px">
+					<tp-slider-slide style="flex: 70% 0 0"><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: 70% 0 0"><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: 70% 0 0"><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt=""></tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="3" format="$current / $total">1 / 3</tp-slider-count>
+		</tp-slider>
+
+		<br>
+
+		<!-- Slider with Slides Per View and Step -->
+		<tp-slider per-view="2" step="2">
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="3" format="$current / $total">1 / 3</tp-slider-count>
+		</tp-slider>
+
+		<!--Nested sliders-->
+		<tp-slider flexible-height="yes" swipe="yes" behaviour="fade">
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide>
+						<tp-slider flexible-height="yes" infinite="yes" swipe="yes">
+							<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+							<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+							<tp-slider-track>
+								<tp-slider-slides>
+									<tp-slider-slide><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt=""></tp-slider-slide>
+									<tp-slider-slide><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt=""></tp-slider-slide>
+									<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+									<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+								</tp-slider-slides>
+							</tp-slider-track>
+							<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
+						</tp-slider>
+					</tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
+		</tp-slider>
+
+		<br>
+
+		<!--Slider that autoplay -->
+		<tp-slider flexible-height="yes" infinite="yes" auto-slide-interval="3000">
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-nav>
+				<tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+				<tp-slider-nav-item><button>4</button></tp-slider-nav-item>
+			</tp-slider-nav>
+			<tp-slider-count current="1" total="4" format="$current / $total">1 / 4</tp-slider-count>
+		</tp-slider>
+	</main>
+</body>
+</html>

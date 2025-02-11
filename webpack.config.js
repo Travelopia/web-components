@@ -85,6 +85,7 @@ module.exports = ( env ) => {
 			lightbox: './src/lightbox/index.ts',
 			'toggle-attribute': './src/toggle-attribute/index.ts',
 			'number-spinner': './src/number-spinner/index.ts',
+			carousel: './src/carousel/index.ts',
 		},
 		module: {
 			rules: [
