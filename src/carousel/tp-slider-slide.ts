@@ -32,15 +32,5 @@ export class TPSliderSlideElement extends HTMLElement {
 			// Bail early if not found.
 			return;
 		}
-
-		/**
-		 * Yield to main thread to avoid observation errors.
-		 *
-		 * @see https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#observation_errors
-		 */
-		setTimeout( (): void => {
-			// Handle resize.
-			slider.handleResize();
-		}, 0 );
 	}
 }

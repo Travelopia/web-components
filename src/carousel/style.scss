@@ -6,8 +6,6 @@ tp-slider {
 tp-slider-track {
     display: block;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
     position: relative;
 }
 
@@ -15,7 +13,7 @@ tp-slider-slides {
     position: relative;
     display: flex;
     align-items: flex-start;
-    scroll-snap-align: start;
+	scroll-snap-type: x mandatory;
     transition: none;
 }
 
@@ -27,44 +25,8 @@ tp-slider-slide {
     height: auto;
 }
 
-tp-slider[flexible-height="yes"] tp-slider-slides {
-    align-items: flex-start; /* Align slides to the top for flexible height */
-}
 
 tp-slider-nav {
     display: flex;
     gap: 10px;
-}
-
-// Fade in Styles.
-tp-slider[behaviour="fade"] {
-
-	/**
-	 * We are using first of type and direct child here
-	 * so that if there is a nested slider it does not affect
-	 * the styles for the inner slider and is only applied to the
-	 * parent.
-	 */
-	tp-slider-slides:first-of-type {
-		display: block;
-
-		> tp-slider-slide {
-			position: absolute;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: auto;
-			transition-property: opacity, visibility;
-			transition-duration: .6s;
-			transition-timing-function: ease;
-			visibility: hidden;
-			opacity: 0;
-		}
-
-		> tp-slider-slide[active="yes"] {
-			visibility: visible;
-			opacity: 1;
-			z-index: 1;
-		}
-	}
 }
