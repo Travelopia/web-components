@@ -3,7 +3,6 @@
  */
 import { TPSliderSlidesElement } from './tp-slider-slides';
 import { TPSliderSlideElement } from './tp-slider-slide';
-// import { TPSliderArrowElement } from './tp-slider-arrow';
 
 /**
  * TP Slider.
@@ -89,7 +88,7 @@ export class TPSliderElement extends HTMLElement {
 		// Bail.
 		if ( ! slidesElement ) {
 			// Early return.
-			 return;
+			return;
 		}
 
 		// Check if we are at the last slide considering per view attribute.
@@ -116,16 +115,23 @@ export class TPSliderElement extends HTMLElement {
 		// Everything is good, go to next slide.
 		this.setCurrentSlide( nextSlideIndex );
 
+		// Checlk if infinite slide and swipe the slide.
 		if ( 'yes' === this.getAttribute( 'infinite' ) ) {
-			console.log("In");
-			slidesElement.scrollLeft += 800;
-			if (slidesElement.scrollLeft >= (totalSlides - 1) * slidesElement.offsetWidth) {
+			slidesElement.scrollLeft += slidesElement.offsetWidth;
+
+			// If slides Element have reached it's last point.
+			if ( slidesElement.scrollLeft >= ( totalSlides - 1 ) * slidesElement.offsetWidth ) {
+				// Set position to initial.
 				slidesElement.scrollLeft = 0;
 			}
 		} else {
+			// Set next slide.
 			slidesElement.scrollLeft += slidesElement.offsetWidth;
-			if (slidesElement.scrollLeft > (totalSlides - 1) * slidesElement.offsetWidth){
-				slidesElement.scrollLeft = (totalSlides - 1) * slidesElement.offsetWidth;
+
+			// Check if at the last slide.
+			if ( slidesElement.scrollLeft > ( totalSlides - 1 ) * slidesElement.offsetWidth ) {
+				// Set and stay at last slide.
+				slidesElement.scrollLeft = ( totalSlides - 1 ) * slidesElement.offsetWidth;
 			}
 		}
 	}
@@ -134,26 +140,6 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
-	// Check if we are at the first slide.
-	if ( this.currentSlideIndex <= 1 ) {
-		// Check if we are in infinite mode.
-		if ( 'yes' === this.getAttribute( 'infinite' ) ) {
-			this.setCurrentSlide( this.getTotalSlides() );
-		}
-
-		// Terminate.
-		return;
-	}
-		// Get previous slide index.
-		const previousSlideNumber: number = this.currentSlideIndex - 1;
-
-		// Check if the previous slide step is not taking it beyond the first slide.
-		if ( previousSlideNumber > 1 ) {
-			this.setCurrentSlide( previousSlideNumber );
-		} else {
-			this.setCurrentSlide( 1 );
-		}
-
 		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
 
@@ -163,33 +149,65 @@ export class TPSliderElement extends HTMLElement {
 		// Bail.
 		if ( ! slidesElement ) {
 			// Early return.
-			 return;
+			return;
 		}
 
-		if (totalSlides) {
+		// Check if we are at the first slide.
+		if ( this.currentSlideIndex <= 1 ) {
+			// Check if we are in infinite mode.
+			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
+				// set last slide.
+				this.setCurrentSlide( this.getTotalSlides() );
+			}
+
+			// Terminate.
+			return;
+		}
+
+		// Get previous slide index.
+		const previousSlideNumber: number = this.currentSlideIndex - 1;
+
+		// Check if the previous slide step is not taking it beyond the first slide.
+		if ( previousSlideNumber > 1 ) {
+			// Set to previous slide.
+			this.setCurrentSlide( previousSlideNumber );
+		} else {
+			// Set at first slide.
+			this.setCurrentSlide( 1 );
+		}
+
+		// Checlk if infinite slide and swipe the slide.
+		if ( totalSlides ) {
+			// Set previous slide.
 			slidesElement.scrollLeft -= slidesElement.offsetWidth;
-			if (slidesElement.scrollLeft <= 0) {
-				slidesElement.scrollLeft = (totalSlides - 1) * slidesElement.offsetWidth;
+
+			// Checking if container posization is at initial.
+			if ( slidesElement.scrollLeft <= 0 ) {
+				// Set last slide.
+				slidesElement.scrollLeft = ( totalSlides - 1 ) * slidesElement.offsetWidth;
 			}
 		} else {
+			// Set previous slide.
 			slidesElement.scrollLeft -= slidesElement.offsetWidth;
-			if (slidesElement.scrollLeft < 0){
+
+			// Checking if container posization is at initial.
+			if ( slidesElement.scrollLeft < 0 ) {
+				// Set and stay at initial slide.
 				slidesElement.scrollLeft = 0;
 			}
 		}
 	}
 
-
 	/**
 	 * Update Slides.
 	 */
 	updateSlide(): void {
-	// Check if slider is disabled.
-	if ( 'yes' === this.getAttribute( 'disabled' ) ) {
-		// Yes, it is. So stop.
-		return;
-	}
+		// Check if slider is disabled.
+		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
+			// Yes, it is. So stop.
 
+			// TODO: Add comment.
+		}
 	}
 
 	/**
@@ -216,4 +234,3 @@ export class TPSliderElement extends HTMLElement {
 		this.setAttribute( 'current-slide', index.toString() );
 	}
 }
-
