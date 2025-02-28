@@ -86,7 +86,7 @@ export class TPSliderElement extends HTMLElement {
 		const slidesElement: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 
 		// Bail.
-		if ( ! slidesElement ) {
+		if ( ! slidesElement || totalSlides ) {
 			// Early return.
 			return;
 		}
@@ -147,7 +147,7 @@ export class TPSliderElement extends HTMLElement {
 		const slidesElement: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 
 		// Bail.
-		if ( ! slidesElement ) {
+		if ( ! slidesElement || totalSlides ) {
 			// Early return.
 			return;
 		}
