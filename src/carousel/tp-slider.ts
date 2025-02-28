@@ -86,7 +86,7 @@ export class TPSliderElement extends HTMLElement {
 		const slidesElement: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 
 		// Bail.
-		if ( ! slidesElement || totalSlides ) {
+		if ( ! slidesElement || ! totalSlides ) {
 			// Early return.
 			return;
 		}
@@ -147,7 +147,7 @@ export class TPSliderElement extends HTMLElement {
 		const slidesElement: TPSliderSlidesElement | null = this.querySelector( 'tp-slider-slides' );
 
 		// Bail.
-		if ( ! slidesElement || totalSlides ) {
+		if ( ! slidesElement || ! totalSlides ) {
 			// Early return.
 			return;
 		}
@@ -195,18 +195,6 @@ export class TPSliderElement extends HTMLElement {
 				// Set and stay at initial slide.
 				slidesElement.scrollLeft = 0;
 			}
-		}
-	}
-
-	/**
-	 * Update Slides.
-	 */
-	updateSlide(): void {
-		// Check if slider is disabled.
-		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
-			// Yes, it is. So stop.
-
-			// TODO: Add comment.
 		}
 	}
 
