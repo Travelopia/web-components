@@ -12,6 +12,8 @@ export class TPFormElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected readonly form: HTMLFormElement | null;
+	protected hasError: boolean;
+	protected pauseSubmit: boolean;
 
 	/**
 	 * Constructor.
@@ -19,6 +21,8 @@ export class TPFormElement extends HTMLElement {
 	constructor() {
 		// Initialize parent.
 		super();
+		this.hasError = false;
+		this.pauseSubmit = false;
 
 		// Get form.
 		this.form = this.querySelector( 'form' );
@@ -28,29 +32,54 @@ export class TPFormElement extends HTMLElement {
 	}
 
 	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
+		// Attributes observed in the TPFormElement web-component.
+		return [ 'has-error', 'pause-submit' ];
+	}
+
+	/**
+	 * Attribute changed callback.
+	 *
+	 * @param {string} name     Attribute name.
+	 * @param {string} oldValue Old value.
+	 * @param {string} newValue New value.
+	 */
+	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		// Dispatch form submit event.
+		if ( ( 'has-error' === name || 'pause-submit' === name ) && oldValue !== newValue ) {
+			this.handleFormSubmit.bind( this );
+		}
+	}
+
+	/**
 	 * Handle form submission.
 	 *
 	 * @param {Event} e Submit event.
 	 */
 	protected handleFormSubmit( e: SubmitEvent ): void {
 		// Validate the form.
-		const isValid: boolean = this.validate();
+		const formValid: boolean = this.validate();
 
-		// Dispatch a custom event for additional-validation.
-		const additionalValidationEvent = new CustomEvent( 'additional-validation', {
-			detail: { isValid },
-			bubbles: true,
-			cancelable: true,
-		} );
-		this.dispatchEvent( additionalValidationEvent );
+		// Dispatch after validate event.
+		this.dispatchEvent( new CustomEvent( 'after-validation', { bubbles: true, detail: { formValid } } ) );
 
-		// Check validation with default + additional.
-		const formValid: boolean = isValid && additionalValidationEvent.detail.isValid;
+		// Get the updated flags.
+		this.hasError = 'yes' === this.getAttribute( 'has-error' ) ? true : false;
+		this.pauseSubmit = 'yes' === this.getAttribute( 'pause-submit' ) ? true : false;
 
 		// Prevent form submission if it's invalid.
-		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
+		if ( ! formValid || this.hasError || this.pauseSubmit || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
+
+			// Return if submit pause is set.
+			if ( this.pauseSubmit ) {
+				return;
+			}
 		}
 
 		// Get submit button.
@@ -59,7 +88,7 @@ export class TPFormElement extends HTMLElement {
 		// If present.
 		if ( submit ) {
 			// Check if form is valid.
-			if ( formValid ) {
+			if ( formValid && ! this.hasError ) {
 				submit.setAttribute( 'submitting', 'yes' );
 			} else {
 				submit.removeAttribute( 'submitting' );
@@ -67,7 +96,7 @@ export class TPFormElement extends HTMLElement {
 		}
 
 		// If form is valid then dispatch a custom 'submit-validation-success' event.
-		if ( formValid ) {
+		if ( formValid && ! this.hasError ) {
 			this.dispatchEvent( new CustomEvent( 'submit-validation-success', { bubbles: true } ) );
 		}
 	}
@@ -88,6 +117,9 @@ export class TPFormElement extends HTMLElement {
 		if ( ! fields ) {
 			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
 
+			// Remove has-error attributes, indicating validation passed.
+			this.removeAttribute( 'has-error' );
+
 			// Return true indicating validation passed.
 			return true;
 		}
@@ -103,8 +135,10 @@ export class TPFormElement extends HTMLElement {
 
 		// If form is valid then dispatch a custom 'validation-success' event else send a custom 'validation-error' event.
 		if ( formValid ) {
+			this.removeAttribute( 'has-error' );
 			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
 		} else {
+			this.setAttribute( 'has-error', 'yes' );
 			this.dispatchEvent( new CustomEvent( 'validation-error', { bubbles: true } ) );
 		}
 
@@ -137,5 +171,9 @@ export class TPFormElement extends HTMLElement {
 
 		// Remove 'submitting' attribute from submit button.
 		submit?.removeAttribute( 'submitting' );
+
+		// Reset form error and submit pause flags.
+		submit?.removeAttribute( 'has-error' );
+		submit?.removeAttribute( 'pause-submit' );
 	}
 }
