@@ -8,204 +8,48 @@
 
 	<link rel="stylesheet" href="../../dist/tooltip/style.css" media="all">
 	<script type="module" src="../../dist/tooltip/index.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 	<style>
-		*,
-		*:before,
-		*:after {
-			box-sizing: border-box;
-		}
-
-
-		body {
-			font-family: Arial, sans-serif;
-			padding: 20px;
-			background-color: #f4f4f4;
-		}
-
-		.card-container {
-			display: flex;
-			flex-wrap: wrap; /* Makes cards wrap on smaller screens */
-			justify-content: center; /* Centers the cards horizontally */
-			gap: 20px; /* Adds space between cards */
-		}
-
-		.card {
-			background-color: white;
-			border: 1px solid #ddd;
-			border-radius: 8px;
-			width: 300px; /* Fixed width for cards */
-			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-			transition: transform 0.3s ease;
-		}
-
-		.card-header {
-			display: flex;
+		main {
+			max-width: 600px;
+			margin: 0 auto;
 			padding: 0 20px;
-			justify-content: space-between;
-			align-items: center;
 		}
 
-		.info-icon {
-			color: #555;
-			font-size: 20px;
-			cursor: pointer;
-			transition: color 0.3s ease;
+		.tooltip-1 tp-tooltip-arrow {
+			width: 15px;
+			height: 15px;
+			background-color: red;
 		}
 
-		.info-icon:hover {
-			color: #007BFF; /* Changes icon color on hover */
-		}
-
-		@media (max-width: 768px) {
-			.card {
-				width: 100%; /* Cards take full width on smaller screens */
-			}
+		.tooltip-1 tp-tooltip-popover {
+			background-color: #fff;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 200px;
 		}
 	</style>
 </head>
 <body style="padding: 0; margin: 0">
 	<main >
-		<tp-tooltip>
-			<tp-tooltip-trigger>
-				<div class="my-btn">Hover Me</div>
-			</tp-tooltip-trigger>
-			<tp-tooltip-popover style="width: 265px;padding: 5px;border: 2px solid red;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
+		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et corrupti accusamus odit doloribus aliquam blanditiis tenetur est ut, corporis minima cupiditate commodi similique rerum non necessitatibus voluptatem libero reprehenderit repellat laudantium exercitationem facere harum? Voluptates, dignissimos itaque? Veniam distinctio officiis, sit dolore minima libero suscipit architecto. Exercitationem molestias pariatur, labore nemo et quasi ducimus quaerat mollitia amet quisquam error voluptatibus placeat modi ab. Sunt praesentium quis neque nesciunt eos sapiente. Mollitia inventore magni sequi quas. Ad consequatur illum commodi dolorum ipsam tempore quis placeat sed recusandae cumque ab temporibus vel doloremque voluptate quisquam eaque ducimus sint magni, repellat doloribus cum.</p>
+		
+		<tp-tooltip offSet="10" class="tooltip-1">
+			<div>Hover Me</div>
+			<tp-tooltip-popover>
+				<tp-tooltip-arrow></tp-tooltip-arrow>
+				<div style="z-index: 1;">First tooltip dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</div>
+			</tp-tooltip-popover>
 		</tp-tooltip>
-		<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus eum nulla quam optio numquam reprehenderit, fugit modi eos pariatur, doloremque magnam consequatur atque officiis necessitatibus, deleniti odit quia commodi ullam. Mollitia, reiciendis ipsum impedit quos nobis molestias sit qui vitae voluptate pariatur, fugiat eveniet, veniam magni tenetur repellat eum. Facere aspernatur nobis laborum fuga dolorem quis fugiat, expedita atque cumque quae quia ut in asperiores? Eum, sunt laudantium beatae voluptas architecto impedit itaque ipsam consequatur, blanditiis atque distinctio corporis consectetur ipsum et ut, adipisci dolore exercitationem harum culpa quia. Id tempora laudantium, amet provident maxime ut est nemo veritatis vel.</p>
-		<tp-tooltip>
-			<tp-tooltip-trigger>
-				<div class="my-btn" style="display: flex;gap: 10px;">
-					<div>Hover me</div>
-					<i>i</i>
-				</div>
-			</tp-tooltip-trigger>
-			<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
+		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et corrupti accusamus odit doloribus aliquam blanditiis tenetur est ut, corporis minima cupiditate commodi similique rerum non necessitatibus voluptatem libero reprehenderit repellat laudantium exercitationem facere harum? Voluptates, dignissimos itaque? Veniam distinctio officiis, sit dolore minima libero suscipit architecto. Exercitationem molestias pariatur, labore nemo et quasi ducimus quaerat mollitia amet quisquam error voluptatibus placeat modi ab. Sunt praesentium quis neque nesciunt eos sapiente. Mollitia inventore magni sequi quas. Ad consequatur illum commodi dolorum ipsam tempore quis placeat sed recusandae cumque ab temporibus vel doloremque voluptate quisquam eaque ducimus sint magni, repellat doloribus cum.</p>
+		<tp-tooltip offSet="10">
+			<span class="my-btn">Hover Me</span>
+			<tp-tooltip-popover>
+				<tp-tooltip-arrow style="width: 15px; height: 15px; background-color: orange;"></tp-tooltip-arrow>
+				<div style="z-index: 1;background-color: green; width: 265px; padding: 5px; border: 2px solid red;">Second tooltip dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</div>
+			</tp-tooltip-popover>
 		</tp-tooltip>
-		<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus eum nulla quam optio numquam reprehenderit, fugit modi eos pariatur, doloremque magnam consequatur atque officiis necessitatibus, deleniti odit quia commodi ullam. Mollitia, reiciendis ipsum impedit quos nobis molestias sit qui vitae voluptate pariatur, fugiat eveniet, veniam magni tenetur repellat eum. Facere aspernatur nobis laborum fuga dolorem quis fugiat, expedita atque cumque quae quia ut in asperiores? Eum, sunt laudantium beatae voluptas architecto impedit itaque ipsam consequatur, blanditiis atque distinctio corporis consectetur ipsum et ut, adipisci dolore exercitationem harum culpa quia. Id tempora laudantium, amet provident maxime ut est nemo veritatis vel.</p>
-		<div style="padding: 20px; border: 1px solid red; margin: 0 20px;">
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-			<tp-tooltip>
-				<tp-tooltip-trigger>
-					<div class="my-btn" style="display: flex;gap: 10px;">
-						<div>Hover me</div>
-						<i>i</i>
-					</div>
-				</tp-tooltip-trigger>
-				<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</tp-tooltip-popover>
-			</tp-tooltip>
-		</div>
-
-
-		<div class="card-container">
-			<div class="card">
-				<div class="card-header">
-					<h2>Card 1</h2>
-					<tp-tooltip>
-						<tp-tooltip-trigger>
-							<i class="fas fa-info-circle info-icon"></i>
-						</tp-tooltip-trigger>
-						<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae
-					distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque
-					a, repellendus iure quae eaque consectetur!
-						</tp-tooltip-popover>
-					</tp-tooltip>
-				</div>
-			  	<p>This is the first card.</p>
-			</div>
-			<div class="card">
-				<div class="card-header">
-					<h2>Card 2</h2>
-					<tp-tooltip>
-						<tp-tooltip-trigger>
-							<i class="fas fa-info-circle info-icon"></i>
-						</tp-tooltip-trigger>
-						<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae
-					distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque
-					a, repellendus iure quae eaque consectetur!
-						</tp-tooltip-popover>
-					</tp-tooltip>
-				</div>
-			  	<p>This is the first card.</p>
-			</div>
-			<div class="card">
-				<div class="card-header">
-					<h2>Card 3</h2>
-					<tp-tooltip>
-						<tp-tooltip-trigger>
-							<i class="fas fa-info-circle info-icon"></i>
-						</tp-tooltip-trigger>
-						<tp-tooltip-popover style="width: 265px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia molestiae
-					distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque
-					a, repellendus iure quae eaque consectetur!
-						</tp-tooltip-popover>
-					</tp-tooltip>
-				</div>
-			  	<p>This is the first card.</p>
-			</div>
-		</div>
 	</main>
 </body>
 </html>

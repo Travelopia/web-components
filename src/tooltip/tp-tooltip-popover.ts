@@ -1,4 +1,8 @@
-import { TPTooltipElement } from "./tp-tooltip";
+/**
+ * Internal dependencies.
+ */
+import { TPTooltipElement } from './tp-tooltip';
+import { TPTooltipArrowElement } from './tp-tooltip-arrow';
 
 /**
  * TP Tooltip Popover.
@@ -8,110 +12,92 @@ export class TPTooltipPopoverElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected trigger: TPTooltipElement | null;
-	protected tooltipWidth: number;
-	protected tooltipArrowHeight: number;
-	protected tooltipGap: number;
+	protected arrow: TPTooltipArrowElement | null;
+	protected offset: number = 0;
 
+	/**
+	 * Constructor.
+	 */
 	constructor() {
-
 		// Initialize parent.
 		super();
 
+		// Set attribute for popover.
+		this.setAttribute( 'popover', 'true' );
+
+		// Get the internal elements.
 		this.trigger = this.closest( 'tp-tooltip' );
-		this.tooltipWidth = parseInt(this.style.width) || 0;
-		this.tooltipArrowHeight = parseInt(this.getAttribute( 'arrow-height' ) || '8');
-		this.tooltipGap = parseInt(this.getAttribute( 'gap' ) || '10');
-	}
+		this.arrow = this.querySelector( ':scope > tp-tooltip-arrow' );
 
-	showTooltip() {
-		this.showPopover();
-		this.positionTooltip();
-	}
+		// How far the user wants to display the tooltip from the trigger element.
+		this.offset = +( this.trigger?.getAttribute( 'offset' ) || '0' );
 
-	hideTooltip() {
-		this.hidePopover();
+		// When tooltip just open, position the tooltip.
+		this.addEventListener( 'tooltipjustopen', this.positionTooltip );
 	}
 
 	/**
 	 * Position tooltip according to the position of the trigger element.
-	 * Position is calculated based on the following rules:
-	 * 1. If there is enough space above  the trigger element, tooltip will be placed below the trigger element else it will be above.
-	 * 2. If there is enough space to the right of the trigger element tooltip will be aligned with the parent container of tp-tooltip element
-	 *    the tooltip will be placed to the left of the trigger element.
-	 * 3. Similarly if there is not enough space on right of the trigger element.
 	 */
 	positionTooltip() {
-		// Early return if button not found.
-		if( !this.trigger ) {
+		// Early return if trigger button not found.
+		if ( ! this.trigger ) {
+			// return.
 			return;
 		}
 
-		// Getting positions of elements of interest.
 		// Getting position for tooltip popover.
-		const tooltipPopoverPosition = this.getElementPosition( this );
-		console.log(tooltipPopoverPosition);
+		const { height: popoverHeight, width: popoverWidth } = this.getElementPosition( this );
 
 		// Getting position for tooltip trigger button.
-		const tooltipTriggerPosition = this.getElementPosition( this.trigger );
+		const { x: triggerLeftPosition, y: triggerTopPosition, width: triggerWidth, height: triggerHeight } = this.getElementPosition( this.trigger );
 
-		// Getting position for tooltip parent element.
-		// It will be used to position tooltip when there is not enough space to the right and left.
-		const parentPosition = this.getElementPosition( this.trigger.parentNode as Element );
+		// Getting dimensions for tooltip arrow if present.
+		let arrowHeight = 0;
+		let arrowWidth = 0;
 
-		if( tooltipPopoverPosition && tooltipTriggerPosition && parentPosition) {
-			const distanceFromTopWall = (tooltipTriggerPosition.bottom - tooltipTriggerPosition.height);
+		// If arrow is present, get the dimensions.
+		if ( this.arrow ) {
+			( { height: arrowHeight, width: arrowWidth } = this.getElementPosition( this.arrow ) );
+		}
 
-			// Getting viewport width.
-			const viewportWidth = Math.max( document.documentElement.clientWidth || 0, window.innerWidth || 0 );
+		// popover vertical positioning.
+		if ( triggerTopPosition > popoverHeight + this.offset + arrowHeight ) {
+			// there is enough space on top of trigger element, then place popover above the trigger element.
+			this.style.top = `${ triggerTopPosition - popoverHeight - this.offset - ( arrowHeight / 2 ) }px`;
 
-			const tooltipTriggerHalfWidth = tooltipTriggerPosition.width / 2;
-			const tooltipPopupHalfWidth = this.tooltipWidth / 2;
-			const marginFromWalls = 0;
-
-			// Setting tooltip text and arrow position in Y direction
-			let textMarginTop;
-			let arrowTopPosition;
-
-			if( tooltipPopoverPosition.height + marginFromWalls > distanceFromTopWall ) {
-				textMarginTop = tooltipTriggerPosition.bottom + this.tooltipGap + this.tooltipArrowHeight;
-				this.style.setProperty( '--border-bottom-color', "#121212" );
-				arrowTopPosition = tooltipTriggerPosition.bottom - this.tooltipArrowHeight + this.tooltipGap;
-			} else {
-				textMarginTop = tooltipTriggerPosition.bottom - tooltipPopoverPosition.height - tooltipTriggerPosition.height - this.tooltipGap - this.tooltipArrowHeight;
-				this.style.setProperty( '--border-top-color', "#121212" );
-				arrowTopPosition = tooltipTriggerPosition.bottom - tooltipTriggerPosition.height - this.tooltipGap - this.tooltipArrowHeight;
+			// Set arrow placement on bottom of popover
+			if ( this.arrow ) {
+				this.arrow.setAttribute( 'data-placement', 'bottom' );
 			}
-			console.log(tooltipTriggerPosition.bottom, textMarginTop, arrowTopPosition);
-			
-			this.style.marginTop = `calc(${ textMarginTop }px )`;
-			this.style.setProperty( '--arrow-top-positioning', `${ arrowTopPosition }px` );
+		} else {
+			// there is not enough space on top of trigger element, then place popover below the trigger element
+			this.style.top = `${ triggerTopPosition + triggerHeight + this.offset + ( arrowHeight / 2 ) }px`;
 
-
-			// Position tooltip in X direction.
-			let textMarginLeft;
-			const arrowLeftPosition = tooltipTriggerPosition.right - tooltipTriggerHalfWidth;
-
-			if ( viewportWidth - tooltipTriggerPosition.right + tooltipTriggerHalfWidth < tooltipPopupHalfWidth + marginFromWalls ) {
-				// Position of tooltip if there is not enough space to the right.
-				textMarginLeft = parentPosition.right - this.tooltipWidth;
-			} else if ( tooltipTriggerPosition.right - tooltipTriggerHalfWidth < tooltipPopupHalfWidth + marginFromWalls ) {
-				// Position of tooltip if there is not enough space to the left.
-				textMarginLeft = parentPosition.right - parentPosition.width;
-			} else {
-				textMarginLeft = tooltipTriggerPosition.right - tooltipPopupHalfWidth - tooltipTriggerHalfWidth;
+			// Set arrow placement on top of popover
+			if ( this.arrow ) {
+				this.arrow.setAttribute( 'data-placement', 'top' );
 			}
+		}
 
-			// Setting location of the tooltip text.
-			this.style.marginLeft = textMarginLeft + 'px';
-			this.style.setProperty( '--arrow-left-positioning', `${ arrowLeftPosition }px` );
+		// popover horizontal positioning.
+		if ( triggerLeftPosition + ( triggerWidth / 2 ) > ( popoverWidth / 2 ) ) {
+			this.style.left = `${ triggerLeftPosition + ( triggerWidth / 2 ) - ( popoverWidth / 2 ) }px`;
 		}
 	}
 
 	/**
 	 * Gets the position of a given element in the viewport.
+	 *
+	 * @param { Element } element Attribute name.
+	 *
+	 * @return { DOMRect }        Position of the element.
 	 */
-	getElementPosition( element : Element | null ) {
-		const elementRect = element?.getBoundingClientRect();
+	getElementPosition( element : Element ) : DOMRect {
+		// Get the DOM rectangle object.
+		const elementRect : DOMRect = element?.getBoundingClientRect();
+
+		// Return DOM rectangle object.
 		return elementRect;
 	}
 }

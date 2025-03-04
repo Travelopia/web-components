@@ -1,29 +1,28 @@
-tp-tooltip-trigger > button {
-	background-color: transparent;
-	border: none;
-	outline: none;
-	cursor: pointer;
-	padding: 0;
+tp-tooltip-popover {
+	overflow: visible;
+	position: relative;
+	height: fit-content;
+    color: canvastext;
+    background-color: canvas;
+    inset: 0px;
+    margin: 0;
+    border-width: 0;
+    border-style: none;
+    padding: 0;
 }
 
-tp-tooltip-popover {
-	--arrow-top-positioning: 0;
-	--arrow-left-positioning: 0;
-	--border-top-color: transparent;
-	--border-bottom-color: transparent;
-	background-color: #fff;
+tp-tooltip-arrow {
+	position: absolute;
+	z-index: -1;
+	left: 50%;
 
-	&::backdrop {
-		width: 0;
-		height: 0;
-		border-width: 8px;
-		border-style: solid;
-		border-top-color: var(--border-top-color);
-		border-bottom-color: var(--border-bottom-color);
-		border-left-color: transparent;
-		border-right-color: transparent;
-		top: var(--arrow-top-positioning);
-		left: var(--arrow-left-positioning);
-		transform: translateX(-50%);
+	&[data-placement='bottom'] {
+		bottom: 0;
+		transform: translateY(50%) translateX(-50%) rotate(45deg);
+	}
+
+	&[data-placement='top'] {
+		top: 0;
+		transform: translateY(-50%) translateX(-50%) rotate(45deg);
 	}
 }
