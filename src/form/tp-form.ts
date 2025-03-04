@@ -12,7 +12,6 @@ export class TPFormElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected readonly form: HTMLFormElement | null;
-	protected hasError: boolean;
 
 	/**
 	 * Constructor.
@@ -20,7 +19,6 @@ export class TPFormElement extends HTMLElement {
 	constructor() {
 		// Initialize parent.
 		super();
-		this.hasError = false;
 
 		// Get form.
 		this.form = this.querySelector( 'form' );
@@ -30,45 +28,27 @@ export class TPFormElement extends HTMLElement {
 	}
 
 	/**
-	 * Get observed attributes.
-	 *
-	 * @return {Array} List of observed attributes.
-	 */
-	static get observedAttributes(): string[] {
-		// Attributes observed in the TPFormElement web-component.
-		return [ 'has-error', 'pause-submit' ];
-	}
-
-	/**
-	 * Attribute changed callback.
-	 *
-	 * @param {string} name     Attribute name.
-	 * @param {string} oldValue Old value.
-	 * @param {string} newValue New value.
-	 */
-	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
-		// Dispatch form submit event.
-		if ( ( 'has-error' === name || 'pause-submit' === name ) && oldValue !== newValue ) {
-			this.handleFormSubmit.bind( this );
-		}
-	}
-
-	/**
 	 * Handle form submission.
 	 *
 	 * @param {Event} e Submit event.
 	 */
 	protected handleFormSubmit( e: SubmitEvent ): void {
 		// Validate the form.
-		const formvalid = this.validate();
+		const isValid: boolean = this.validate();
 
-		// Dispatch after validate event.
-		this.dispatchEvent( new CustomEvent( 'after-validation', { bubbles: true } ) );
+		// Dispatch a custom event for additional-validation.
+		const additionalValidationEvent = new CustomEvent( 'additional-validation', {
+			detail: { isValid },
+			bubbles: true,
+			cancelable: true,
+		} );
+		this.dispatchEvent( additionalValidationEvent );
 
-		this.hasError = 'yes' === this.getAttribute( 'has-error' ) ? true : false;
+		// Check validation with default + additional.
+		const formValid: boolean = isValid && additionalValidationEvent.detail.isValid;
 
 		// Prevent form submission if it's invalid.
-		if ( ! formvalid || this.hasError || 'yes' === this.getAttribute( 'pause-submit' ) ) {
+		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 		}
@@ -79,7 +59,7 @@ export class TPFormElement extends HTMLElement {
 		// If present.
 		if ( submit ) {
 			// Check if form is valid.
-			if ( ! this.hasError ) {
+			if ( formValid ) {
 				submit.setAttribute( 'submitting', 'yes' );
 			} else {
 				submit.removeAttribute( 'submitting' );
@@ -87,13 +67,15 @@ export class TPFormElement extends HTMLElement {
 		}
 
 		// If form is valid then dispatch a custom 'submit-validation-success' event.
-		if ( ! this.hasError ) {
+		if ( formValid ) {
 			this.dispatchEvent( new CustomEvent( 'submit-validation-success', { bubbles: true } ) );
 		}
 	}
 
 	/**
 	 * Validate the form.
+	 *
+	 * @return {boolean} Whether the form is valid or not.
 	 */
 	validate(): boolean {
 		// Dispatch a custom 'validate' event.
@@ -106,8 +88,8 @@ export class TPFormElement extends HTMLElement {
 		if ( ! fields ) {
 			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
 
-			// Remove has-error attributes, indicating validation passed.
-			this.removeAttribute( 'has-error' );
+			// Return true indicating validation passed.
+			return true;
 		}
 
 		// Check if all fields are valid.
@@ -121,13 +103,12 @@ export class TPFormElement extends HTMLElement {
 
 		// If form is valid then dispatch a custom 'validation-success' event else send a custom 'validation-error' event.
 		if ( formValid ) {
-			this.removeAttribute( 'has-error' );
 			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
 		} else {
-			this.setAttribute( 'has-error', 'yes' );
 			this.dispatchEvent( new CustomEvent( 'validation-error', { bubbles: true } ) );
 		}
 
+		// Return whether the form is valid or not.
 		return formValid;
 	}
 
