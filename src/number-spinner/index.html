@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Web Component: Number Spinner</title>
+
+		<link rel="stylesheet" href="../../dist/number-spinner/style.css" media="all">
+		<script type="module" src="../../dist/number-spinner/index.js"></script>
+	</head>
+
+	<body>
+		<main>
+			<tp-number-spinner>
+				<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
+				<tp-number-spinner-input>
+					<input type="number" value="0" readonly />
+				</tp-number-spinner-input>
+				<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
+			</tp-number-spinner>
+
+			<br><br>
+
+			<tp-number-spinner min="0" max="10" step="1">
+				<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
+				<tp-number-spinner-input>
+					<input type="number" value="0" readonly />
+				</tp-number-spinner-input>
+				<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
+			</tp-number-spinner>
+
+			<br><br>
+
+			<tp-number-spinner min="2" max="10" step="2">
+				<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
+				<tp-number-spinner-input>
+					<input type="number" value="4" readonly />
+				</tp-number-spinner-input>
+				<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
+			</tp-number-spinner>
+		</main>
+	</body>
+</html>

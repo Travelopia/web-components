@@ -1,6 +1,6 @@
 {
   "name": "@travelopia/web-components",
-  "version": "0.6.9",
+  "version": "0.7.6",
   "description": "Accessible web components for the modern web",
   "files": [
     "dist"

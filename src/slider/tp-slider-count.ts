@@ -58,8 +58,8 @@ export class TPSliderCountElement extends HTMLElement {
 			return;
 		}
 
-		// Initializing current and total variables.
-		const current: number = slider.currentSlideIndex - 1 + slider.step;
+		// Initializing current variable including step. Along with initializing total variable.
+		const current: number = Math.min( slider.currentSlideIndex - 1 + slider.step, slider.getTotalSlides() );
 		const total: string = slider.getAttribute( 'total' ) ?? '';
 
 		// Updating variables in format attribute.

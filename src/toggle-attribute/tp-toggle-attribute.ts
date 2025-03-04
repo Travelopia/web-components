@@ -19,7 +19,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 	update(): void {
 		// Get trigger elements.
 		const triggerSelector: string = this.getAttribute( 'trigger' ) ?? ':scope > *';
-		const triggers: NodeListOf<HTMLElement> | null = this.querySelectorAll( triggerSelector );
+		const triggers: NodeListOf<HTMLElement> = this.querySelectorAll( triggerSelector );
 
 		// Exit the function if no triggers are found.
 		if ( ! triggers ) {
@@ -61,7 +61,7 @@ export class TPToggleAttributeElement extends HTMLElement {
 		// Check if trigger has a value, example: form inputs.
 		if ( value || '' === value ) {
 			// Check if we have a value.
-			if ( this.hasAttribute( 'value' ) ) {
+			if ( this.hasAttribute( 'value' ) || this.hasAttribute( 'non-empty-value' ) ) {
 				this.toggleByValueAttribute( value );
 			} else {
 				this.toggleByTargetDataValue( value );
@@ -78,22 +78,38 @@ export class TPToggleAttributeElement extends HTMLElement {
 	 * @param {string} value Trigger's value.
 	 */
 	toggleByValueAttribute( value: string = '' ): void {
-		// Get value to listen for.
-		const values: string[] = ( this.getAttribute( 'value' ) ?? '' ).split( ',' );
-
 		// Get the target elements.
 		const targetElements = this.getTargetElements();
 
 		// Check if we can continue
-		if ( ! ( values.length && targetElements ) ) {
+		if ( ! targetElements ) {
 			// We can't.
 			return;
+		}
+
+		// Initialize values.
+		let values: string[] = [];
+
+		// Get value to listen for.
+		const valuesAttribute = this.getAttribute( 'value' );
+		const nonEmptyValuesAttribute = this.hasAttribute( 'non-empty-value' );
+
+		// Can we proceed?
+		if ( ! valuesAttribute && ! nonEmptyValuesAttribute ) {
+			// Nope.
+			return;
+		}
+
+		// Do we have the values attribute?
+		if ( valuesAttribute ) {
+			// Yes, split it.
+			values = valuesAttribute.split( ',' );
 		}
 
 		// Toggle the target elements.
 		targetElements.forEach( ( target ) => {
 			// Toggle the target's attribute if the target and trigger have the same value.
-			if ( values.includes( value ) ) {
+			if ( ( values.length && values.includes( value ) ) || ( nonEmptyValuesAttribute && value ) ) {
 				this.toggleTargetAttribute( target, 'on' );
 			} else {
 				this.toggleTargetAttribute( target, 'off' );
@@ -118,17 +134,27 @@ export class TPToggleAttributeElement extends HTMLElement {
 
 		// Toggle the target elements.
 		targetElements.forEach( ( target: HTMLElement ): void => {
-			// Get values.
-			const values: string[] = ( target.getAttribute( 'data-toggle-value' ) ?? '' ).split( ',' );
+			// Get values and split them. Set an empty array otherwise.
+			const valuesAttribute = target.getAttribute( 'data-toggle-value' );
+			const nonEmptyValuesAttribute = target.hasAttribute( 'data-toggle-non-empty-value' );
 
-			// Check if we can continue
-			if ( ! values.length ) {
-				// We can't.
+			// Can we proceed?
+			if ( ! valuesAttribute && ! nonEmptyValuesAttribute ) {
+				// Nope, bail.
 				return;
 			}
 
-			// Toggle on element attribute if it matches value.
-			if ( values.includes( value ) ) {
+			// Initialize values.
+			let values: string[] = [];
+
+			// Null check.
+			if ( valuesAttribute ) {
+				// Assign the values.
+				values = valuesAttribute.split( ',' );
+			}
+
+			// Toggle on element attribute if it matches value or it does not have a data-toggle-value attribute in which case it will match with all non empty values.
+			if ( ( values.length && values.includes( value ) ) || ( nonEmptyValuesAttribute && value ) ) {
 				this.toggleTargetAttribute( target, 'on' );
 			} else {
 				this.toggleTargetAttribute( target, 'off' );
