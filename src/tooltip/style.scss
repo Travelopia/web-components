@@ -1,6 +1,10 @@
 tp-tooltip {
 	display: none;
 
+	&[popover] {
+		margin: 0;
+	}
+
 	&[show] {
 		display: block;
 	}
