@@ -16,7 +16,53 @@
 
 <body>
 	<main>
-		<tp-tooltip></tp-tooltip>
+
+		<tp-tooltip id="my-tooltip">
+			<tp-tooltip-content>
+				<slot></slot>
+				<tp-tooltip-arrow></tp-tooltip-arrow>
+			</tp-tooltip-content>
+		</tp-tooltip>
+
+		<tp-tooltip id="my-other-tooltip">
+			<tp-tooltip-content>
+				<slot></slot>
+				<tp-tooltip-arrow></tp-tooltip-arrow>
+			</tp-tooltip-content>
+		</tp-tooltip>
+
+		<p>
+			Hi, this is a paragraph and here is:
+			<tp-tooltip-trigger tooltip="my-tooltip">
+				<template>
+					<p>Tooltip content 1</p>
+				</template>
+				<a href="#">trigger 1</a>
+			</tp-tooltip-trigger>
+			and
+			<tp-tooltip-trigger tooltip="my-tooltip">
+				<template>
+					<p>Tooltip content 2</p>
+				</template>
+				<a href="#">trigger 2</a>
+			</tp-tooltip-trigger>
+			and
+			<tp-tooltip-trigger tooltip="my-tooltip">
+				<template>
+					<p>Tooltip content 3</p>
+				</template>
+				<a href="#">trigger 3</a>
+			</tp-tooltip-trigger>
+		</p>
+		<p>
+			And just for fun, here's a button:
+			<tp-tooltip-trigger tooltip="my-other-tooltip">
+				<template>
+					<p>Button tooltip content</p>
+				</template>
+				<button>hover me</button>
+			</tp-tooltip-trigger>
+		</p>
 	</main>
 </body>
 </html>
