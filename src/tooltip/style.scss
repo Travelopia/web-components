@@ -1,1 +1,7 @@
-tp-tooltip {}
+tp-tooltip {
+	display: none;
+
+	&[show] {
+		display: block;
+	}
+}
