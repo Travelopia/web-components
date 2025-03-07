@@ -24,5 +24,8 @@ declare global {
 		tpFormErrors: {
 			[ key: string ]: string;
 		};
+		tpFormSuspenseMessages: {
+			[ key: string ]: string;
+		};
 	}
 }

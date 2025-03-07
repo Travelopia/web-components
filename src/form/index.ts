@@ -29,6 +29,7 @@ const validators = [
  */
 window.tpFormValidators = {};
 window.tpFormErrors = {};
+window.tpFormSuspenseMessages = {};
 
 // Register validators.
 validators.forEach( (
