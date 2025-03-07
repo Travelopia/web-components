@@ -45,6 +45,7 @@ validators.forEach( (
 import { TPFormElement } from './tp-form';
 import { TPFormFieldElement } from './tp-form-field';
 import { TPFormErrorElement } from './tp-form-error';
+import { TPFormSuspenseElement } from './tp-form-suspense';
 import { TPFormSubmitElement } from './tp-form-submit';
 
 /**
@@ -53,4 +54,5 @@ import { TPFormSubmitElement } from './tp-form-submit';
 customElements.define( 'tp-form', TPFormElement );
 customElements.define( 'tp-form-field', TPFormFieldElement );
 customElements.define( 'tp-form-error', TPFormErrorElement );
+customElements.define( 'tp-form-suspense', TPFormSuspenseElement );
 customElements.define( 'tp-form-submit', TPFormSubmitElement );

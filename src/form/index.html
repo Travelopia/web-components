@@ -29,11 +29,26 @@
 			width: 100%;
 		}
 	</style>
+
+	<script type="module">
+		window.tpFormValidators['async-validator'] = {
+			validate: async () => {
+				return new Promise( (resolve) => {
+					setTimeout( () => {
+						resolve(true); // Resolves true after 2 seconds
+					}, 2000 );
+				});
+			},
+			getErrorMessage: () => 'There was an error processing your request.',
+			getSuspenseMessage: () => 'Checking...',
+		};
+	</script>
 </head>
 <body>
 	<main>
 		<tp-form prevent-submit="yes">
 			<form action="#">
+				<h3>Synchronous Form</h3>
 				<tp-form-field no-empty-spaces="yes" required="yes">
 					<label>Field 1</label>
 					<input type="text" name="field_1">
@@ -54,6 +69,40 @@
 				<tp-form-field min-length="4" max-length="8">
 					<label>Field 4</label>
 					<textarea name="field_4"></textarea>
+				</tp-form-field>
+				<tp-form-submit submitting-text="Submitting...">
+					<button type="submit">Submit</button>
+				</tp-form-submit>
+			</form>
+		</tp-form>
+
+		<tp-form>
+			<form action="#">
+				<h3>Asynchronous Form</h3>
+				<tp-form-field no-empty-spaces="yes" required="yes">
+					<label>Field 1</label>
+					<input type="text" name="field_1">
+				</tp-form-field>
+				<tp-form-field required="yes" email="yes">
+					<label>Field 2</label>
+					<input type="email" name="field_2">
+				</tp-form-field>
+				<tp-form-field required="yes">
+					<label>Field 3</label>
+					<select type="text" name="field_3">
+						<option value="">Select value</option>
+						<option value="value_1">Value 1</option>
+						<option value="value_2">Value 2</option>
+						<option value="value_3">Value 3</option>
+					</select>
+				</tp-form-field>
+				<tp-form-field min-length="4" max-length="8">
+					<label>Field 4</label>
+					<textarea name="field_4"></textarea>
+				</tp-form-field>
+				<tp-form-field required="yes" email="yes" async-validator="yes">
+					<label>Field 5</label>
+					<input type="email" name="field_5">
 				</tp-form-field>
 				<tp-form-submit submitting-text="Submitting...">
 					<button type="submit">Submit</button>
