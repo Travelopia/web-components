@@ -28,6 +28,12 @@ export class TPFormFieldElement extends HTMLElement {
 	 * Update validation when the field has changed.
 	 */
 	handleFieldChanged(): void {
+		// Check if we want to ignore field revalidations.
+		if ( 'no' === this.getAttribute( 'revalidate-on-change' ) ) {
+			// Yes we do, bail!
+			return;
+		}
+
 		// Validate the field again if 'valid' or 'error' attribute is present.
 		if ( this.getAttribute( 'valid' ) || this.getAttribute( 'error' ) ) {
 			const form: TPFormElement | null = this.closest( 'tp-form' );
