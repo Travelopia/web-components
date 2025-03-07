@@ -37,6 +37,10 @@ export class TPFormElement extends HTMLElement {
 		e.preventDefault();
 		e.stopImmediatePropagation();
 
+		// Get submit button.
+		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
+		submit?.setAttribute( 'submitting', 'yes' );
+
 		// Ignore a form that currently has suspense.
 		if ( 'yes' === this.getAttribute( 'suspense' ) ) {
 			// Bail early.
@@ -45,19 +49,6 @@ export class TPFormElement extends HTMLElement {
 
 		// Validate the form.
 		const formValid: boolean = await this.validate();
-
-		// Get submit button.
-		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
-
-		// If present.
-		if ( submit ) {
-			// Check if form is valid.
-			if ( formValid ) {
-				submit.setAttribute( 'submitting', 'yes' );
-			} else {
-				submit.removeAttribute( 'submitting' );
-			}
-		}
 
 		// If form is valid then dispatch a custom 'submit-validation-success' event.
 		if ( formValid ) {
@@ -68,6 +59,9 @@ export class TPFormElement extends HTMLElement {
 			if ( 'yes' !== this.getAttribute( 'prevent-submit' ) ) {
 				this.form?.submit();
 			}
+		} else {
+			// Form is not valid, remove submitting attribute.
+			submit?.removeAttribute( 'submitting' );
 		}
 	}
 
