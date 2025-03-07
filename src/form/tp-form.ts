@@ -32,15 +32,19 @@ export class TPFormElement extends HTMLElement {
 	 *
 	 * @param {Event} e Submit event.
 	 */
-	protected handleFormSubmit( e: SubmitEvent ): void {
-		// Validate the form.
-		const formValid: boolean = this.validate();
+	protected async handleFormSubmit( e: SubmitEvent ): Promise<void> {
+		// Stop normal form submission.
+		e.preventDefault();
+		e.stopImmediatePropagation();
 
-		// Prevent form submission if it's invalid.
-		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
-			e.preventDefault();
-			e.stopImmediatePropagation();
+		// Ignore a form that currently has suspense.
+		if ( 'yes' === this.getAttribute( 'suspense' ) ) {
+			// Bail early.
+			return;
 		}
+
+		// Validate the form.
+		const formValid: boolean = await this.validate();
 
 		// Get submit button.
 		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
@@ -57,7 +61,13 @@ export class TPFormElement extends HTMLElement {
 
 		// If form is valid then dispatch a custom 'submit-validation-success' event.
 		if ( formValid ) {
+			// Trigger event.
 			this.dispatchEvent( new CustomEvent( 'submit-validation-success', { bubbles: true } ) );
+
+			// Submit form.
+			if ( 'yes' !== this.getAttribute( 'prevent-submit' ) ) {
+				this.form?.submit();
+			}
 		}
 	}
 
@@ -66,7 +76,7 @@ export class TPFormElement extends HTMLElement {
 	 *
 	 * @return {boolean} Whether the form is valid or not.
 	 */
-	validate(): boolean {
+	async validate(): Promise<boolean> {
 		// Dispatch a custom 'validate' event.
 		this.dispatchEvent( new CustomEvent( 'validate', { bubbles: true } ) );
 
@@ -81,14 +91,26 @@ export class TPFormElement extends HTMLElement {
 			return true;
 		}
 
+		// Start by setting the form as suspense.
+		this.setAttribute( 'suspense', 'yes' );
+
 		// Check if all fields are valid.
 		let formValid: boolean = true;
-		fields.forEach( ( field: TPFormFieldElement ): void => {
-			// Validate the field.
-			if ( ! field.validate() ) {
+		const validationPromises: Promise<boolean>[] = Array
+			.from( fields )
+			.map( async ( field: TPFormFieldElement ): Promise<boolean> => await field.validate() );
+
+		// Wait for promises to resolve.
+		await Promise.all( validationPromises )
+			.then( ( results: boolean[] ): void => {
+				// Check if all fields are valid.
+				formValid = results.every( ( isValid: boolean ) => isValid );
+			} )
+			.catch( () => {
+				// There was an error with one or more fields.
 				formValid = false;
-			}
-		} );
+			} )
+			.finally( () => this.removeAttribute( 'suspense' ) );
 
 		// If form is valid then dispatch a custom 'validation-success' event else send a custom 'validation-error' event.
 		if ( formValid ) {
