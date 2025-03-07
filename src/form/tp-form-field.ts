@@ -167,16 +167,19 @@ export class TPFormFieldElement extends HTMLElement {
 								if ( true === suspenseIsValid ) {
 									this.setAttribute( 'valid', 'yes' );
 									this.removeAttribute( 'error' );
+
+									// Resolve the promise.
+									resolve( true );
 								} else {
 									this.removeAttribute( 'valid' );
 									this.setAttribute( 'error', error );
+
+									// Resolve the promise.
+									resolve( false );
 								}
 
 								// Dispatch a custom 'validation-suspense-success' event.
 								this.dispatchEvent( new CustomEvent( 'validation-suspense-success' ) );
-
-								// Resolve the promise.
-								resolve( true );
 							} )
 							.catch( (): void => {
 								// There was an error.
