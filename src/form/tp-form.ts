@@ -153,15 +153,17 @@ export class TPFormElement extends HTMLElement {
 
 		// Remove 'valid' and 'error' attributes from all fields.
 		fields.forEach( ( field: TPFormFieldElement ): void => {
-			// Remove 'valid' and 'error' attribute.
+			// Remove 'valid' and 'error' and 'suspense' attributes.
 			field.removeAttribute( 'valid' );
 			field.removeAttribute( 'error' );
+			field.removeAttribute( 'suspense' );
 		} );
 
-		// Get submit button.
-		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
+		// Remove 'suspense' attribute from form.
+		this.removeAttribute( 'suspense' );
 
 		// Remove 'submitting' attribute from submit button.
+		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
 		submit?.removeAttribute( 'submitting' );
 	}
 }

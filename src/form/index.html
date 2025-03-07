@@ -33,9 +33,9 @@
 	<script type="module">
 		window.tpFormValidators['async-validator'] = {
 			validate: async () => {
-				return new Promise( (resolve) => {
+				return new Promise( ( resolve ) => {
 					setTimeout( () => {
-						resolve(true); // Resolves true after 2 seconds
+						resolve( true ); // Resolves true after 5 seconds.
 					}, 5000 );
 				});
 			},
