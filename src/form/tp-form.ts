@@ -124,6 +124,21 @@ export class TPFormElement extends HTMLElement {
 	}
 
 	/**
+	 * Validate one field.
+	 *
+	 * @param {HTMLElement} field Field node.
+	 */
+	async validateField( field: TPFormFieldElement ): Promise<boolean> {
+		// Set form as suspense, validate and undo suspense.
+		this.setAttribute( 'suspense', 'yes' );
+		const fieldValid: boolean = await field.validate();
+		this.removeAttribute( 'suspense' );
+
+		// Return result.
+		return fieldValid;
+	}
+
+	/**
 	 * Reset form validation.
 	 */
 	resetValidation(): void {

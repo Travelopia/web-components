@@ -1,6 +1,7 @@
 /**
  * Internal dependencies.
  */
+import { TPFormElement } from './tp-form';
 import { TPFormErrorElement } from './tp-form-error';
 import { TPFormSuspenseElement } from './tp-form-suspense';
 
@@ -29,7 +30,8 @@ export class TPFormFieldElement extends HTMLElement {
 	handleFieldChanged(): void {
 		// Validate the field again if 'valid' or 'error' attribute is present.
 		if ( this.getAttribute( 'valid' ) || this.getAttribute( 'error' ) ) {
-			this.validate();
+			const form: TPFormElement | null = this.closest( 'tp-form' );
+			form?.validateField( this );
 		}
 	}
 
@@ -90,8 +92,8 @@ export class TPFormFieldElement extends HTMLElement {
 
 		// Check if the suspense exists and has a corresponding suspense message function.
 		if ( '' !== suspense && suspense in tpFormValidators && 'function' === typeof tpFormValidators[ suspense ].getSuspenseMessage ) {
-			// this.setSuspenseMessage( tpFormValidators[ suspense ].getSuspenseMessage( this ) ?? '' );
-			this.setSuspenseMessage( 'Loading...' );
+			// @ts-ignore
+			this.setSuspenseMessage( tpFormValidators[ suspense ]?.getSuspenseMessage( this ) );
 		} else {
 			this.removeSuspenseMessage();
 		}
