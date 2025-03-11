@@ -32,32 +32,36 @@ export class TPFormElement extends HTMLElement {
 	 *
 	 * @param {Event} e Submit event.
 	 */
-	protected handleFormSubmit( e: SubmitEvent ): void {
-		// Validate the form.
-		const formValid: boolean = this.validate();
-
-		// Prevent form submission if it's invalid.
-		if ( ! formValid || 'yes' === this.getAttribute( 'prevent-submit' ) ) {
-			e.preventDefault();
-			e.stopImmediatePropagation();
-		}
+	protected async handleFormSubmit( e: SubmitEvent ): Promise<void> {
+		// Stop normal form submission.
+		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		// Get submit button.
 		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
+		submit?.setAttribute( 'submitting', 'yes' );
 
-		// If present.
-		if ( submit ) {
-			// Check if form is valid.
-			if ( formValid ) {
-				submit.setAttribute( 'submitting', 'yes' );
-			} else {
-				submit.removeAttribute( 'submitting' );
-			}
+		// Ignore a form that currently has suspense.
+		if ( 'yes' === this.getAttribute( 'suspense' ) ) {
+			// Bail early.
+			return;
 		}
+
+		// Validate the form.
+		const formValid: boolean = await this.validate();
 
 		// If form is valid then dispatch a custom 'submit-validation-success' event.
 		if ( formValid ) {
+			// Trigger event.
 			this.dispatchEvent( new CustomEvent( 'submit-validation-success', { bubbles: true } ) );
+
+			// Submit form.
+			if ( 'yes' !== this.getAttribute( 'prevent-submit' ) ) {
+				this.form?.submit();
+			}
+		} else {
+			// Form is not valid, remove submitting attribute.
+			submit?.removeAttribute( 'submitting' );
 		}
 	}
 
@@ -66,7 +70,7 @@ export class TPFormElement extends HTMLElement {
 	 *
 	 * @return {boolean} Whether the form is valid or not.
 	 */
-	validate(): boolean {
+	async validate(): Promise<boolean> {
 		// Dispatch a custom 'validate' event.
 		this.dispatchEvent( new CustomEvent( 'validate', { bubbles: true } ) );
 
@@ -81,14 +85,26 @@ export class TPFormElement extends HTMLElement {
 			return true;
 		}
 
+		// Start by setting the form as suspense.
+		this.setAttribute( 'suspense', 'yes' );
+
 		// Check if all fields are valid.
 		let formValid: boolean = true;
-		fields.forEach( ( field: TPFormFieldElement ): void => {
-			// Validate the field.
-			if ( ! field.validate() ) {
+		const validationPromises: Promise<boolean>[] = Array
+			.from( fields )
+			.map( async ( field: TPFormFieldElement ): Promise<boolean> => await field.validate() );
+
+		// Wait for promises to resolve.
+		await Promise.all( validationPromises )
+			.then( ( results: boolean[] ): void => {
+				// Check if all fields are valid.
+				formValid = results.every( ( isValid: boolean ) => isValid );
+			} )
+			.catch( () => {
+				// There was an error with one or more fields.
 				formValid = false;
-			}
-		} );
+			} )
+			.finally( () => this.removeAttribute( 'suspense' ) );
 
 		// If form is valid then dispatch a custom 'validation-success' event else send a custom 'validation-error' event.
 		if ( formValid ) {
@@ -99,6 +115,21 @@ export class TPFormElement extends HTMLElement {
 
 		// Return whether the form is valid or not.
 		return formValid;
+	}
+
+	/**
+	 * Validate one field.
+	 *
+	 * @param {HTMLElement} field Field node.
+	 */
+	async validateField( field: TPFormFieldElement ): Promise<boolean> {
+		// Set form as suspense, validate and undo suspense.
+		this.setAttribute( 'suspense', 'yes' );
+		const fieldValid: boolean = await field.validate();
+		this.removeAttribute( 'suspense' );
+
+		// Return result.
+		return fieldValid;
 	}
 
 	/**
@@ -116,15 +147,17 @@ export class TPFormElement extends HTMLElement {
 
 		// Remove 'valid' and 'error' attributes from all fields.
 		fields.forEach( ( field: TPFormFieldElement ): void => {
-			// Remove 'valid' and 'error' attribute.
+			// Remove 'valid' and 'error' and 'suspense' attributes.
 			field.removeAttribute( 'valid' );
 			field.removeAttribute( 'error' );
+			field.removeAttribute( 'suspense' );
 		} );
 
-		// Get submit button.
-		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
+		// Remove 'suspense' attribute from form.
+		this.removeAttribute( 'suspense' );
 
 		// Remove 'submitting' attribute from submit button.
+		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
 		submit?.removeAttribute( 'submitting' );
 	}
 }

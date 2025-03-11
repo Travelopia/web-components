@@ -33,7 +33,7 @@ form.resetValidation();
 ```html
 <tp-form prevent-submit="yes">
 	<form action="#">
-		<tp-form-field required="yes">
+		<tp-form-field required="yes" revalidate-on-change="no"> <-- If you don't want to revalidate as the value changes
 			<label>Field 1</label>
 			<input type="text" name="field_1">
 		</tp-form-field>

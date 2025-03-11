@@ -7,8 +7,9 @@ import { TPFormFieldElement } from './tp-form-field';
  * Form Validator.
  */
 export interface TPFormValidator {
-	validate: { ( field: TPFormFieldElement ): boolean };
+	validate: { ( field: TPFormFieldElement ): boolean | Promise<boolean> };
 	getErrorMessage: { ( field: TPFormFieldElement ): string };
+	getSuspenseMessage?: { ( field: TPFormFieldElement ): string };
 }
 
 /**
@@ -21,6 +22,9 @@ declare global {
 			[ key: string ]: TPFormValidator;
 		}
 		tpFormErrors: {
+			[ key: string ]: string;
+		};
+		tpFormSuspenseMessages: {
 			[ key: string ]: string;
 		};
 	}

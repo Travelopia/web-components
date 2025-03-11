@@ -1,7 +1,9 @@
 /**
  * Internal dependencies.
  */
+import { TPFormElement } from './tp-form';
 import { TPFormErrorElement } from './tp-form-error';
+import { TPFormSuspenseElement } from './tp-form-suspense';
 
 /**
  * TP Form Field.
@@ -26,9 +28,16 @@ export class TPFormFieldElement extends HTMLElement {
 	 * Update validation when the field has changed.
 	 */
 	handleFieldChanged(): void {
+		// Check if we want to ignore field revalidations.
+		if ( 'no' === this.getAttribute( 'revalidate-on-change' ) ) {
+			// Yes we do, bail!
+			return;
+		}
+
 		// Validate the field again if 'valid' or 'error' attribute is present.
 		if ( this.getAttribute( 'valid' ) || this.getAttribute( 'error' ) ) {
-			this.validate();
+			const form: TPFormElement | null = this.closest( 'tp-form' );
+			form?.validateField( this );
 		}
 	}
 
@@ -39,7 +48,7 @@ export class TPFormFieldElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Attributes observed in the TPFormFieldElement web-component.
-		return [ 'valid', 'error' ];
+		return [ 'valid', 'error', 'suspense' ];
 	}
 
 	/**
@@ -53,7 +62,7 @@ export class TPFormFieldElement extends HTMLElement {
 		// Check if the observed attributes 'valid' or 'error' have changed.
 
 		// Dispatch a custom 'validate' event.
-		if ( ( 'valid' === name || 'error' === name ) && oldValue !== newValue ) {
+		if ( ( 'valid' === name || 'error' === name || 'suspense' === name ) && oldValue !== newValue ) {
 			this.dispatchEvent( new CustomEvent( 'validate', { bubbles: true } ) );
 		}
 
@@ -70,7 +79,7 @@ export class TPFormFieldElement extends HTMLElement {
 
 		// Exit the function if validators are not available.
 		if ( ! tpFormValidators ) {
-			//Early return
+			// Early return.
 			return;
 		}
 
@@ -82,6 +91,17 @@ export class TPFormFieldElement extends HTMLElement {
 			this.setErrorMessage( tpFormValidators[ error ].getErrorMessage( this ) );
 		} else {
 			this.removeErrorMessage();
+		}
+
+		// Get the 'suspense' attribute value.
+		const suspense: string = this.getAttribute( 'suspense' ) ?? '';
+
+		// Check if the suspense exists and has a corresponding suspense message function.
+		if ( '' !== suspense && suspense in tpFormValidators && 'function' === typeof tpFormValidators[ suspense ].getSuspenseMessage ) {
+			// @ts-ignore
+			this.setSuspenseMessage( tpFormValidators[ suspense ]?.getSuspenseMessage( this ) );
+		} else {
+			this.removeSuspenseMessage();
 		}
 	}
 
@@ -100,7 +120,7 @@ export class TPFormFieldElement extends HTMLElement {
 	 *
 	 * @return {boolean} Whether this field passed validation.
 	 */
-	validate(): boolean {
+	async validate(): Promise<boolean> {
 		// Retrieve tpFormValidators from the window object.
 		const { tpFormValidators } = window;
 
@@ -118,6 +138,7 @@ export class TPFormFieldElement extends HTMLElement {
 
 		// Prepare error and valid status.
 		let valid: boolean = true;
+		let suspense: Promise<boolean> | null = null;
 		let error: string = '';
 		const allAttributes: string[] = this.getAttributeNames();
 
@@ -126,14 +147,64 @@ export class TPFormFieldElement extends HTMLElement {
 			// Check if the attribute is a validator.
 			if ( attributeName in tpFormValidators && 'function' === typeof tpFormValidators[ attributeName ].validate ) {
 				// We found one, lets validate the field.
-				const isValid: boolean = tpFormValidators[ attributeName ].validate( this );
+				const isValid: boolean | Promise<boolean> = tpFormValidators[ attributeName ].validate( this );
+				error = attributeName;
 
-				// Looks like we found an error!
-				if ( false === isValid ) {
+				// First check for a Promise.
+				if ( isValid instanceof Promise ) {
+					// Yes it is an async validation.
 					valid = false;
-					error = attributeName;
 
-					// return false;
+					// Dispatch a custom 'validation-suspense-start' event.
+					this.dispatchEvent( new CustomEvent( 'validation-suspense-start' ) );
+
+					// Create the promise.
+					suspense = new Promise( ( resolve, reject ): void => {
+						// Validate it.
+						isValid
+							.then( ( suspenseIsValid: boolean ) => {
+								// Validation is complete.
+								if ( true === suspenseIsValid ) {
+									this.setAttribute( 'valid', 'yes' );
+									this.removeAttribute( 'error' );
+
+									// Resolve the promise.
+									resolve( true );
+								} else {
+									this.removeAttribute( 'valid' );
+									this.setAttribute( 'error', error );
+
+									// Resolve the promise.
+									resolve( false );
+								}
+
+								// Dispatch a custom 'validation-suspense-success' event.
+								this.dispatchEvent( new CustomEvent( 'validation-suspense-success' ) );
+							} )
+							.catch( (): void => {
+								// There was an error.
+								this.removeAttribute( 'valid' );
+								this.setAttribute( 'error', error );
+
+								// Dispatch a custom 'validation-suspense-error' event.
+								this.dispatchEvent( new CustomEvent( 'validation-suspense-error' ) );
+
+								// Reject the promise.
+								reject( false );
+							} )
+							.finally( (): void => {
+								// Clean up.
+								this.removeAttribute( 'suspense' );
+							} );
+					} );
+
+					// Return.
+					return false;
+				} else if ( false === isValid ) {
+					// Not a Promise, but looks like we found an error!
+					valid = false;
+
+					// Return.
 					return false;
 				}
 			}
@@ -146,12 +217,27 @@ export class TPFormFieldElement extends HTMLElement {
 		if ( valid ) {
 			this.setAttribute( 'valid', 'yes' );
 			this.removeAttribute( 'error' );
+			this.removeAttribute( 'suspense' );
 		} else {
 			this.removeAttribute( 'valid' );
-			this.setAttribute( 'error', error );
+
+			// Check for suspense.
+			if ( suspense ) {
+				this.setAttribute( 'suspense', error );
+				this.removeAttribute( 'error' );
+			} else {
+				this.removeAttribute( 'suspense' );
+				this.setAttribute( 'error', error );
+			}
 		}
 
-		// Return validity.
+		// Do we have a suspense?
+		if ( suspense ) {
+			// Yes we do, return the promise.
+			return suspense;
+		}
+
+		// No we don't, return a resolved promise.
 		return valid;
 	}
 
@@ -186,5 +272,32 @@ export class TPFormFieldElement extends HTMLElement {
 
 		// Dispatch a custom 'validation-success' event.
 		this.dispatchEvent( new CustomEvent( 'validation-success' ) );
+	}
+
+	/**
+	 * Set the suspense message.
+	 *
+	 * @param {string} message Suspense message.
+	 */
+	setSuspenseMessage( message: string = '' ): void {
+		// Look for an existing tp-form-error element.
+		const suspense: TPFormSuspenseElement | null = this.querySelector( 'tp-form-suspense' );
+
+		// If found, update its innerHTML with the suspense message. Otherwise, create a new tp-form-suspense element and append it to the component.
+		if ( suspense ) {
+			suspense.innerHTML = message;
+		} else {
+			const suspenseElement: TPFormSuspenseElement = document.createElement( 'tp-form-suspense' );
+			suspenseElement.innerHTML = message;
+			this.appendChild( suspenseElement );
+		}
+	}
+
+	/**
+	 * Remove the suspense message.
+	 */
+	removeSuspenseMessage(): void {
+		// Find and remove the tp-form-suspense element.
+		this.querySelector( 'tp-form-suspense' )?.remove();
 	}
 }
