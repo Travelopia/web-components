@@ -1,11 +1,35 @@
 tp-tooltip {
-	display: none;
-
+	position: relative;
+	z-index: 0;
+	
 	&[popover] {
+		overflow: visible;
 		margin: 0;
+		padding: 0;
 	}
 
-	&[show] {
+	tp-tooltip-content {
+		position: relative;
 		display: block;
+		z-index: 10;
+	}
+
+	tp-tooltip-arrow {
+		position: absolute;
+		display: block;
+		left: 50%;
+		z-index: 5;
+	
+		&[position="top"] {
+			top: 0;
+			transform: translateY(-50%) translateX(-50%) rotate(45deg);
+		}
+	
+		&[position="bottom"] {
+			bottom: 0;
+			transform: translateY(50%) translateX(-50%) rotate(45deg);
+		}
 	}
 }
+
+

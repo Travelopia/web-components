@@ -30,7 +30,7 @@ export class TPTooltip extends HTMLElement {
 	makePopover(): void {
 		// Check if this isn't already a popover.
 		if ( ! this.getAttribute( 'popover' ) ) {
-			this.setAttribute( 'popover', 'popover' );
+			this.setAttribute( 'popover', '' );
 		}
 	}
 
@@ -76,7 +76,7 @@ export class TPTooltip extends HTMLElement {
 
 		// Get arrow dimensions.
 		let arrowHeight: number = 0;
-		const arrow: TPTooltipArrow | null = this.querySelector( 'tp-tooltop-arrow' );
+		const arrow: TPTooltipArrow | null = this.querySelector( 'tp-tooltip-arrow' );
 
 		// Check if we have an arrow.
 		if ( arrow ) {
@@ -110,6 +110,9 @@ export class TPTooltip extends HTMLElement {
 	show(): void {
 		// Position tooltip and show it.
 		this.setContent();
+
+		// Show the tooltip.
+		this.showPopover();
 		this.setPosition();
 		this.setAttribute( 'show', 'yes' );
 	}
@@ -118,7 +121,8 @@ export class TPTooltip extends HTMLElement {
 	 * Hide the tooltip.
 	 */
 	hide(): void {
-		// Hide the attribute.
+		// Hide the tooltip.
+		this.hidePopover();
 		this.removeAttribute( 'show' );
 	}
 }
