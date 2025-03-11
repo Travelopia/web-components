@@ -11,6 +11,16 @@
 	<script type="module" src="../../dist/tooltip/index.js"></script>
 
 	<style>
+
+		#my-third-tooltip {
+
+			tp-tooltip-arrow {
+				
+				width: 20px;
+				height: 20px;
+				background-color: orange;
+			}			
+		}
 	</style>
 </head>
 
@@ -29,6 +39,13 @@
 				<slot></slot>
 				<tp-tooltip-arrow></tp-tooltip-arrow>
 			</tp-tooltip-content>
+		</tp-tooltip>
+
+		<tp-tooltip id="my-third-tooltip">
+			<tp-tooltip-content>
+				<slot></slot>
+			</tp-tooltip-content>
+			<tp-tooltip-arrow></tp-tooltip-arrow>
 		</tp-tooltip>
 
 		<p>
@@ -56,13 +73,26 @@
 		</p>
 		<p>
 			And just for fun, here's a button:
-			<tp-tooltip-trigger tooltip="my-other-tooltip">
+			<tp-tooltip-trigger offset="20" tooltip="my-other-tooltip">
 				<template>
 					<p>Button tooltip content</p>
 				</template>
 				<button>hover me</button>
 			</tp-tooltip-trigger>
 		</p>
+
+		<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error soluta, ratione non doloribus aspernatur totam dolor dignissimos aliquam rem, ipsum quod distinctio sint voluptas qui? Dolores quae voluptatibus ut facere cumque, ex quisquam. Ut magnam provident corrupti dolore ipsum ullam hic aliquid itaque eaque odit necessitatibus quidem ab quam earum dolor repellendus sequi, consequuntur fuga? Praesentium sed asperiores libero. Placeat provident ex dignissimos enim laudantium reprehenderit labore obcaecati consectetur numquam dolores mollitia sapiente ut exercitationem doloribus aliquid tenetur fugiat, architecto praesentium doloremque rem! Sequi, ipsam doloribus dolorum quaerat molestiae officia porro odit inventore a rerum vitae quidem, amet molestias eligendi expedita, labore libero explicabo autem architecto? Tempora reprehenderit, dolorem qui esse inventore, ratione omnis recusandae modi adipisci iusto et facere dolor soluta fuga cupiditate autem, minus corrupti at quis iste! Ipsam illum, iste assumenda aperiam quo eos aut voluptatem, accusamus sunt dignissimos, deleniti explicabo ab nemo dolores porro libero tempore asperiores recusandae distinctio in doloremque. Consequuntur ex inventore cumque facilis facere voluptate suscipit cupiditate molestias nulla amet porro incidunt autem fugiat laudantium tempora perferendis, doloremque esse, saepe quae illo a? Vitae pariatur atque sunt asperiores laboriosam repudiandae expedita modi obcaecati magnam culpa cumque ipsum eius impedit, repellendus omnis laudantium blanditiis molestias? Quasi dicta aliquid possimus impedit pariatur dolor repellat quo, consequuntur architecto temporibus labore quia quidem, assumenda nisi quis accusantium, quisquam voluptatum neque? Porro dolor dolorum quos voluptates quo aut asperiores similique placeat, quibusdam reiciendis! Ad, praesentium unde. Iure, hic blanditiis molestias ratione voluptas ipsam reprehenderit debitis, placeat tenetur ut tempora numquam, aperiam modi? Voluptatum, odit commodi dignissimos
+			
+			<tp-tooltip-trigger offset="10" tooltip="my-third-tooltip">
+				<template>
+					<p>Button tooltip content</p>
+				</template>
+				<button>hover me</button>
+			</tp-tooltip-trigger>
+			beatae ipsa vitae hic id reprehenderit cupiditate quisquam recusandae unde? Commodi, labore voluptatum recusandae exercitationem modi libero optio qui vitae? Laboriosam eveniet ullam in laborum debitis ex reiciendis aspernatur harum voluptates doloribus? Exercitationem ipsa quos fuga tempore numquam explicabo earum sed accusamus eos. Praesentium, aut maiores? Beatae quis ratione et repudiandae. Eligendi dolore quisquam velit quidem nulla, eveniet in facere debitis excepturi? Reiciendis, id. Optio, dolore suscipit ab id qui minus iusto placeat perspiciatis. Architecto rem cupiditate iusto esse dolores quisquam quae consequuntur aperiam nulla rerum? Laboriosam ipsum, impedit odit ut ex incidunt quod in! Veniam consectetur atque assumenda libero dicta doloribus exercitationem tempore adipisci iusto, eum expedita voluptatibus. Temporibus deserunt sed esse itaque ipsam officia atque? Maxime consectetur quibusdam omnis illum, debitis accusantium accusamus exercitationem expedita eum quia ipsa repellendus commodi deleniti consequatur vitae incidunt aperiam, nesciunt deserunt excepturi adipisci officia illo esse! Consectetur, ipsum sapiente adipisci dolor tenetur laudantium necessitatibus, omnis, non ea sequi iste nemo voluptatum voluptate nihil. Pariatur consequatur accusantium sunt ipsa quasi fugit, error ab assumenda aut rem fuga saepe maxime repellat commodi libero explicabo, voluptas doloremque tenetur asperiores laudantium a! Eius repudiandae optio illum ab quo? At ab doloribus ipsum aliquid itaque deleniti rem eius, vero hic illum, iusto laborum, officiis dolore distinctio cumque. Modi hic doloribus iusto quia explicabo, aspernatur, nulla ratione perspiciatis sint recusandae aliquam officia. Quibusdam libero perspiciatis molestias eveniet quo dolores iusto sed ex pariatur fugit obcaecati rerum maiores, consequatur modi numquam.</p>
+
+
+
 	</main>
 </body>
 </html>
