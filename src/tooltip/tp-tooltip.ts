@@ -70,9 +70,13 @@ export class TPTooltip extends HTMLElement {
 
 		// Get width and height of this tooltip.
 		const { height: tooltipHeight, width: tooltipWidth } = this.getBoundingClientRect();
+		console.log( 'tooltipHeight', tooltipHeight, 'tooltipWidth', tooltipWidth );
+		
 
 		// Get position and coordinates of the trigger.
 		const { x: triggerLeftPosition, y: triggerTopPosition, width: triggerWidth, height: triggerHeight } = this.trigger.getBoundingClientRect();
+		console.log( 'triggerLeftPosition', triggerLeftPosition, 'triggerTopPosition', triggerTopPosition, 'triggerWidth', triggerWidth, 'triggerHeight', triggerHeight );
+		
 
 		// Get arrow dimensions.
 		let arrowHeight: number = 0;
@@ -86,7 +90,7 @@ export class TPTooltip extends HTMLElement {
 		// Determine the vertical position of this tooltip.
 		if ( triggerTopPosition > tooltipHeight + this.trigger.offset + arrowHeight ) {
 			// There is enough space on top of trigger element, so place popover above the trigger element.
-			this.style.top = `${ triggerTopPosition - tooltipHeight - this.trigger.offset - ( arrowHeight / 2 ) }px`;
+			this.style.marginTop = `${ triggerTopPosition - tooltipHeight - this.trigger.offset - ( arrowHeight / 2 ) }px`;
 
 			// Set arrow placement on bottom of popover
 			arrow?.setAttribute( 'position', 'bottom' );

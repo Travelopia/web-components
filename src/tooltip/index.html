@@ -27,70 +27,167 @@
 <body>
 	<main>
 
-		<tp-tooltip id="my-tooltip">
-			<tp-tooltip-content>
-				<slot></slot>
-				<tp-tooltip-arrow></tp-tooltip-arrow>
-			</tp-tooltip-content>
-		</tp-tooltip>
+		<div>
+			<tp-tooltip id="anchor-tag-tooltip">
+				<tp-tooltip-content>
+					<slot></slot>
+					<tp-tooltip-arrow></tp-tooltip-arrow>
+				</tp-tooltip-content>
+			</tp-tooltip>
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero excepturi, esse aperiam omnis voluptatem 
+			   et perspiciatis quas nostrum. Modi velit repellat labore illo, laudantium eaque, ea esse tempora earum 
+			   natus ullam repudiandae voluptatibus ut perferendis nobis. Nesciunt, possimus accusamus sed dolor 
+			   exercitationem repellendus sunt perspiciatis. Nulla saepe assumenda facere. Aliquid et eum accusantium
+			   velit nisi rem, eaque, repudiandae voluptas culpa dolor hic at aperiam dignissimos voluptatum quia, 
+			   architecto incidunt! Unde ipsa maiores maxime repellendus, voluptatem assumenda doloribus fugit 
+			   necessitatibus ipsam soluta laboriosam voluptas optio a tenetur eveniet nostrum debitis hic, beatae 
+			   eos asperiores repellat consectetur animi est dolor? Quis, recusandae neque deserunt asperiores culpa 
+			    <tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio odit, dolor recusandae veniam est molestiae!
+						</p>
+					</template>
+					<a href="#">Para link 1</a>
+		   		</tp-tooltip-trigger>
+			   exercitationem autem consequatur, sequi saepe blanditiis, laudantium vel? Voluptates pariatur ducimus 
+			   corporis magni. Placeat, fugiat, veniam incidunt dolorum numquam itaque non inventore, aliquam laboriosam 
+			   dolor mollitia ipsa! Nemo voluptas, animi corrupti facere perspiciatis commodi voluptatibus sint saepe 
+			   suscipit? Molestiae temporibus recusandae delectus molestias, ea, tempora unde, sapiente quae reiciendis 
+			   suscipit est? Nemo enim eius suscipit possimus eum debitis adipisci officiis, dolor, iste autem delectus 
+			   quam illum ut asperiores expedita impedit ad atque repellat aut quisquam doloremque! Nihil magnam harum 
+				<tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, tenetur!
+						</p>
+					</template>
+					<a href="#">Para link 2</a>
+				</tp-tooltip-trigger>
+			   dolores in neque perspiciatis! Velit, repellendus sapiente cumque ullam optio molestias ipsum doloribus 
+			   blanditiis. Eum at quibusdam voluptatem fugiat facere omnis ipsam est obcaecati provident laborum dolores 
+			   exercitationem aspernatur saepe cumque animi eligendi corrupti, aliquid tenetur. Similique quam accusantium 
+			   numquam a, aliquam libero debitis quibusdam consequatur modi doloremque, exercitationem eum temporibus quo 
+			   quia velit repellendus, aspernatur eos. Optio exercitationem dolore ipsum alias est quas velit eaque autem 
+			   ducim</tp-tooltip-trigger> us. Iusto fugit reiciendis nisi fugiat deserunt, quibusdam doloribus. Eligendi a officia quas totam 
+			   adipisci minus voluptatibus dignissimos sed nostrum. Consequatur eos est illo tempore odit, adipisci itaque
+			   	<tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+						</p>
+					</template>
+					<a href="#">Para link 3</a>
+				</tp-tooltip-trigger>
+			   magnam, obcaecati ullam possimus ab sint beatae, animi sed mollitia sit perspiciatis eligendi! Tenetur minus 
+			   vero soluta amet excepturi sit quia animi.
+			</p>
+		</div>
 
-		<tp-tooltip id="my-other-tooltip">
-			<tp-tooltip-content>
-				<slot></slot>
-				<tp-tooltip-arrow></tp-tooltip-arrow>
-			</tp-tooltip-content>
-		</tp-tooltip>
+		<br/>
 
-		<tp-tooltip id="my-third-tooltip">
-			<tp-tooltip-content>
-				<slot></slot>
-			</tp-tooltip-content>
-			<tp-tooltip-arrow></tp-tooltip-arrow>
-		</tp-tooltip>
+		<section>
+			<tp-tooltip id="card-tooltip">
+				<tp-tooltip-content>
+					<slot></slot>
+					<tp-tooltip-arrow></tp-tooltip-arrow>
+				</tp-tooltip-content>
+			</tp-tooltip>
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-around; row-gap: 20px;">
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
 
-		<p>
-			Hi, this is a paragraph and here is:
-			<tp-tooltip-trigger tooltip="my-tooltip">
-				<template>
-					<p>Tooltip content 1</p>
-				</template>
-				<a href="#">trigger 1</a>
-			</tp-tooltip-trigger>
-			and
-			<tp-tooltip-trigger tooltip="my-tooltip">
-				<template>
-					<p>Tooltip content 2</p>
-				</template>
-				<a href="#">trigger 2</a>
-			</tp-tooltip-trigger>
-			and
-			<tp-tooltip-trigger tooltip="my-tooltip">
-				<template>
-					<p>Tooltip content 3</p>
-				</template>
-				<a href="#">trigger 3</a>
-			</tp-tooltip-trigger>
-		</p>
-		<p>
-			And just for fun, here's a button:
-			<tp-tooltip-trigger offset="20" tooltip="my-other-tooltip">
-				<template>
-					<p>Button tooltip content</p>
-				</template>
-				<button>hover me</button>
-			</tp-tooltip-trigger>
-		</p>
-
-		<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error soluta, ratione non doloribus aspernatur totam dolor dignissimos aliquam rem, ipsum quod distinctio sint voluptas qui? Dolores quae voluptatibus ut facere cumque, ex quisquam. Ut magnam provident corrupti dolore ipsum ullam hic aliquid itaque eaque odit necessitatibus quidem ab quam earum dolor repellendus sequi, consequuntur fuga? Praesentium sed asperiores libero. Placeat provident ex dignissimos enim laudantium reprehenderit labore obcaecati consectetur numquam dolores mollitia sapiente ut exercitationem doloribus aliquid tenetur fugiat, architecto praesentium doloremque rem! Sequi, ipsam doloribus dolorum quaerat molestiae officia porro odit inventore a rerum vitae quidem, amet molestias eligendi expedita, labore libero explicabo autem architecto? Tempora reprehenderit, dolorem qui esse inventore, ratione omnis recusandae modi adipisci iusto et facere dolor soluta fuga cupiditate autem, minus corrupti at quis iste! Ipsam illum, iste assumenda aperiam quo eos aut voluptatem, accusamus sunt dignissimos, deleniti explicabo ab nemo dolores porro libero tempore asperiores recusandae distinctio in doloremque. Consequuntur ex inventore cumque facilis facere voluptate suscipit cupiditate molestias nulla amet porro incidunt autem fugiat laudantium tempora perferendis, doloremque esse, saepe quae illo a? Vitae pariatur atque sunt asperiores laboriosam repudiandae expedita modi obcaecati magnam culpa cumque ipsum eius impedit, repellendus omnis laudantium blanditiis molestias? Quasi dicta aliquid possimus impedit pariatur dolor repellat quo, consequuntur architecto temporibus labore quia quidem, assumenda nisi quis accusantium, quisquam voluptatum neque? Porro dolor dolorum quos voluptates quo aut asperiores similique placeat, quibusdam reiciendis! Ad, praesentium unde. Iure, hic blanditiis molestias ratione voluptas ipsam reprehenderit debitis, placeat tenetur ut tempora numquam, aperiam modi? Voluptatum, odit commodi dignissimos
-			
-			<tp-tooltip-trigger offset="10" tooltip="my-third-tooltip">
-				<template>
-					<p>Button tooltip content</p>
-				</template>
-				<button>hover me</button>
-			</tp-tooltip-trigger>
-			beatae ipsa vitae hic id reprehenderit cupiditate quisquam recusandae unde? Commodi, labore voluptatum recusandae exercitationem modi libero optio qui vitae? Laboriosam eveniet ullam in laborum debitis ex reiciendis aspernatur harum voluptates doloribus? Exercitationem ipsa quos fuga tempore numquam explicabo earum sed accusamus eos. Praesentium, aut maiores? Beatae quis ratione et repudiandae. Eligendi dolore quisquam velit quidem nulla, eveniet in facere debitis excepturi? Reiciendis, id. Optio, dolore suscipit ab id qui minus iusto placeat perspiciatis. Architecto rem cupiditate iusto esse dolores quisquam quae consequuntur aperiam nulla rerum? Laboriosam ipsum, impedit odit ut ex incidunt quod in! Veniam consectetur atque assumenda libero dicta doloribus exercitationem tempore adipisci iusto, eum expedita voluptatibus. Temporibus deserunt sed esse itaque ipsam officia atque? Maxime consectetur quibusdam omnis illum, debitis accusantium accusamus exercitationem expedita eum quia ipsa repellendus commodi deleniti consequatur vitae incidunt aperiam, nesciunt deserunt excepturi adipisci officia illo esse! Consectetur, ipsum sapiente adipisci dolor tenetur laudantium necessitatibus, omnis, non ea sequi iste nemo voluptatum voluptate nihil. Pariatur consequatur accusantium sunt ipsa quasi fugit, error ab assumenda aut rem fuga saepe maxime repellat commodi libero explicabo, voluptas doloremque tenetur asperiores laudantium a! Eius repudiandae optio illum ab quo? At ab doloribus ipsum aliquid itaque deleniti rem eius, vero hic illum, iusto laborum, officiis dolore distinctio cumque. Modi hic doloribus iusto quia explicabo, aspernatur, nulla ratione perspiciatis sint recusandae aliquam officia. Quibusdam libero perspiciatis molestias eveniet quo dolores iusto sed ex pariatur fugit obcaecati rerum maiores, consequatur modi numquam.</p>
-
+			</div>
+		</section>
 
 
 	</main>
