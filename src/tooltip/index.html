@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Tooltip</title>
+
+	<link rel="stylesheet" href="../../dist/tooltip/style.css" media="all">
+	<script type="module" src="../../dist/tooltip/index.js"></script>
+
+	<style>
+		main {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+
+		.tooltip-1 tp-tooltip-arrow {
+			width: 15px;
+			height: 15px;
+			background-color: red;
+		}
+
+		.tooltip-1 tp-tooltip-popover {
+			background-color: #fff;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			width: 200px;
+		}
+	</style>
+</head>
+<body style="padding: 0; margin: 0">
+	<main >
+		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et corrupti accusamus odit doloribus aliquam blanditiis tenetur est ut, corporis minima cupiditate commodi similique rerum non necessitatibus voluptatem libero reprehenderit repellat laudantium exercitationem facere harum? Voluptates, dignissimos itaque? Veniam distinctio officiis, sit dolore minima libero suscipit architecto. Exercitationem molestias pariatur, labore nemo et quasi ducimus quaerat mollitia amet quisquam error voluptatibus placeat modi ab. Sunt praesentium quis neque nesciunt eos sapiente. Mollitia inventore magni sequi quas. Ad consequatur illum commodi dolorum ipsam tempore quis placeat sed recusandae cumque ab temporibus vel doloremque voluptate quisquam eaque ducimus sint magni, repellat doloribus cum.</p>
+		
+		<tp-tooltip offSet="10" class="tooltip-1">
+			<div>Hover Me</div>
+			<tp-tooltip-popover>
+				<tp-tooltip-arrow></tp-tooltip-arrow>
+				<div style="z-index: 1;">First tooltip dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</div>
+			</tp-tooltip-popover>
+		</tp-tooltip>
+		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et corrupti accusamus odit doloribus aliquam blanditiis tenetur est ut, corporis minima cupiditate commodi similique rerum non necessitatibus voluptatem libero reprehenderit repellat laudantium exercitationem facere harum? Voluptates, dignissimos itaque? Veniam distinctio officiis, sit dolore minima libero suscipit architecto. Exercitationem molestias pariatur, labore nemo et quasi ducimus quaerat mollitia amet quisquam error voluptatibus placeat modi ab. Sunt praesentium quis neque nesciunt eos sapiente. Mollitia inventore magni sequi quas. Ad consequatur illum commodi dolorum ipsam tempore quis placeat sed recusandae cumque ab temporibus vel doloremque voluptate quisquam eaque ducimus sint magni, repellat doloribus cum.</p>
+		<tp-tooltip offSet="10">
+			<span class="my-btn">Hover Me</span>
+			<tp-tooltip-popover>
+				<tp-tooltip-arrow style="width: 15px; height: 15px; background-color: orange;"></tp-tooltip-arrow>
+				<div style="z-index: 1;background-color: green; width: 265px; padding: 5px; border: 2px solid red;">Second tooltip dolor sit amet consectetur adipisicing elit. Mollitia molestiae distinctio tempore nobis rem provident libero voluptatum excepturi optio pariatur, accusantium minus ex, doloremque a, repellendus iure quae eaque consectetur!</div>
+			</tp-tooltip-popover>
+		</tp-tooltip>
+	</main>
+</body>
+</html>

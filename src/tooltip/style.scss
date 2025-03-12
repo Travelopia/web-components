@@ -1,0 +1,24 @@
+tp-tooltip-popover {
+	overflow: visible;
+	position: relative;
+    margin: 0;
+    border-width: 0;
+    border-style: none;
+    padding: 0;
+}
+
+tp-tooltip-arrow {
+	position: absolute;
+	z-index: -1;
+	left: 50%;
+
+	&[data-placement='bottom'] {
+		bottom: 0;
+		transform: translateY(50%) translateX(-50%) rotate(45deg);
+	}
+
+	&[data-placement='top'] {
+		top: 0;
+		transform: translateY(-50%) translateX(-50%) rotate(45deg);
+	}
+}
