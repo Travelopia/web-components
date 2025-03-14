@@ -1,0 +1,32 @@
+tp-slider {
+    display: block;
+    overflow: hidden;
+}
+
+tp-slider-track {
+    display: block;
+    overflow-x: auto;
+    position: relative;
+}
+
+tp-slider-slides {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+	scroll-snap-type: x mandatory;
+    transition: none;
+}
+
+tp-slider-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+
+tp-slider-nav {
+    display: flex;
+    gap: 10px;
+}
