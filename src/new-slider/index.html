@@ -1,23 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="../../dist/newSlider/style.css" media="all">
-	<script type="module" src="../../dist/newSlider/index.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Slider Example</title>
+    <link rel="stylesheet" href="../../dist/newSlider/style.css">
+    <script type="module" src="../../dist/newSlider/index.js"></script>
 </head>
 <body>
+    <h1>TP Slider Example</h1>
+    
     <tp-slider 
-        slides-per-view="2" 
-        auto-play="5000" 
-        infinite 
-        arrows 
-        dots
+        swipe-threshold="150" 
+        flexible-height="yes" 
+        infinite="yes" 
+        swipe="yes" 
+        auto-slide-interval="5000"
+        per-view="1"
+        responsive='[
+            {"media":"(min-width: 768px)","per-view":2,"step":2},
+            {"media":"(min-width: 480px)","per-view":1,"step":1,"behaviour":"slide"},
+            {"media":"(min-width: 320px)","per-view":1,"step":1,"behaviour":"fade"}
+        ]'
     >
-        <tp-slide ><img src="https://picsum.photos/800/600?1" alt="Slide 1"></tp-slide>
-        <tp-slide ><img src="https://picsum.photos/800/600?2" alt="Slide 2"></tp-slide>
-        <tp-slide ><img src="https://picsum.photos/800/600?3" alt="Slide 3"></tp-slide>
-        <tp-slide ><img src="https://picsum.photos/800/600?1" alt="Slide 1"></tp-slide>
-        <tp-slide ><img src="https://picsum.photos/800/600?2" alt="Slide 2"></tp-slide>
-        <tp-slide ><img src="https://picsum.photos/800/600?3" alt="Slide 3"></tp-slide>
+        <tp-slider-arrow direction="previous"><button>Previous</button></tp-slider-arrow>
+        <tp-slider-arrow direction="next"><button>Next</button></tp-slider-arrow>
+        
+        <tp-slider-track>
+            <tp-slider-slides>
+                <tp-slider-slide><img src="https://picsum.photos/800/400?1" alt="Slide 1"></tp-slider-slide>
+                <tp-slider-slide><img src="https://picsum.photos/800/400?2" alt="Slide 2"></tp-slider-slide>
+                <tp-slider-slide><img src="https://picsum.photos/800/400?3" alt="Slide 3"></tp-slider-slide>
+                <tp-slider-slide><img src="https://picsum.photos/800/400?4" alt="Slide 4"></tp-slider-slide>
+            </tp-slider-slides>
+        </tp-slider-track>
+        
+        <tp-slider-nav>
+            <tp-slider-nav-item><button>1</button></tp-slider-nav-item>
+            <tp-slider-nav-item><button>2</button></tp-slider-nav-item>
+            <tp-slider-nav-item><button>3</button></tp-slider-nav-item>
+            <tp-slider-nav-item><button>4</button></tp-slider-nav-item>
+        </tp-slider-nav>
+        
+        <tp-slider-count current="1" total="4" format="$current / $total"></tp-slider-count>
     </tp-slider>
 </body>
 </html>

@@ -1,127 +1,457 @@
+/**
+ * components/tp-slider.ts - Main slider component that orchestrates the functionality
+ */
 export class TPSlider extends HTMLElement {
-    private slides: HTMLElement[];
-    private currentIndex: number;
-    private autoPlayInterval: number | null;
-    private slidesPerView: number;
-    private dotsContainer!: HTMLDivElement;
+	// Properties
+	private currentIndex: number = 0;
+	private autoPlayInterval: number | null = null;
+	private touchStartX: number = 0;
+	private touchEndX: number = 0;
+	private responsiveSettings: any[] = [];
+	private behaviour: string = 'slide'; // 'slide' or 'fade'
 
-    constructor() {
-        super();
-        this.slides = [];
-        this.currentIndex = 0;
-        this.autoPlayInterval = null;
-        this.slidesPerView = 1;
-        this.init();
-    }
+	// Elements (will be populated in connectedCallback)
+	private track: HTMLElement | null = null;
+	private slidesContainer: HTMLElement | null = null;
+	private slides: HTMLElement[] = [];
+	private navItems: NodeListOf<HTMLElement> | null = null;
+	private countElement: HTMLElement | null = null;
+	private prevArrow: HTMLElement | null = null;
+	private nextArrow: HTMLElement | null = null;
 
-    // Initialize Component
-    private init(): void {
-        this.setupSlides();
-        if (this.hasAttribute("arrows")) this.addArrows();
-        if (this.hasAttribute("dots")) this.addDots();
-        if (this.hasAttribute("infinite")) this.addClones();
-        if (this.hasAttribute("auto-play")) this.startAutoPlay();
-    }
+	// Getters for attributes
+	get infiniteScroll(): boolean {
+		return this.hasAttribute( 'infinite' ) && this.getAttribute( 'infinite' ) !== 'no';
+	}
 
-    // Setup Slides & Scroll
-    private setupSlides(): void {
-        this.slides = [...this.querySelectorAll("tp-slide")] as HTMLElement[];
-        this.slidesPerView = parseInt(this.getAttribute("slides-per-view") || "1");
-        this.style.overflowX = "auto";
-        this.slides.forEach((slide) => {
-            slide.style.flex = `0 0 calc(100% / ${this.slidesPerView} - 10px)`;
-            slide.style.scrollSnapAlign = "start";
-        });
-    }
+	// TODO: Add comment.
+	get autoSlideInterval(): number {
+		return this.hasAttribute( 'auto-slide-interval' )
+			? parseInt( this.getAttribute( 'auto-slide-interval' ) || '0', 10 )
+			: 0;
+	}
 
-    // Next/Previous Methods
-    public next(): void {
-        this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-        this.scrollToSlide(this.currentIndex);
-    }
+	// TODO: Add comment.
+	get perView(): number {
+		return this.hasAttribute( 'per-view' )
+			? parseInt( this.getAttribute( 'per-view' ) || '1', 10 )
+			: 1;
+	}
 
-    public prev(): void {
-        this.currentIndex =
-            (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-        this.scrollToSlide(this.currentIndex);
-    }
+	// TODO: Add comment.
+	get step(): number {
+		return this.hasAttribute( 'step' )
+			? parseInt( this.getAttribute( 'step' ) || '1', 10 )
+			: 1;
+	}
 
-    // Scroll to Specific Slide
-    public scrollToSlide(index: number): void {
-        const slideWidth = this.slides[0].offsetWidth + 10; // Include gap
-        this.scrollTo({
-            left: slideWidth * index,
-            behavior: "smooth",
-        });
-        this.updateDots(index);
-    }
+	// TODO: Add comment.
+	get flexibleHeight(): boolean {
+		return this.hasAttribute( 'flexible-height' ) && this.getAttribute( 'flexible-height' ) !== 'no';
+	}
 
-    // Pagination Dots
-    private addDots(): void {
-        this.dotsContainer = document.createElement("div");
-        this.dotsContainer.className = "tp-dots";
-        this.slides.forEach((_, i) => {
-            const dot = document.createElement("div");
-            dot.className = `tp-dot ${i === 0 ? "active" : ""}`;
-            dot.addEventListener("click", () => this.scrollToSlide(i));
-            this.dotsContainer.appendChild(dot);
-        });
-        this.appendChild(this.dotsContainer);
-    }
+	// TODO: Add comment.
+	get swipeEnabled(): boolean {
+		return this.hasAttribute( 'swipe' ) && this.getAttribute( 'swipe' ) !== 'no';
+	}
 
-    // Update Active Dot
-    private updateDots(activeIndex: number): void {
-        if (!this.dotsContainer) return;
-        
-        const dots = this.dotsContainer.querySelectorAll(".tp-dot");
-        dots.forEach((dot, i) => {
-            dot.classList.toggle("active", i === activeIndex);
-        });
-    }
+	// TODO: Add comment.
+	get swipeThreshold(): number {
+		return this.hasAttribute( 'swipe-threshold' )
+			? parseInt( this.getAttribute( 'swipe-threshold' ) || '50', 10 )
+			: 50;
+	}
 
-    // Infinite Scroll (Clone First/Last Slides)
-    private addClones(): void {
-        const firstClone = this.slides[0].cloneNode(true) as HTMLElement;
-        const lastClone = this.slides[this.slides.length - 1].cloneNode(true) as HTMLElement;
-        firstClone.classList.add("clone");
-        lastClone.classList.add("clone");
-        this.append(firstClone);
-        this.prepend(lastClone);
-    }
+	// TODO: Add comment.
+	constructor() {
+		super();
+	}
 
-    // Auto-Play
-    private startAutoPlay(): void {
-        const delay = parseInt(this.getAttribute("auto-play") || "3000");
-        this.autoPlayInterval = window.setInterval(() => this.next(), delay);
-        
-        this.addEventListener("mouseenter", () => {
-            if (this.autoPlayInterval) {
-                clearInterval(this.autoPlayInterval);
-                this.autoPlayInterval = null;
-            }
-        });
-        
-        this.addEventListener("mouseleave", () => {
-            if (!this.autoPlayInterval) {
-                this.startAutoPlay();
-            }
-        });
-    }
+	// TODO: Add comment.
+	connectedCallback() {
+		// Parse responsive settings first
+		this.parseResponsiveSettings();
 
-    // Arrows
-    private addArrows(): void {
-        const prevArrow = document.createElement("div");
-        prevArrow.className = "tp-arrow prev";
-        prevArrow.innerHTML = "❮";
-        prevArrow.addEventListener("click", () => this.prev());
+		// Get all the necessary elements
+		this.track = this.querySelector( 'tp-slider-track' );
+		this.slidesContainer = this.querySelector( 'tp-slider-slides' );
+		this.slides = Array.from( this.querySelectorAll( 'tp-slider-slide' ) );
+		this.navItems = this.querySelectorAll( 'tp-slider-nav-item' );
+		this.countElement = this.querySelector( 'tp-slider-count' );
+		this.prevArrow = this.querySelector( 'tp-slider-arrow[direction="previous"]' );
+		this.nextArrow = this.querySelector( 'tp-slider-arrow[direction="next"]' );
 
-        const nextArrow = document.createElement("div");
-        nextArrow.className = "tp-arrow next";
-        nextArrow.innerHTML = "❯";
-        nextArrow.addEventListener("click", () => this.next());
+		// Apply responsive settings
+		this.applyResponsiveSettings();
 
-        this.appendChild(prevArrow);
-        this.appendChild(nextArrow);
-    }
+		// Set up event listeners
+		this.setupEventListeners();
+
+		// Initialize slider state
+		this.updateSliderState();
+
+		// Start auto-sliding if enabled
+		this.setupAutoPlay();
+	}
+
+	// TODO: Add comment.
+	disconnectedCallback() {
+		// Clean up event listeners
+		this.removeEventListeners();
+
+		// Stop auto-play
+		if ( this.autoPlayInterval ) {
+			clearInterval( this.autoPlayInterval );
+			this.autoPlayInterval = null;
+		}
+	}
+
+	// TODO: Add comment.
+	static get observedAttributes() {
+		return [
+			'per-view',
+			'step',
+			'infinite',
+			'auto-slide-interval',
+			'behaviour',
+			'flexible-height',
+			'swipe',
+			'swipe-threshold',
+			'responsive',
+		];
+	}
+
+	// TODO: Add comment.
+	attributeChangedCallback( name: string, oldValue: string, newValue: string ) {
+		if ( oldValue === newValue ) {
+			return;
+		}
+
+		// TODO: Add comment.
+		switch ( name ) {
+			case 'responsive':
+				this.parseResponsiveSettings();
+				this.applyResponsiveSettings();
+				break;
+			case 'behaviour':
+				this.behaviour = newValue || 'slide';
+				this.updateSliderState();
+				break;
+			case 'per-view':
+			case 'step':
+			case 'infinite':
+			case 'flexible-height':
+				this.updateSliderState();
+				break;
+			case 'auto-slide-interval':
+				this.setupAutoPlay();
+				break;
+			case 'swipe':
+				this.updateSwipeHandlers();
+				break;
+		}
+	}
+
+	// Parse responsive settings from attribute
+	private parseResponsiveSettings(): void {
+		if ( this.hasAttribute( 'responsive' ) ) {
+			try {
+				this.responsiveSettings = JSON.parse( this.getAttribute( 'responsive' ) || '[]' );
+			} catch ( e ) {
+				console.error( 'Invalid responsive settings JSON:', e );
+				this.responsiveSettings = [];
+			}
+		}
+	}
+
+	// Apply responsive settings based on current viewport
+	private applyResponsiveSettings(): void {
+		// Loop through responsive settings in reverse order (mobile-first approach)
+		for ( const setting of this.responsiveSettings ) {
+			if ( window.matchMedia( setting.media ).matches ) {
+				// Apply settings to attributes
+				Object.entries( setting ).forEach( ( [ key, value ] ) => {
+					if ( key !== 'media' ) {
+						this.setAttribute( key, String( value ) );
+					}
+				} );
+				break; // Apply only the first matching media query
+			}
+		}
+	}
+
+	// Set up event listeners
+	private setupEventListeners(): void {
+		// Arrow navigation
+		if ( this.prevArrow ) {
+			this.prevArrow.addEventListener( 'click', () => this.prev() );
+		}
+
+		// TODO: Add comment.
+		if ( this.nextArrow ) {
+			this.nextArrow.addEventListener( 'click', () => this.next() );
+		}
+
+		// Nav item clicks
+		if ( this.navItems ) {
+			this.navItems.forEach( ( item, index ) => {
+				item.addEventListener( 'click', () => this.goToSlide( index ) );
+			} );
+		}
+
+		// Swipe handlers
+		this.updateSwipeHandlers();
+
+		// Window resize handler
+		window.addEventListener( 'resize', this.handleResize.bind( this ) );
+	}
+
+	// Remove event listeners
+	private removeEventListeners(): void {
+		window.removeEventListener( 'resize', this.handleResize.bind( this ) );
+
+		// Remove swipe handlers
+		if ( this.slidesContainer ) {
+			this.slidesContainer.removeEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+			this.slidesContainer.removeEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+		}
+	}
+
+	// Handle window resize
+	private handleResize(): void {
+		this.applyResponsiveSettings();
+		this.updateSliderState();
+	}
+
+	// Update swipe handlers
+	private updateSwipeHandlers(): void {
+		if ( ! this.slidesContainer ) {
+			return;
+		}
+
+		// Remove existing listeners to avoid duplicates
+		this.slidesContainer.removeEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
+		this.slidesContainer.removeEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+
+		// Add new listeners if swipe is enabled
+		if ( this.swipeEnabled ) {
+			this.slidesContainer.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
+			this.slidesContainer.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+		}
+	}
+
+	// Handle touch start
+	private handleTouchStart( e: TouchEvent ): void {
+		this.touchStartX = e.changedTouches[ 0 ].screenX;
+	}
+
+	// Handle touch end
+	private handleTouchEnd( e: TouchEvent ): void {
+		this.touchEndX = e.changedTouches[ 0 ].screenX;
+		this.handleSwipe();
+	}
+
+	// Handle swipe gesture
+	private handleSwipe(): void {
+		const swipeDistance = this.touchEndX - this.touchStartX;
+
+		// TODO: Add comment.
+		if ( Math.abs( swipeDistance ) < this.swipeThreshold ) {
+			return;
+		}
+
+		// TODO: Add comment.
+		if ( swipeDistance < 0 ) {
+			// Swipe left - go next
+			this.next();
+		} else {
+			// Swipe right - go previous
+			this.prev();
+		}
+	}
+
+	// Set up auto-play
+	private setupAutoPlay(): void {
+		// Clear existing interval
+		if ( this.autoPlayInterval ) {
+			clearInterval( this.autoPlayInterval );
+			this.autoPlayInterval = null;
+		}
+
+		// Set up new interval if needed
+		if ( this.autoSlideInterval > 0 ) {
+			this.autoPlayInterval = window.setInterval( () => this.next(), this.autoSlideInterval );
+
+			// Pause on hover
+			this.addEventListener( 'mouseenter', () => {
+				if ( this.autoPlayInterval ) {
+					clearInterval( this.autoPlayInterval );
+					this.autoPlayInterval = null;
+				}
+			} );
+
+			// TODO: Add comment.
+			this.addEventListener( 'mouseleave', () => {
+				if ( ! this.autoPlayInterval && this.autoSlideInterval > 0 ) {
+					this.autoPlayInterval = window.setInterval( () => this.next(), this.autoSlideInterval );
+				}
+			} );
+		}
+	}
+
+	// Update slider state based on current settings
+	private updateSliderState(): void {
+		if ( ! this.slidesContainer || this.slides.length === 0 ) {
+			return;
+		}
+
+		// Update behaviour-specific styles
+		if ( this.behaviour === 'fade' ) {
+			// Fade behaviour
+			this.slidesContainer.classList.add( 'tp-fade-behaviour' );
+			this.slidesContainer.classList.remove( 'tp-slide-behaviour' );
+
+			// Update slide visibility
+			this.slides.forEach( ( slide, index ) => {
+				slide.classList.toggle( 'active', index === this.currentIndex );
+			} );
+		} else {
+			// Slide behaviour
+			this.slidesContainer.classList.add( 'tp-slide-behaviour' );
+			this.slidesContainer.classList.remove( 'tp-fade-behaviour' );
+
+			// Set slide width based on perView
+			this.slides.forEach( ( slide ) => {
+				slide.style.flex = `0 0 calc(100% / ${ this.perView })`;
+			} );
+
+			// Position the slides
+			this.scrollToSlide( this.currentIndex );
+		}
+
+		// Update flexible height
+		if ( this.flexibleHeight ) {
+			this.track?.classList.add( 'flexible-height' );
+		} else {
+			this.track?.classList.remove( 'flexible-height' );
+		}
+
+		// Update navigation state
+		this.updateNavigation();
+
+		// Update count
+		this.updateCount();
+	}
+
+	// Go to next slide
+	public next(): void {
+		const newIndex = this.currentIndex + this.step;
+
+		// TODO: Add comment.
+		if ( newIndex >= this.slides.length ) {
+			if ( this.infiniteScroll ) {
+				// Loop back to the beginning
+				this.goToSlide( 0 );
+			} else {
+				// Stay at the last slide
+				this.goToSlide( this.slides.length - 1 );
+			}
+		} else {
+			this.goToSlide( newIndex );
+		}
+	}
+
+	// Go to previous slide
+	public prev(): void {
+		const newIndex = this.currentIndex - this.step;
+
+		// TODO: Add comment.
+		if ( newIndex < 0 ) {
+			if ( this.infiniteScroll ) {
+				// Loop to the end
+				this.goToSlide( this.slides.length - 1 );
+			} else {
+				// Stay at the first slide
+				this.goToSlide( 0 );
+			}
+		} else {
+			this.goToSlide( newIndex );
+		}
+	}
+
+	// Go to specific slide
+	public goToSlide( index: number ): void {
+		// Constrain index to valid range
+		const safeIndex = Math.max( 0, Math.min( index, this.slides.length - 1 ) );
+
+		// Update current index
+		this.currentIndex = safeIndex;
+
+		// Update slides based on behaviour
+		if ( this.behaviour === 'fade' ) {
+			this.slides.forEach( ( slide, i ) => {
+				slide.classList.toggle( 'active', i === this.currentIndex );
+			} );
+		} else {
+			this.scrollToSlide( this.currentIndex );
+		}
+
+		// Update navigation
+		this.updateNavigation();
+
+		// Update count
+		this.updateCount();
+
+		// Dispatch event
+		this.dispatchEvent( new CustomEvent( 'slide-change', {
+			detail: { index: this.currentIndex },
+		} ) );
+	}
+
+	// Scroll to specific slide (for slide behaviour)
+	private scrollToSlide( index: number ): void {
+		if ( ! this.slidesContainer || ! this.slides[ index ] ) {
+			return;
+		}
+
+		// TODO: Add comment.
+		const slideWidth = this.slides[ 0 ].offsetWidth;
+		const offset = slideWidth * index;
+
+		// TODO: Add comment.
+		this.slidesContainer.style.transform = `translateX(-${ offset }px)`;
+	}
+
+	// Update navigation state
+	private updateNavigation(): void {
+		if ( this.navItems ) {
+			this.navItems.forEach( ( item, index ) => {
+				item.classList.toggle( 'active', index === this.currentIndex );
+			} );
+		}
+	}
+
+	// Update count element
+	private updateCount(): void {
+		if ( ! this.countElement ) {
+			return;
+		}
+
+		// TODO: Add comment.
+		const current = this.currentIndex + 1;
+		const total = this.slides.length;
+
+		// Update attributes
+		this.countElement.setAttribute( 'current', current.toString() );
+		this.countElement.setAttribute( 'total', total.toString() );
+
+		// Update content based on format
+		const format = this.countElement.getAttribute( 'format' ) || '$current / $total';
+		const formattedCount = format
+			.replace( '$current', current.toString() )
+			.replace( '$total', total.toString() );
+
+		// TODO: Add comment.
+		this.countElement.textContent = formattedCount;
+	}
 }
-
