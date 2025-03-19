@@ -25,6 +25,26 @@ export class TPTooltip extends HTMLElement {
 	}
 
 	/**
+	 * Get offset.
+	 */
+	get offset(): number {
+		// Get the offset.
+		return parseInt( this.getAttribute( 'offset' ) ?? '0' );
+	}
+
+	/**
+	 * Set offset.
+	 */
+	set offset( offset: number ) {
+		// Set or remove offset.
+		if ( ! offset ) {
+			this.removeAttribute( 'offset' );
+		} else {
+			this.setAttribute( 'offset', offset.toString() );
+		}
+	}
+
+	/**
 	 * Make this tooltip a popover, if it isn't already.
 	 */
 	makePopover(): void {
@@ -70,13 +90,9 @@ export class TPTooltip extends HTMLElement {
 
 		// Get width and height of this tooltip.
 		const { height: tooltipHeight, width: tooltipWidth } = this.getBoundingClientRect();
-		console.log( 'tooltipHeight', tooltipHeight, 'tooltipWidth', tooltipWidth );
-		
 
 		// Get position and coordinates of the trigger.
 		const { x: triggerLeftPosition, y: triggerTopPosition, width: triggerWidth, height: triggerHeight } = this.trigger.getBoundingClientRect();
-		console.log( 'triggerLeftPosition', triggerLeftPosition, 'triggerTopPosition', triggerTopPosition, 'triggerWidth', triggerWidth, 'triggerHeight', triggerHeight );
-		
 
 		// Get arrow dimensions.
 		let arrowHeight: number = 0;
@@ -88,15 +104,15 @@ export class TPTooltip extends HTMLElement {
 		}
 
 		// Determine the vertical position of this tooltip.
-		if ( triggerTopPosition > tooltipHeight + this.trigger.offset + arrowHeight ) {
+		if ( triggerTopPosition > tooltipHeight + this.offset + arrowHeight ) {
 			// There is enough space on top of trigger element, so place popover above the trigger element.
-			this.style.marginTop = `${ triggerTopPosition - tooltipHeight - this.trigger.offset - ( arrowHeight / 2 ) }px`;
+			this.style.marginTop = `${ triggerTopPosition - tooltipHeight - this.offset - ( arrowHeight / 2 ) }px`;
 
 			// Set arrow placement on bottom of popover
 			arrow?.setAttribute( 'position', 'bottom' );
 		} else {
 			// There is not enough space on top of trigger element, so place popover below the trigger element.
-			this.style.top = `${ triggerTopPosition + triggerHeight + this.trigger.offset + ( arrowHeight / 2 ) }px`;
+			this.style.marginTop = `${ triggerTopPosition + triggerHeight + this.offset + ( arrowHeight / 2 ) }px`;
 
 			// Set arrow placement on top of popover
 			arrow?.setAttribute( 'position', 'top' );
@@ -104,7 +120,7 @@ export class TPTooltip extends HTMLElement {
 
 		// Determine the horizontal position of this tooltip.
 		if ( triggerLeftPosition + ( triggerWidth / 2 ) > ( tooltipWidth / 2 ) ) {
-			this.style.left = `${ triggerLeftPosition + ( triggerWidth / 2 ) - ( tooltipWidth / 2 ) }px`;
+			this.style.marginLeft = `${ triggerLeftPosition + ( triggerWidth / 2 ) - ( tooltipWidth / 2 ) }px`;
 		}
 	}
 
