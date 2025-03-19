@@ -20,26 +20,6 @@ export class TPTooltipTrigger extends HTMLElement {
 	}
 
 	/**
-	 * Get offset.
-	 */
-	get offset(): number {
-		// Get the offset.
-		return parseInt( this.getAttribute( 'offset' ) ?? '0' );
-	}
-
-	/**
-	 * Set offset.
-	 */
-	set offset( offset: number ) {
-		// Set or remove offset.
-		if ( ! offset ) {
-			this.removeAttribute( 'offset' );
-		} else {
-			this.setAttribute( 'offset', offset.toString() );
-		}
-	}
-
-	/**
 	 * Show the tooltip.
 	 */
 	showTooltip(): void {

@@ -28,11 +28,11 @@
 	<main>
 
 		<div>
-			<tp-tooltip id="anchor-tag-tooltip">
+			<tp-tooltip id="anchor-tag-tooltip" style="width: 400px;">
 				<tp-tooltip-content>
 					<slot></slot>
-					<tp-tooltip-arrow></tp-tooltip-arrow>
 				</tp-tooltip-content>
+				<tp-tooltip-arrow style="width: 20px; height: 20px; background-color: blue;"></tp-tooltip-arrow>
 			</tp-tooltip>
 			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero excepturi, esse aperiam omnis voluptatem 
 			   et perspiciatis quas nostrum. Modi velit repellat labore illo, laudantium eaque, ea esse tempora earum 
@@ -87,11 +87,11 @@
 		<br/>
 
 		<section>
-			<tp-tooltip id="card-tooltip">
+			<tp-tooltip offSet="10" id="card-tooltip" style="width: 260px;">
 				<tp-tooltip-content>
 					<slot></slot>
-					<tp-tooltip-arrow></tp-tooltip-arrow>
 				</tp-tooltip-content>
+				<tp-tooltip-arrow style="width: 15px; height: 15px; background-color: orange;"></tp-tooltip-arrow>
 			</tp-tooltip>
 			<div style="display: flex; flex-wrap: wrap; justify-content: space-around; row-gap: 20px;">
 				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
@@ -108,8 +108,7 @@
 						</div>
 					</tp-tooltip-trigger>
 					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
-				</article>
-				
+				</article>	
 				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
 					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
 					<tp-tooltip-trigger tooltip="card-tooltip">
@@ -185,7 +184,6 @@
 					</tp-tooltip-trigger>
 					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
 				</article>
-
 			</div>
 		</section>
 
