@@ -94,6 +94,9 @@ export class TPTooltip extends HTMLElement {
 		// Get position and coordinates of the trigger.
 		const { x: triggerLeftPosition, y: triggerTopPosition, width: triggerWidth, height: triggerHeight } = this.trigger.getBoundingClientRect();
 
+		// Trigger center from left edge of screen.
+		const triggerCenterPosition = triggerLeftPosition + ( triggerWidth / 2 );
+
 		// Get arrow dimensions.
 		let arrowHeight: number = 0;
 		const arrow: TPTooltipArrow | null = this.querySelector( 'tp-tooltip-arrow' );
@@ -119,8 +122,26 @@ export class TPTooltip extends HTMLElement {
 		}
 
 		// Determine the horizontal position of this tooltip.
-		if ( triggerLeftPosition + ( triggerWidth / 2 ) > ( tooltipWidth / 2 ) ) {
+		if ( triggerCenterPosition < ( tooltipWidth / 2 ) ) {
+			// There is not enough space on left of trigger element, so place popover at the left edge of the screen.
+			this.style.marginLeft = '0px';
+		} else if ( window.innerWidth - triggerCenterPosition < ( tooltipWidth / 2 ) ) {
+			// There is not enough space on right of trigger element, so place popover at the right edge of the screen.
+			this.style.marginLeft = `${ window.innerWidth - tooltipWidth }px`;
+		} else {
+			// There is enough space on both sides of trigger element, so place popover at the center of the trigger element.
 			this.style.marginLeft = `${ triggerLeftPosition + ( triggerWidth / 2 ) - ( tooltipWidth / 2 ) }px`;
+		}
+
+		// Get left position of the tooltip.
+		const { left: tooltipLeftPosition } = this.getBoundingClientRect();
+
+		// Percentage the arrow should be moved from left edge of the tooltip.
+		const arrowPosition = ( ( triggerCenterPosition - tooltipLeftPosition ) / tooltipWidth ) * 100;
+
+		// Set the arrow position.
+		if ( arrow ) {
+			arrow.style.left = `${ arrowPosition }%`;
 		}
 	}
 
