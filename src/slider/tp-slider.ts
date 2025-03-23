@@ -223,7 +223,7 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// Get next slide index by adding minimum of step or remaining number of slides.
-		const nextSlideIndex: number = Math.min( this.currentSlideIndex + this.step, totalSlides - this.perView + 1 )
+		const nextSlideIndex: number = Math.min( this.currentSlideIndex + this.step, totalSlides - this.perView + 1 );
 
 		// Check if the next slide step is not taking it beyond the last slide.
 		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
@@ -239,9 +239,6 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
-		// Initialize total slides variable.
-		const totalSlides: number = this.getTotalSlides();
-
 		// Check if we are at the first slide.
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
@@ -253,13 +250,16 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
+		// Initialize total slides variable.
+		const totalSlides: number = this.getTotalSlides();
+
 		// Check if we don't have round of number of slides.
-		if ( totalSlides / this.step !=  Math.round(totalSlides / this.step) ) {
+		if ( totalSlides / this.step !== Math.round( totalSlides / this.step ) ) {
 			// Get total possible groups based on total slides.
 			const totalGroups: number = Math.ceil( totalSlides / this.step );
 
 			// Checking in which group we are currently.
-			const currentGroup: number = this.currentSlideIndex + this.step - 1 >= totalSlides  ? totalGroups : Math.ceil( this.currentSlideIndex / this.step );
+			const currentGroup: number = this.currentSlideIndex + this.step - 1 >= totalSlides ? totalGroups : Math.ceil( this.currentSlideIndex / this.step );
 
 			// Setting Previous slide based on groups.
 			const previousSlideNumber: number = currentGroup === totalGroups ? this.currentSlideIndex - this.step + 1 : this.currentSlideIndex - this.step;
@@ -420,7 +420,7 @@ export class TPSliderElement extends HTMLElement {
 				navItem.removeAttribute( 'current' );
 
 				// Make Groups based on perView.
-				const totalGroups = Math.ceil( totalSlides / this.perView  );
+				const totalGroups = Math.ceil( totalSlides / this.perView );
 
 				// Get Round of Index.
 				const groupIndex = Math.round( ( this.currentSlideIndex - 1 ) / this.step );
@@ -428,11 +428,11 @@ export class TPSliderElement extends HTMLElement {
 				// Update current attribute after considering step.
 				if ( groupIndex === index ) {
 					navItem.setAttribute( 'current', 'yes' );
-				} else if (  ( index === totalGroups - 1 && this.currentSlideIndex + this.perView - 1 >= totalSlides ) ) {
+				} else if ( ( index === totalGroups - 1 && this.currentSlideIndex + this.perView - 1 >= totalSlides ) ) {
 					navItem.setAttribute( 'current', 'yes' );
 
 					// Remove current index from last 2nd item.
-					allItems[index-1]?.removeAttribute( 'current' );
+					allItems[ index - 1 ]?.removeAttribute( 'current' );
 				}
 			} );
 		}
