@@ -223,7 +223,7 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// Get next slide index by adding minimum of step or remaining number of slides.
-		const nextSlideIndex: number = this.currentSlideIndex + Math.min( this.step, totalSlides - this.currentSlideIndex - this.perView + 1 );
+		const nextSlideIndex: number = Math.min( this.currentSlideIndex + this.step, totalSlides - this.perView + 1 )
 
 		// Check if the next slide step is not taking it beyond the last slide.
 		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
