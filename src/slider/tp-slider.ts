@@ -174,6 +174,7 @@ export class TPSliderElement extends HTMLElement {
 
 	/**
 	 * Get All Groups.
+	 *
 	 * @return {number} Total group.
 	 */
 	get totalPosibleGroups(): number {
