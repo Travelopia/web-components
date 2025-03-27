@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Tooltip</title>
+
+	<link rel="stylesheet" href="../../dist/tooltip/style.css" media="all">
+	<script type="module" src="../../dist/tooltip/index.js"></script>
+</head>
+
+<body>
+	<main>
+
+		<div>
+			<tp-tooltip id="anchor-tag-tooltip" style="width: 400px;">
+				<tp-tooltip-content>
+					<slot></slot>
+				</tp-tooltip-content>
+				<tp-tooltip-arrow></tp-tooltip-arrow>
+			</tp-tooltip>
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero excepturi, esse aperiam omnis voluptatem
+			   et perspiciatis quas nostrum. Modi velit repellat labore illo, laudantium eaque, ea esse tempora earum
+			   natus ullam repudiandae voluptatibus ut perferendis nobis. Nesciunt, possimus accusamus sed dolor
+			   exercitationem repellendus sunt perspiciatis. Nulla saepe assumenda facere. Aliquid et eum accusantium
+			   velit nisi rem, eaque, repudiandae voluptas culpa dolor hic at aperiam dignissimos voluptatum quia,
+			   architecto incidunt! Unde ipsa maiores maxime repellendus, voluptatem assumenda doloribus fugit
+			   necessitatibus ipsam soluta laboriosam voluptas optio a tenetur eveniet nostrum debitis hic, beatae
+			   eos asperiores repellat consectetur animi est dolor? Quis, recusandae neque deserunt asperiores culpa
+			    <tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio odit, dolor recusandae veniam est molestiae!
+						</p>
+					</template>
+					<a href="#">Paragraph link 1</a>
+		   		</tp-tooltip-trigger>
+			   exercitationem autem consequatur, sequi saepe blanditiis, laudantium vel? Voluptates pariatur ducimus
+			   corporis magni. Placeat, fugiat, veniam incidunt dolorum numquam itaque non inventore, aliquam laboriosam
+			   dolor mollitia ipsa! Nemo voluptas, animi corrupti facere perspiciatis commodi voluptatibus sint saepe
+			   suscipit? Molestiae temporibus recusandae delectus molestias, ea, tempora unde, sapiente quae reiciendis
+			   suscipit est? Nemo enim eius suscipit possimus eum debitis adipisci officiis, dolor, iste autem delectus
+			   quam illum ut asperiores expedita impedit ad atque repellat aut quisquam doloremque! Nihil magnam harum
+				<tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, tenetur!
+						</p>
+					</template>
+					<a href="#">Paragraph link 2</a>
+				</tp-tooltip-trigger>
+			   dolores in neque perspiciatis! Velit, repellendus sapiente cumque ullam optio molestias ipsum doloribus
+			   blanditiis. Eum at quibusdam voluptatem fugiat facere omnis ipsam est obcaecati provident laborum dolores
+			   exercitationem aspernatur saepe cumque animi eligendi corrupti, aliquid tenetur. Similique quam accusantium
+			   numquam a, aliquam libero debitis quibusdam consequatur modi doloremque, exercitationem eum temporibus quo
+			   quia velit repellendus, aspernatur eos. Optio exercitationem dolore ipsum alias est quas velit eaque autem
+			   ducim</tp-tooltip-trigger> us. Iusto fugit reiciendis nisi fugiat deserunt, quibusdam doloribus. Eligendi a officia quas totam
+			   adipisci minus voluptatibus dignissimos sed nostrum. Consequatur eos est illo tempore odit, adipisci itaque
+			   	<tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+						</p>
+					</template>
+					<a href="#">Paragraph link 3</a>
+				</tp-tooltip-trigger>
+			   magnam, obcaecati ullam possimus ab sint beatae, animi sed mollitia sit perspiciatis eligendi! Tenetur minus
+			   vero soluta amet excepturi sit quia animi.
+			</p>
+		</div>
+
+		<br/>
+
+		<section>
+			<tp-tooltip offSet="10" id="card-tooltip" style="width: 260px;">
+				<tp-tooltip-content>
+					<slot></slot>
+				</tp-tooltip-content>
+				<tp-tooltip-arrow></tp-tooltip-arrow>
+			</tp-tooltip>
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-around; row-gap: 20px;">
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
+					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
+					<tp-tooltip-trigger tooltip="card-tooltip">
+						<template>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+							</p>
+						</template>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
+							<h2>Card Title   </h2>
+							<i style="margin-right: 20px;">i</i>
+						</div>
+					</tp-tooltip-trigger>
+					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
+				</article>
+			</div>
+		</section>
+
+	</main>
+</body>
+</html>
