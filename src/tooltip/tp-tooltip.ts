@@ -156,6 +156,9 @@ export class TPTooltip extends HTMLElement {
 		this.showPopover();
 		this.setPosition();
 		this.setAttribute( 'show', 'yes' );
+
+		// Trigger event.
+		this.dispatchEvent( new CustomEvent( 'show' ) );
 	}
 
 	/**
@@ -165,5 +168,8 @@ export class TPTooltip extends HTMLElement {
 		// Hide the tooltip.
 		this.hidePopover();
 		this.removeAttribute( 'show' );
+
+		// Trigger event.
+		this.dispatchEvent( new CustomEvent( 'hide' ) );
 	}
 }
