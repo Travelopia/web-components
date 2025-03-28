@@ -173,6 +173,19 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Get All Groups.
+	 *
+	 * @return {number} Total group.
+	 */
+	get totalPosibleGroups(): number {
+		// Get total slides.
+		const totalSlides: number = this.getTotalSlides();
+
+		// Return total number of group based on steps.
+		return Math.ceil( totalSlides / this.step );
+	}
+
+	/**
 	 * Get total number of slides.
 	 *
 	 * @return {number} Total slides.
@@ -223,7 +236,7 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// Get next slide index by adding minimum of step or remaining number of slides.
-		const nextSlideIndex: number = this.currentSlideIndex + Math.min( this.step, totalSlides - this.currentSlideIndex - this.perView + 1 );
+		const nextSlideIndex: number = Math.min( this.currentSlideIndex + this.step, totalSlides - this.perView + 1 );
 
 		// Check if the next slide step is not taking it beyond the last slide.
 		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
@@ -250,14 +263,33 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Get previous slide index.
-		const previousSlideNumber: number = this.currentSlideIndex - this.step;
+		// Initialize total slides variable.
+		const totalSlides: number = this.getTotalSlides();
 
-		// Check if the previous slide step is not taking it beyond the first slide.
-		if ( previousSlideNumber > 1 ) {
-			this.setCurrentSlide( previousSlideNumber );
+		// Check if we don't have round of number of slides.
+		if ( totalSlides / this.step !== Math.round( totalSlides / this.step ) ) {
+			// Checking in which group we are currently.
+			const currentGroup: number = this.currentSlideIndex + this.step - 1 >= totalSlides ? this.totalPosibleGroups : Math.ceil( this.currentSlideIndex / this.step );
+
+			// Setting Previous slide based on groups.
+			const previousSlideNumber: number = currentGroup === this.totalPosibleGroups ? this.currentSlideIndex - this.step + 1 : this.currentSlideIndex - this.step;
+
+			// Check if the previous slide step is not taking it beyond the first slide.
+			if ( previousSlideNumber > 1 ) {
+				this.setCurrentSlide( previousSlideNumber );
+			} else {
+				this.setCurrentSlide( 1 );
+			}
 		} else {
-			this.setCurrentSlide( 1 );
+			// Get previous slide index.
+			const previousSlideNumber: number = this.currentSlideIndex - this.step;
+
+			// Check if the previous slide step is not taking it beyond the first slide.
+			if ( previousSlideNumber > 1 ) {
+				this.setCurrentSlide( previousSlideNumber );
+			} else {
+				this.setCurrentSlide( 1 );
+			}
 		}
 	}
 
@@ -372,6 +404,9 @@ export class TPSliderElement extends HTMLElement {
 		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
 		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
 
+		// Initialize total slides variable.
+		const totalSlides: number = this.getTotalSlides();
+
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
 
@@ -389,12 +424,22 @@ export class TPSliderElement extends HTMLElement {
 
 		// Set current slider nav item.
 		if ( sliderNavItems ) {
-			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
+			// Add current attribute.
+			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number, allItems: NodeListOf<TPSliderNavItemElement> ): void => {
+				// Remove current attribute.
+				navItem.removeAttribute( 'current' );
+
+				// Get Round of Index.
+				const groupIndex = Math.round( ( this.currentSlideIndex - 1 ) / this.step );
+
 				// Update current attribute after considering step.
-				if ( Math.ceil( this.currentSlideIndex / this.step ) - 1 === index ) {
+				if ( groupIndex === index ) {
 					navItem.setAttribute( 'current', 'yes' );
-				} else {
-					navItem.removeAttribute( 'current' );
+				} else if ( ( index === this.totalPosibleGroups - 1 && this.currentSlideIndex + this.perView - 1 >= totalSlides ) ) {
+					navItem.setAttribute( 'current', 'yes' );
+
+					// Remove current index from last 2nd item.
+					allItems[ index - 1 ]?.removeAttribute( 'current' );
 				}
 			} );
 		}
