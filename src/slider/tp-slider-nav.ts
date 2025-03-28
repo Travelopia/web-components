@@ -1,8 +1,4 @@
 /**
- * TP Slider Nav.
- */
-
-/**
  * Internal dependencies.
  */
 import { TPSliderElement } from './tp-slider';
@@ -26,7 +22,7 @@ export class TPSliderNavElement extends HTMLElement {
 
 		// Initialize properties.
 		this.template = this.querySelector( 'template' );
-		this.slider   = this.closest<TPSliderElement>('tp-slider');
+		this.slider   = this.closest('tp-slider');
 
 		// Apply template if slider is found
 		this.setTemplate();
