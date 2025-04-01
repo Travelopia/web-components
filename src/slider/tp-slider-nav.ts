@@ -30,7 +30,7 @@ export class TPSliderNavElement extends HTMLElement {
 	setTemplate(): void {
 		// Initialize properties.
 		this.template = this.querySelector( 'template' );
-		this.slider   = this.closest('tp-slider');
+		this.slider = this.closest( 'tp-slider' );
 
 		// Bail if no template.
 		if ( ! this.template || ! this.slider ) {
@@ -39,7 +39,7 @@ export class TPSliderNavElement extends HTMLElement {
 		}
 
 		// Total slides.
-		const step        = Number( this.slider?.getAttribute( 'step' ) ? Number( this.slider?.getAttribute( 'per-view' ) ?? '1' ) : 1 );
+		const step = Number( this.slider?.getAttribute( 'step' ) ? Number( this.slider?.getAttribute( 'per-view' ) ?? '1' ) : 1 );
 		const totalSlides = Number( this.slider?.getAttribute( 'total' ) ?? 0 );
 
 		// Calculate the number of navigation items.
