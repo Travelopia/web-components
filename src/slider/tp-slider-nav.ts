@@ -20,21 +20,18 @@ export class TPSliderNavElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
-		// Initialize properties.
-		this.template = this.querySelector( 'template' );
-		this.slider   = this.closest('tp-slider');
-
 		// Apply template if slider is found
 		this.setTemplate();
-
-		// Add event listener.
-		this.slider?.addEventListener( 'template-set', this.setTemplate.bind( this ) );
 	}
 
 	/**
 	 * Set the template.
 	 */
 	setTemplate(): void {
+		// Initialize properties.
+		this.template = this.querySelector( 'template' );
+		this.slider   = this.closest('tp-slider');
+
 		// Bail if no template.
 		if ( ! this.template || ! this.slider ) {
 			// Exit.
@@ -42,21 +39,19 @@ export class TPSliderNavElement extends HTMLElement {
 		}
 
 		// Total slides.
+		const step        = Number( this.slider?.getAttribute( 'step' ) ? Number( this.slider?.getAttribute( 'per-view' ) ?? '1' ) : 1 );
 		const totalSlides = Number( this.slider?.getAttribute( 'total' ) ?? 0 );
+
+		// Calculate the number of navigation items.
+		const totalNavItems = Math.ceil( totalSlides / step );
 
 		// Clear the navigation.
 		this.innerHTML = '';
 
 		// Append the navigation items.
-		for ( let i = 1; i <= totalSlides; i++ ) {
+		for ( let i = 1; i <= totalNavItems; i++ ) {
 			// Clone the template.
 			const navItem = this.template.content.cloneNode( true ) as HTMLTemplateElement;
-
-			// Find the button inside and set its text.
-			const button = navItem.querySelector('button');
-			if ( button ) {
-				button.textContent = `${i}`; // Add slide number in button
-			}
 
 			// Append the navigation item.
 			this.appendChild( navItem );
