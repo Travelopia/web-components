@@ -319,7 +319,10 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// First, update the height.
-		this.updateHeight();
+		setTimeout( () => {
+			// Update Height.
+			this.updateHeight();
+		}, 0 );
 
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
