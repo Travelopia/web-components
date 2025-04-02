@@ -4,6 +4,7 @@
 import { TPSliderSlidesElement } from './tp-slider-slides';
 import { TPSliderSlideElement } from './tp-slider-slide';
 import { TPSliderCountElement } from './tp-slider-count';
+import { TPSliderNavElement } from './tp-slider-nav';
 import { TPSliderNavItemElement } from './tp-slider-nav-item';
 import { TPSliderArrowElement } from './tp-slider-arrow';
 
@@ -367,7 +368,7 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	update(): void {
 		// Get sub-components.
-		const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
+		const sliderNav: TPSliderNavElement | null = this.querySelector( 'tp-slider-nav' );
 		const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
 		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
 		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
@@ -386,6 +387,12 @@ export class TPSliderElement extends HTMLElement {
 				}
 			} );
 		}
+
+		// First, set the template for the slider nav.
+		sliderNav?.updateNavItems();
+
+		// Once the template has been set, query the slider nav items.
+		const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
 
 		// Set current slider nav item.
 		if ( sliderNavItems ) {

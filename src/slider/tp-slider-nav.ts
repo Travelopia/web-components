@@ -11,7 +11,7 @@ export class TPSliderNavElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected template: HTMLTemplateElement | null = null;
-	protected slider : TPSliderElement | null = null;
+	protected slider: TPSliderElement | null = null;
 
 	/**
 	 * Constructor.
@@ -20,18 +20,15 @@ export class TPSliderNavElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
-		// Apply template if slider is found
-		this.setTemplate();
+		// Get elements.
+		this.template = this.querySelector( 'template' );
+		this.slider = this.closest( 'tp-slider' );
 	}
 
 	/**
-	 * Set the template.
+	 * Update nav items based on template.
 	 */
-	setTemplate(): void {
-		// Initialize properties.
-		this.template = this.querySelector( 'template' );
-		this.slider = this.closest( 'tp-slider' );
-
+	public updateNavItems(): void {
 		// Bail if no template.
 		if ( ! this.template || ! this.slider ) {
 			// Exit.
@@ -51,10 +48,12 @@ export class TPSliderNavElement extends HTMLElement {
 		// Append the navigation items.
 		for ( let i = 1; i <= totalNavItems; i++ ) {
 			// Clone the template.
-			const navItem = this.template.content.cloneNode( true ) as HTMLTemplateElement;
+			const navItem: Node = this.template.content.cloneNode( true );
+			const div: HTMLDivElement = document.createElement( 'div' );
+			div.appendChild( navItem );
 
 			// Append the navigation item.
-			this.appendChild( navItem );
+			this.innerHTML += div.innerHTML.replace( '$index', i.toString() );
 		}
 	}
 }
