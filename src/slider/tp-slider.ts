@@ -205,6 +205,19 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Get All Groups.
+	 *
+	 * @return {number} Total group.
+	 */
+	totalSlidesGroups(): number {
+		// Get total slides.
+		const totalSlides: number = this.getTotalSlides();
+
+		// Return total number of group based on steps.
+		return Math.ceil( totalSlides / this.step );
+	}
+
+	/**
 	 * Navigate to the next slide.
 	 */
 	next(): void {
