@@ -407,6 +407,10 @@ export class TPSliderElement extends HTMLElement {
 		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
 		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
 
+		// Total slides variable and Total posible group.
+		const totalSlides: number = this.getTotalSlides();
+		const totalPosibleGroups: number = this.totalSlidesGroups();
+
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
 
@@ -430,12 +434,22 @@ export class TPSliderElement extends HTMLElement {
 
 		// Set current slider nav item.
 		if ( sliderNavItems ) {
-			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
-				// Update current attribute after considering step.
-				if ( Math.ceil( this.currentSlideIndex / this.step ) - 1 === index ) {
+			// Add current attribute.
+			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number, allItems: NodeListOf<TPSliderNavItemElement> ): void => {
+				// Remove current attribute.
+				navItem.removeAttribute( 'current' );
+
+				// Get Round of Index.
+				const groupIndex = Math.round( ( this.currentSlideIndex - 1 ) / this.step );
+
+				// Check if index and groups are equal to update active dot.
+				if ( groupIndex === index ) {
 					navItem.setAttribute( 'current', 'yes' );
-				} else {
-					navItem.removeAttribute( 'current' );
+				} else if ( ( index === totalPosibleGroups - 1 && this.currentSlideIndex + this.step - 1 >= totalSlides ) ) {
+					navItem.setAttribute( 'current', 'yes' );
+
+					// Remove current index from last 2nd item.
+					allItems[ index - 1 ]?.removeAttribute( 'current' );
 				}
 			} );
 		}
