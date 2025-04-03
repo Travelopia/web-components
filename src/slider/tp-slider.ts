@@ -253,12 +253,6 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
-		// Initialize total slides variable.
-		const totalSlides: number = this.getTotalSlides();
-
-		// Total Posible groups.
-		const totalPosibleGroups: number = this.totalSlidesGroups();
-
 		// Check if we are at the first slide.
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
@@ -270,6 +264,12 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
+		// Initialize total slides variable.
+		const totalSlides: number = this.getTotalSlides();
+
+		// Total Posible groups.
+		const totalPosibleGroups: number = this.totalSlidesGroups();
+
 		// Check if we don't have round of number of slides.
 		if ( totalSlides / this.step !== Math.round( totalSlides / this.step ) ) {
 			// Checking in which group we are currently.
@@ -277,6 +277,7 @@ export class TPSliderElement extends HTMLElement {
 
 			// Setting Previous slide based on groups.
 			const previousSlideNumber: number = currentGroup === totalPosibleGroups ? this.currentSlideIndex - this.step + 1 : this.currentSlideIndex - this.step;
+
 			// Check if the previous slide step is not taking it beyond the first slide.
 			if ( previousSlideNumber > 1 ) {
 				this.setCurrentSlide( previousSlideNumber );
@@ -360,17 +361,17 @@ export class TPSliderElement extends HTMLElement {
 
 		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
 		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
-			const lastSlide = slides[slides.length - 1];
+			const lastSlide = slides[ slides.length - 1 ];
 			const lastSlideRightEdge = lastSlide.offsetLeft + lastSlide.getBoundingClientRect().width;
 			const containerWidth = slidesContainer.offsetWidth;
+			let newLeft = slides[ this.currentSlideIndex - 1 ].offsetLeft;
 
-			let newLeft = slides[this.currentSlideIndex - 1].offsetLeft;
 			// If the last slide's right edge exceeds the container width, adjust the left position
 			if ( this.getTotalSlides() - this.perView + 1 === this.currentSlideIndex ) {
-				if (lastSlideRightEdge > containerWidth) {
-					console.log( "In" )
+				// Check if last slide is hidden.
+				if ( lastSlideRightEdge > containerWidth ) {
 					const overflow = lastSlideRightEdge - containerWidth;
-					newLeft = Math.max(newLeft, overflow);
+					newLeft = Math.max( newLeft, overflow );
 				}
 			}
 
