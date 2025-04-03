@@ -53,9 +53,18 @@ export class TPSliderNavItemElement extends HTMLElement {
 
 		// No, find it in the navigation.
 		const slideNav: TPSliderNavElement | null = this.closest( 'tp-slider-nav' );
-		const step = this.slider?.step;
+		const step = this.slider?.step || 1;
+
+		// current dot position.
+		const currentSlideNavItem = Array.from( slideNav?.children ?? [] ).indexOf( this );
+
+		// Check if the nav dot is equal to total slides groups.
+		if ( currentSlideNavItem + 1 === this.slider?.totalSlidesGroups() ) {
+			// Return last posible slide group.
+			return this.slider?.getTotalSlides() - step + 1;
+		}
 
 		// Return index of this element considering the step value.
-		return ( Array.from( slideNav?.children ?? [] ).indexOf( this ) * ( step ?? 1 ) ) + 1;
+		return ( currentSlideNavItem * step ) + 1;
 	}
 }
