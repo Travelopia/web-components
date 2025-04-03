@@ -360,8 +360,22 @@ export class TPSliderElement extends HTMLElement {
 
 		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
 		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
-			// Yes, it is. So slide to the current slide.
-			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
+			const lastSlide = slides[slides.length - 1];
+			const lastSlideRightEdge = lastSlide.offsetLeft + lastSlide.getBoundingClientRect().width;
+			const containerWidth = slidesContainer.offsetWidth;
+
+			let newLeft = slides[this.currentSlideIndex - 1].offsetLeft;
+			// If the last slide's right edge exceeds the container width, adjust the left position
+			if ( this.getTotalSlides() - this.perView + 1 === this.currentSlideIndex ) {
+				if (lastSlideRightEdge > containerWidth) {
+					console.log( "In" )
+					const overflow = lastSlideRightEdge - containerWidth;
+					newLeft = Math.max(newLeft, overflow);
+				}
+			}
+
+			// Slide to the current slide.
+			slidesContainer.style.left = `-${ newLeft }px`;
 		}
 	}
 
