@@ -319,8 +319,9 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// First, update the height.
+
 		// Yield to main thread to fix a bug in Safari 16.
-		setTimeout( this.updateHeight.bind( this ), 10 );
+		setTimeout( () => this.updateHeight(), 0 );
 
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
