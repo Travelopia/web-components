@@ -60,7 +60,7 @@ export class TPTabsElement extends HTMLElement {
 	 */
 	update(): void {
 		// Get current tab.
-		const currentTab: string = this.getAttribute( 'current-tab' ) ?? '';
+		const currentTab: string = this.currentTab;
 
 		// Check if current tab exists.
 		if ( ! this.querySelector( `tp-tabs-tab[id="${ currentTab }"]` ) ) {
@@ -114,6 +114,16 @@ export class TPTabsElement extends HTMLElement {
 
 		// Set current associated tab.
 		this.setCurrentTab();
+	}
+
+	/**
+	 * Get current tab.
+	 *
+	 * @return {string} Current tab ID.
+	 */
+	get currentTab(): string {
+		// Return the current tab ID.
+		return this.getAttribute( 'current-tab' ) ?? '';
 	}
 
 	/**
