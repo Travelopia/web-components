@@ -273,30 +273,26 @@ export class TPSliderElement extends HTMLElement {
 		// Total Posible groups.
 		const totalPosibleGroups: number = this.getTotalSlidesGroupCount();
 
-		// Check if we don't have round of number of slides.
+		// Initialize previous slide number.
+		let previousSlideNumber: number = 0;
+
+		// Check if total slides are not multiple of step.
 		if ( totalSlides / this.step !== Math.round( totalSlides / this.step ) ) {
 			// Checking in which group we are currently.
 			const currentGroup: number = this.currentSlideIndex + this.step - 1 >= totalSlides ? totalPosibleGroups : Math.ceil( this.currentSlideIndex / this.step );
 
 			// Setting Previous slide based on groups.
-			const previousSlideNumber: number = currentGroup === totalPosibleGroups ? this.currentSlideIndex - this.step + 1 : this.currentSlideIndex - this.step;
-
-			// Check if the previous slide step is not taking it beyond the first slide.
-			if ( previousSlideNumber > 1 ) {
-				this.setCurrentSlide( previousSlideNumber );
-			} else {
-				this.setCurrentSlide( 1 );
-			}
+			previousSlideNumber = currentGroup === totalPosibleGroups ? this.currentSlideIndex - this.step + 1 : this.currentSlideIndex - this.step;
 		} else {
-			// Get previous slide index.
-			const previousSlideNumber: number = this.currentSlideIndex - this.step;
+			// Check if we are in the last group.
+			previousSlideNumber = this.currentSlideIndex - this.step;
+		}
 
-			// Check if the previous slide step is not taking it beyond the first slide.
-			if ( previousSlideNumber > 1 ) {
-				this.setCurrentSlide( previousSlideNumber );
-			} else {
-				this.setCurrentSlide( 1 );
-			}
+		// Check if the previous slide step is not taking it beyond the first slide.
+		if ( previousSlideNumber > 1 ) {
+			this.setCurrentSlide( previousSlideNumber );
+		} else {
+			this.setCurrentSlide( 1 );
 		}
 	}
 
