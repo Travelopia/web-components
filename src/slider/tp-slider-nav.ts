@@ -39,7 +39,7 @@ export class TPSliderNavElement extends HTMLElement {
 		const totalSlides: number = this.slider?.getTotalSlides();
 
 		// Calculate the number of navigation items.
-		const totalNavItems: number = this.slider?.perView > this.slider?.step ? Math.ceil( ( totalSlides - this.slider?.perView ) / this.slider?.step ) + 1 : this.slider?.totalSlidesGroups();
+		const totalNavItems: number = this.slider?.perView > this.slider?.step ? Math.ceil( ( totalSlides - this.slider?.perView ) / this.slider?.step ) + 1 : this.slider?.getTotalSlidesGroupCount();
 
 		// Clear the navigation.
 		this.innerHTML = '';

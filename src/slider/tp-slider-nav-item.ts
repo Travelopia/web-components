@@ -59,7 +59,7 @@ export class TPSliderNavItemElement extends HTMLElement {
 		const currentSlideNavItem = Array.from( slideNav?.children ?? [] ).indexOf( this );
 
 		// Check if the nav dot is equal to total slides groups.
-		if ( currentSlideNavItem + 1 === this.slider?.totalSlidesGroups() ) {
+		if ( currentSlideNavItem + 1 === this.slider?.getTotalSlidesGroupCount() ) {
 			// Return last posible slide group.
 			return this.slider?.getTotalSlides() - step + 1;
 		}
