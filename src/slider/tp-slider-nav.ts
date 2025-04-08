@@ -42,8 +42,8 @@ export class TPSliderNavElement extends HTMLElement {
 		let totalNavItems: number;
 
 		// Update the total number of navigation items based on the slider's step and perView. considering perView can not be grater than the step. As if perView is greater than step, then we end up with hiding some slides on each shift.
-		// Scenario 1: If the slider's step is less than the number of slides per view, we need to calculate the total number of navigation items.
 		if ( this.slider?.perView > this.slider?.step ) {
+			// Scenario 1: If the slider's step is less than the number of slides per view, we need to calculate the total number of navigation items.
 			totalNavItems = Math.ceil( ( totalSlides - this.slider?.perView ) / this.slider?.step ) + 1;
 		} else {
 			// Scenario 2: we can create nav items equal to number of slides group.

@@ -222,7 +222,6 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the next slide.
 	 */
 	next(): void {
-		console.log(this.getTotalSlidesGroupCount());
 		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
 
@@ -258,7 +257,6 @@ export class TPSliderElement extends HTMLElement {
 		// Check if we are at the first slide.
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
-			console.log( "total Slides: ", this.getTotalSlides(), "Per View: ", this.perView )
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
 				this.setCurrentSlide( this.getTotalSlides() - this.perView + 1 );
 			}
@@ -312,8 +310,6 @@ export class TPSliderElement extends HTMLElement {
 	 * @param {number} index Slide index.
 	 */
 	setCurrentSlide( index: number ): void {
-
-		console.log("Index: ", index);
 		// Check if slide index is valid.
 		if ( index > this.getTotalSlides() || index <= 0 ) {
 			// Stop! It's not valid.
@@ -454,7 +450,6 @@ export class TPSliderElement extends HTMLElement {
 			sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number, allItems: NodeListOf<TPSliderNavItemElement> ): void => {
 				// Remove current attribute.
 				navItem.removeAttribute( 'current' );
-				console.log( "currentGroup", (index * this.step) + 1);
 
 				// Get Round of Index.
 				const groupIndex = Math.round( ( this.currentSlideIndex - 1 ) / this.step );
