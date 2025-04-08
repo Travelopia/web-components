@@ -8,7 +8,8 @@
   "scripts": {
     "build": "webpack --config ./webpack.config.js --mode production --env=production",
     "dev": "webpack --config ./webpack.config.js --mode production --env=development --watch",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "repository": {
     "type": "git",
