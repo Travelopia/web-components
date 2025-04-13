@@ -55,7 +55,10 @@ export class TPSliderNavItemElement extends HTMLElement {
 		const slideNav: TPSliderNavElement | null = this.closest( 'tp-slider-nav' );
 		const step = this.slider?.step;
 
-		// Return index of this element considering the step value.
-		return ( Array.from( slideNav?.children ?? [] ).indexOf( this ) * ( step ?? 1 ) ) + 1;
+		// Get Current slide number, ensuring it stays within the valid range considering visible slides and navigation step.
+		const currentSlideIndex: number = Math.min( ( ( this.slider?.getTotalSlides() ?? 1 ) - ( this.slider?.perView ?? 1 ) ) + 1, ( Array.from( slideNav?.children ?? [] ).indexOf( this ) * ( step ?? 1 ) ) + 1 );
+
+		// return the index.
+		return currentSlideIndex;
 	}
 }
