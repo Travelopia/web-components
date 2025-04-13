@@ -205,6 +205,20 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Calculates the total number of slides groups in the slider.
+	 * Each group contains a number of slides determined by the `step` property.
+	 *
+	 * @return {number} The total number of slide groups.
+	 */
+	getTotalSlidesGroupCount(): number {
+		// Get total slides.
+		const totalSlides: number = this.getTotalSlides();
+
+		// Return total number of group based on steps.
+		return Math.ceil( totalSlides / this.step );
+	}
+
+	/**
 	 * Navigate to the next slide.
 	 */
 	next(): void {
