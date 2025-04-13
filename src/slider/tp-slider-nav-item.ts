@@ -55,16 +55,9 @@ export class TPSliderNavItemElement extends HTMLElement {
 		const slideNav: TPSliderNavElement | null = this.closest( 'tp-slider-nav' );
 		const step = this.slider?.step || 1;
 
-		// current dot position.
-		const currentSlideNavItem = Array.from( slideNav?.children ?? [] ).indexOf( this );
-
-		// Check if the nav dot is equal to total slides groups.
-		if ( currentSlideNavItem + 1 === this.slider?.getTotalSlidesGroupCount() ) {
-			// Return last posible slide group.
-			return this.slider?.getTotalSlides() - step + 1;
-		}
+		const any: number  = Math.min(( (this.slider?.getTotalSlides() ?? 1) - (this.slider?.perView ?? 1) ) + 1, ( Array.from( slideNav?.children ?? [] ).indexOf( this ) * ( step ?? 1 ) ) + 1);
 
 		// Return index of this element considering the step value.
-		return ( currentSlideNavItem * step ) + 1;
+		return any;
 	}
 }
