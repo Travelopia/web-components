@@ -205,20 +205,6 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
-	 * Calculates the total number of slides groups in the slider.
-	 * Each group contains a number of slides determined by the `step` property.
-	 *
-	 * @return {number} The total number of slide groups.
-	 */
-	getTotalSlidesGroupCount(): number {
-		// Get total slides.
-		const totalSlides: number = this.getTotalSlides();
-
-		// Return total number of group based on steps.
-		return Math.ceil( totalSlides / this.step );
-	}
-
-	/**
 	 * Navigate to the next slide.
 	 */
 	next(): void {
@@ -269,18 +255,16 @@ export class TPSliderElement extends HTMLElement {
 		const totalSlides: number = this.getTotalSlides();
 
 		// Total Posible groups.
-		const totalPosibleGroups: number = this.getTotalSlidesGroupCount();
+		const totalPosibleGroups: number = Math.ceil( totalSlides / this.step );
 
 		// Initialize previous slide number.
 		let previousSlideNumber: number = 0;
 
-		// Check if total slides are not multiple of step.
+		// Checking if total slides are not divisible by step.
 		if ( totalSlides / this.step !== Math.round( totalSlides / this.step ) ) {
 			// Checking in which group we are currently.
 			const currentGroup: number = this.currentSlideIndex + this.step - 1 >= totalSlides ? totalPosibleGroups : Math.ceil( this.currentSlideIndex / this.step );
 
-			// Setting Previous slide based on groups.
-			previousSlideNumber = currentGroup === totalPosibleGroups ? this.currentSlideIndex - this.step + 1 : this.currentSlideIndex - this.step;
 		} else {
 			// Check if we are in the last group.
 			previousSlideNumber = this.currentSlideIndex - this.step;
@@ -409,7 +393,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Total slides variable and Total posible group.
 		const totalSlides: number = this.getTotalSlides();
-		const totalPosibleGroups: number = this.getTotalSlidesGroupCount();
+		const totalPosibleGroups: number = Math.ceil( totalSlides / this.step );
 
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
