@@ -262,9 +262,22 @@ export class TPSliderElement extends HTMLElement {
 
 		// Checking if total slides are not divisible by step.
 		if ( totalSlides / this.step !== Math.round( totalSlides / this.step ) ) {
-			// Checking in which group we are currently.
-			const currentGroup: number = this.currentSlideIndex + this.step - 1 >= totalSlides ? totalPosibleGroups : Math.ceil( this.currentSlideIndex / this.step );
+			// Initialize current group.
+			let currentGroup: number;
 
+			// Check if we are in the last group or in any other.
+			if ( this.currentSlideIndex + this.step - 1 >= totalSlides ) {
+				currentGroup = totalPosibleGroups;
+			} else {
+				currentGroup = Math.ceil( this.currentSlideIndex / this.step );
+			}
+
+			// Update previous slide number based on which group we are in.
+			if ( currentGroup === totalPosibleGroups ) {
+				previousSlideNumber = this.currentSlideIndex - this.step + 1;
+			} else {
+				previousSlideNumber = this.currentSlideIndex - this.step;
+			}
 		} else {
 			// Check if we are in the last group.
 			previousSlideNumber = this.currentSlideIndex - this.step;
