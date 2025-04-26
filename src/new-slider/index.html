@@ -1,48 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TP Slider Example</title>
-    <link rel="stylesheet" href="../../dist/newSlider/style.css">
-    <script type="module" src="../../dist/newSlider/index.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Slider</title>
+
+	<link rel="stylesheet" href="../../dist/newSlider/style.css" media="all">
+	<script type="module" src="../../dist/newSlider/index.js"></script>
+
+	<style>
+		tp-slider-slide {
+			background-color: #eee
+		}
+
+		img {
+			display: block;
+		}
+
+		main {
+			max-width: 600px;
+			margin: 0 auto;
+			padding: 0 20px;
+		}
+	</style>
 </head>
 <body>
-    <h1>TP Slider Example</h1>
-    
-    <tp-slider 
-        swipe-threshold="150" 
-        flexible-height="yes" 
-        infinite="yes" 
-        swipe="yes" 
-        auto-slide-interval="5000"
-        per-view="1"
-        responsive='[
-            {"media":"(min-width: 768px)","per-view":2,"step":2},
-            {"media":"(min-width: 480px)","per-view":1,"step":1,"behaviour":"slide"},
-            {"media":"(min-width: 320px)","per-view":1,"step":1,"behaviour":"fade"}
-        ]'
-    >
-        <tp-slider-arrow direction="previous"><button>Previous</button></tp-slider-arrow>
-        <tp-slider-arrow direction="next"><button>Next</button></tp-slider-arrow>
-        
-        <tp-slider-track>
-            <tp-slider-slides>
-                <tp-slider-slide><img src="https://picsum.photos/800/400?1" alt="Slide 1"></tp-slider-slide>
-                <tp-slider-slide><img src="https://picsum.photos/800/400?2" alt="Slide 2"></tp-slider-slide>
-                <tp-slider-slide><img src="https://picsum.photos/800/400?3" alt="Slide 3"></tp-slider-slide>
-                <tp-slider-slide><img src="https://picsum.photos/800/400?4" alt="Slide 4"></tp-slider-slide>
-            </tp-slider-slides>
-        </tp-slider-track>
-        
-        <tp-slider-nav>
-            <tp-slider-nav-item><button>1</button></tp-slider-nav-item>
-            <tp-slider-nav-item><button>2</button></tp-slider-nav-item>
-            <tp-slider-nav-item><button>3</button></tp-slider-nav-item>
-            <tp-slider-nav-item><button>4</button></tp-slider-nav-item>
-        </tp-slider-nav>
-        
-        <tp-slider-count current="1" total="4" format="$current / $total"></tp-slider-count>
-    </tp-slider>
+	<main>
+		<!--Slider that slides horizontally with responsive settings.-->
+		<tp-slider>
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+		</tp-slider>
+
+		
+	</main>
 </body>
 </html>

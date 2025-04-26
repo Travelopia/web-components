@@ -1,457 +1,375 @@
 /**
- * components/tp-slider.ts - Main slider component that orchestrates the functionality
+ * Internal dependencies.
  */
-export class TPSlider extends HTMLElement {
-	// Properties
-	private currentIndex: number = 0;
-	private autoPlayInterval: number | null = null;
-	private touchStartX: number = 0;
-	private touchEndX: number = 0;
-	private responsiveSettings: any[] = [];
-	private behaviour: string = 'slide'; // 'slide' or 'fade'
 
-	// Elements (will be populated in connectedCallback)
-	private track: HTMLElement | null = null;
-	private slidesContainer: HTMLElement | null = null;
-	private slides: HTMLElement[] = [];
-	private navItems: NodeListOf<HTMLElement> | null = null;
-	private countElement: HTMLElement | null = null;
-	private prevArrow: HTMLElement | null = null;
-	private nextArrow: HTMLElement | null = null;
+import { TPSliderArrowElement } from "./tp-slider-arrow";
+import { TPSliderSlideElement } from "./tp-slider-slide";
+import { TPSliderSlidesElement } from "./tp-slider-slides";
 
-	// Getters for attributes
-	get infiniteScroll(): boolean {
-		return this.hasAttribute( 'infinite' ) && this.getAttribute( 'infinite' ) !== 'no';
-	}
-
-	// TODO: Add comment.
-	get autoSlideInterval(): number {
-		return this.hasAttribute( 'auto-slide-interval' )
-			? parseInt( this.getAttribute( 'auto-slide-interval' ) || '0', 10 )
-			: 0;
-	}
-
-	// TODO: Add comment.
-	get perView(): number {
-		return this.hasAttribute( 'per-view' )
-			? parseInt( this.getAttribute( 'per-view' ) || '1', 10 )
-			: 1;
-	}
-
-	// TODO: Add comment.
-	get step(): number {
-		return this.hasAttribute( 'step' )
-			? parseInt( this.getAttribute( 'step' ) || '1', 10 )
-			: 1;
-	}
-
-	// TODO: Add comment.
-	get flexibleHeight(): boolean {
-		return this.hasAttribute( 'flexible-height' ) && this.getAttribute( 'flexible-height' ) !== 'no';
-	}
-
-	// TODO: Add comment.
-	get swipeEnabled(): boolean {
-		return this.hasAttribute( 'swipe' ) && this.getAttribute( 'swipe' ) !== 'no';
-	}
-
-	// TODO: Add comment.
-	get swipeThreshold(): number {
-		return this.hasAttribute( 'swipe-threshold' )
-			? parseInt( this.getAttribute( 'swipe-threshold' ) || '50', 10 )
-			: 50;
-	}
-
-	// TODO: Add comment.
+/**
+ * TP Slider.
+ */
+export class TPSliderElement extends HTMLElement {
+	/**
+	 * Constructor.
+	 */
 	constructor() {
+		// Initialize parent.
 		super();
-	}
 
-	// TODO: Add comment.
-	connectedCallback() {
-		// Parse responsive settings first
-		this.parseResponsiveSettings();
-
-		// Get all the necessary elements
-		this.track = this.querySelector( 'tp-slider-track' );
-		this.slidesContainer = this.querySelector( 'tp-slider-slides' );
-		this.slides = Array.from( this.querySelectorAll( 'tp-slider-slide' ) );
-		this.navItems = this.querySelectorAll( 'tp-slider-nav-item' );
-		this.countElement = this.querySelector( 'tp-slider-count' );
-		this.prevArrow = this.querySelector( 'tp-slider-arrow[direction="previous"]' );
-		this.nextArrow = this.querySelector( 'tp-slider-arrow[direction="next"]' );
-
-		// Apply responsive settings
-		this.applyResponsiveSettings();
-
-		// Set up event listeners
-		this.setupEventListeners();
-
-		// Initialize slider state
-		this.updateSliderState();
-
-		// Start auto-sliding if enabled
-		this.setupAutoPlay();
-	}
-
-	// TODO: Add comment.
-	disconnectedCallback() {
-		// Clean up event listeners
-		this.removeEventListeners();
-
-		// Stop auto-play
-		if ( this.autoPlayInterval ) {
-			clearInterval( this.autoPlayInterval );
-			this.autoPlayInterval = null;
+		// Set current slide.
+		if (!this.getAttribute("current-slide")) {
+			this.setAttribute("current-slide", "1");
 		}
+
+		// Initialize slider.
+		this.slide();
+		this.setAttribute( 'initialized', 'yes' );
 	}
 
-	// TODO: Add comment.
-	static get observedAttributes() {
-		return [
-			'per-view',
-			'step',
-			'infinite',
-			'auto-slide-interval',
-			'behaviour',
-			'flexible-height',
-			'swipe',
-			'swipe-threshold',
-			'responsive',
-		];
+	/**
+	 * Connected callback.
+	 */
+	connectedCallback() {
+		/**
+		 * Update on initial render.
+		 *
+		 * This is so that the disabled values of the navigation arrows
+		 * can be set because attributeChangedCallback does not get fired when
+		 * no attributes are passed to the slider.
+		 */
+		this.update();
 	}
 
-	// TODO: Add comment.
-	attributeChangedCallback( name: string, oldValue: string, newValue: string ) {
-		if ( oldValue === newValue ) {
+	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
+		// Observed attributes.
+		return [ 'current-slide', 'infinite' ];
+	}
+
+	/**
+	 * Attribute changed callback.
+	 *
+	 * @param {string} name     Attribute name.
+	 * @param {string} oldValue Old value.
+	 * @param {string} newValue New value.
+	 */
+	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		// Keep an eye on current slide.
+		if ( 'current-slide' === name && oldValue !== newValue ) {
+			this.slide();
+			this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
+		}
+
+		// Update the component after the attribute change.
+		this.update();
+		console.log();
+		
+	}
+
+	/**
+	 * Get current slide index.
+	 *
+	 * @return {number} Current slide index.
+	 */
+	get currentSlideIndex(): number {
+		// To get the current slide index.
+		return parseInt(this.getAttribute("current-slide") ?? "1");
+	}
+
+	/**
+	 * Set current slide index.
+	 *
+	 * @param {number} index Slide index.
+	 */
+	set currentSlideIndex(index: number) {
+		// Set the current slide index.
+		this.setCurrentSlide(index);
+	}
+
+	/**
+	 * Get Slide Elements.
+	 */
+	getSlideElements() {
+		// Get slides.
+		const slidesElement: TPSliderSlidesElement | null =
+			this.querySelector("tp-slider-slides");
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined =
+			slidesElement?.querySelectorAll(":scope > tp-slider-slide");
+
+		// Return array of slides.
+		return slides;
+	}
+
+	/**
+	 * Slide to the current slide.
+	 *
+	 * @protected
+	 */
+	protected slide(): void {
+		// Check if slider is disabled.
+		if ("yes" === this.getAttribute("disabled")) {
+			// Yes, it is. So stop.
 			return;
 		}
 
-		// TODO: Add comment.
-		switch ( name ) {
-			case 'responsive':
-				this.parseResponsiveSettings();
-				this.applyResponsiveSettings();
-				break;
-			case 'behaviour':
-				this.behaviour = newValue || 'slide';
-				this.updateSliderState();
-				break;
-			case 'per-view':
-			case 'step':
-			case 'infinite':
-			case 'flexible-height':
-				this.updateSliderState();
-				break;
-			case 'auto-slide-interval':
-				this.setupAutoPlay();
-				break;
-			case 'swipe':
-				this.updateSwipeHandlers();
-				break;
+		// Get slides.
+		const slidesContainer: TPSliderSlidesElement | null = this.querySelector("tp-slider-slides");
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
+		// Check if we have slide container and slides.
+		if (!slidesContainer || !slides) {
+			// No, we don't. Either one of them or both are missing. So stop.
+			return;
+		}
+		console.log(slides);
+		
+
+		// First, update the height.
+
+		// Yield to main thread to fix a bug in Safari 16.
+		// setTimeout( () => this.updateHeight(), 0 );
+
+		// Now lets slide!
+		const behaviour: string = this.getAttribute("behaviour") || "";
+
+		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
+		if ("fade" !== behaviour && slides[this.currentSlideIndex - 1]) {
+			// Yes, it is. So slide to the current slide.
+			slidesContainer.scroll( { 
+				left: slides[this.currentSlideIndex - 1].offsetLeft - slides[0].offsetLeft,
+				behavior: 'smooth',
+			});
 		}
 	}
 
-	// Parse responsive settings from attribute
-	private parseResponsiveSettings(): void {
-		if ( this.hasAttribute( 'responsive' ) ) {
-			try {
-				this.responsiveSettings = JSON.parse( this.getAttribute( 'responsive' ) || '[]' );
-			} catch ( e ) {
-				console.error( 'Invalid responsive settings JSON:', e );
-				this.responsiveSettings = [];
-			}
+	/**
+		 * Get the arrow element by selector.
+		 *
+		 * In case of nested sliders, it difficult to find the correct arrow
+		 * because arrows can be placed anywhere.
+		 * This function checks if the parent tp-slider belongs to this component,
+		 * then return that arrow element, using 'this'.
+		 *
+		 * @param {string} selector Selector.
+		 */
+		getArrow( selector: string ) {
+			// Get all arrows.
+			const arrows: NodeListOf<TPSliderArrowElement> | null = this.querySelectorAll( selector );
+			const parentSliderElement: TPSliderElement = this;
+			let theArrow: TPSliderArrowElement | null = this.querySelector( selector );
+	
+			// Loop through all the arrows including the one's inside nested slider.
+			arrows.forEach( ( arrow ) => {
+				/**
+				 * If the closest tp-slider is the same as the parentSliderElement, that means we have found
+				 * the correct arrow.
+				 */
+				if ( parentSliderElement === arrow.closest( 'tp-slider' ) ) {
+					theArrow = arrow;
+				}
+			} );
+	
+			// Return arrow.
+			return theArrow;
 		}
+
+		/**
+	 * Get current slide index.
+	 *
+	 * @return {number} Current slide index.
+	 */
+	getCurrentSlide(): number {
+		// Get current slide index.
+		return this.currentSlideIndex;
 	}
 
-	// Apply responsive settings based on current viewport
-	private applyResponsiveSettings(): void {
-		// Loop through responsive settings in reverse order (mobile-first approach)
-		for ( const setting of this.responsiveSettings ) {
-			if ( window.matchMedia( setting.media ).matches ) {
-				// Apply settings to attributes
-				Object.entries( setting ).forEach( ( [ key, value ] ) => {
-					if ( key !== 'media' ) {
-						this.setAttribute( key, String( value ) );
+	/**
+		 * Update stuff when any attribute has changed.
+		 * Example: Update sub-components.
+		 */
+		update(): void {
+			// Get sub-components.
+			// const sliderNav: TPSliderNavElement | null = this.querySelector( 'tp-slider-nav' );
+			// const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
+			const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
+			const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
+	
+			// Set active slide.
+			const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+	
+			// Check if slides are available.
+			if ( slides ) {
+				slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
+					// Update active attribute.
+					if ( this.currentSlideIndex - 1 === index ) {
+						slide.setAttribute( 'active', 'yes' );
+					} else {
+						slide.removeAttribute( 'active' );
 					}
 				} );
-				break; // Apply only the first matching media query
 			}
-		}
-	}
-
-	// Set up event listeners
-	private setupEventListeners(): void {
-		// Arrow navigation
-		if ( this.prevArrow ) {
-			this.prevArrow.addEventListener( 'click', () => this.prev() );
-		}
-
-		// TODO: Add comment.
-		if ( this.nextArrow ) {
-			this.nextArrow.addEventListener( 'click', () => this.next() );
-		}
-
-		// Nav item clicks
-		if ( this.navItems ) {
-			this.navItems.forEach( ( item, index ) => {
-				item.addEventListener( 'click', () => this.goToSlide( index ) );
-			} );
-		}
-
-		// Swipe handlers
-		this.updateSwipeHandlers();
-
-		// Window resize handler
-		window.addEventListener( 'resize', this.handleResize.bind( this ) );
-	}
-
-	// Remove event listeners
-	private removeEventListeners(): void {
-		window.removeEventListener( 'resize', this.handleResize.bind( this ) );
-
-		// Remove swipe handlers
-		if ( this.slidesContainer ) {
-			this.slidesContainer.removeEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
-			this.slidesContainer.removeEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
-		}
-	}
-
-	// Handle window resize
-	private handleResize(): void {
-		this.applyResponsiveSettings();
-		this.updateSliderState();
-	}
-
-	// Update swipe handlers
-	private updateSwipeHandlers(): void {
-		if ( ! this.slidesContainer ) {
-			return;
-		}
-
-		// Remove existing listeners to avoid duplicates
-		this.slidesContainer.removeEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
-		this.slidesContainer.removeEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
-
-		// Add new listeners if swipe is enabled
-		if ( this.swipeEnabled ) {
-			this.slidesContainer.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
-			this.slidesContainer.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
-		}
-	}
-
-	// Handle touch start
-	private handleTouchStart( e: TouchEvent ): void {
-		this.touchStartX = e.changedTouches[ 0 ].screenX;
-	}
-
-	// Handle touch end
-	private handleTouchEnd( e: TouchEvent ): void {
-		this.touchEndX = e.changedTouches[ 0 ].screenX;
-		this.handleSwipe();
-	}
-
-	// Handle swipe gesture
-	private handleSwipe(): void {
-		const swipeDistance = this.touchEndX - this.touchStartX;
-
-		// TODO: Add comment.
-		if ( Math.abs( swipeDistance ) < this.swipeThreshold ) {
-			return;
-		}
-
-		// TODO: Add comment.
-		if ( swipeDistance < 0 ) {
-			// Swipe left - go next
-			this.next();
-		} else {
-			// Swipe right - go previous
-			this.prev();
-		}
-	}
-
-	// Set up auto-play
-	private setupAutoPlay(): void {
-		// Clear existing interval
-		if ( this.autoPlayInterval ) {
-			clearInterval( this.autoPlayInterval );
-			this.autoPlayInterval = null;
-		}
-
-		// Set up new interval if needed
-		if ( this.autoSlideInterval > 0 ) {
-			this.autoPlayInterval = window.setInterval( () => this.next(), this.autoSlideInterval );
-
-			// Pause on hover
-			this.addEventListener( 'mouseenter', () => {
-				if ( this.autoPlayInterval ) {
-					clearInterval( this.autoPlayInterval );
-					this.autoPlayInterval = null;
+	
+			// First, set the template for the slider nav.
+			// sliderNav?.updateNavItems();
+	
+			// Once the template has been set, query the slider nav items.
+			// const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
+	
+			// Set current slider nav item.
+			// if ( sliderNavItems ) {
+			// 	sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
+			// 		// Update current attribute after considering step.
+			// 		if ( Math.ceil( this.currentSlideIndex / this.step ) - 1 === index ) {
+			// 			navItem.setAttribute( 'current', 'yes' );
+			// 		} else {
+			// 			navItem.removeAttribute( 'current' );
+			// 		}
+			// 	} );
+			// }
+	
+			// Update slider count.
+			// if ( sliderCounts ) {
+			// 	// Set total attribute.
+			// 	this.setAttribute( 'total', this.getTotalSlides().toString() );
+	
+			// 	// Update slider counts.
+			// 	sliderCounts.forEach( ( slideCount: TPSliderCountElement ) => {
+			// 		// Check if the slideCount.update is a function.
+			// 		if ( 'function' === typeof slideCount.update ) {
+			// 			// Update slide count.
+			// 			slideCount.update();
+			// 		}
+			// 	} );
+			// }
+	
+			// Enable / disable arrows.
+			if ( 'yes' !== this.getAttribute( 'infinite' ) ) {
+				// For the last slide.
+				if ( this.getCurrentSlide() === this.getTotalSlides() + 1 ) {
+					rightArrow?.setAttribute( 'disabled', 'yes' );
+				} else {
+					rightArrow?.removeAttribute( 'disabled' );
 				}
-			} );
-
-			// TODO: Add comment.
-			this.addEventListener( 'mouseleave', () => {
-				if ( ! this.autoPlayInterval && this.autoSlideInterval > 0 ) {
-					this.autoPlayInterval = window.setInterval( () => this.next(), this.autoSlideInterval );
+	
+				// For the first slide.
+				if ( 1 === this.getCurrentSlide() ) {
+					leftArrow?.setAttribute( 'disabled', 'yes' );
+				} else {
+					leftArrow?.removeAttribute( 'disabled' );
 				}
-			} );
+			} 
+			// else {
+			// 	rightArrow?.removeAttribute( 'disabled' );
+			// 	leftArrow?.removeAttribute( 'disabled' );
+			// }
 		}
+
+	/**
+	 * Get total number of slides.
+	 *
+	 * @return {number} Total slides.
+	 */
+	getTotalSlides(): number {
+		// To get the total number of slides.
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined =
+			this.getSlideElements();
+
+		// Check if slides are available.
+		if (slides) {
+			// Tell the total number of slides.
+			return slides.length;
+		}
+
+		// Else return 0.
+		return 0;
 	}
 
-	// Update slider state based on current settings
-	private updateSliderState(): void {
-		if ( ! this.slidesContainer || this.slides.length === 0 ) {
+	/**
+	 * Set the current slide index.
+	 *
+	 * @param {number} index Slide index.
+	 */
+	setCurrentSlide(index: number): void {
+		// Check if slide index is valid.
+		if (index > this.getTotalSlides() || index <= 0) {
+			// Stop! It's not valid.
 			return;
 		}
 
-		// Update behaviour-specific styles
-		if ( this.behaviour === 'fade' ) {
-			// Fade behaviour
-			this.slidesContainer.classList.add( 'tp-fade-behaviour' );
-			this.slidesContainer.classList.remove( 'tp-slide-behaviour' );
+		// dispatch slide-set event.
+		this.dispatchEvent(
+			new CustomEvent("slide-set", {
+				bubbles: true,
+				detail: {
+					slideIndex: index,
+				},
+			}),
+		);
 
-			// Update slide visibility
-			this.slides.forEach( ( slide, index ) => {
-				slide.classList.toggle( 'active', index === this.currentIndex );
-			} );
-		} else {
-			// Slide behaviour
-			this.slidesContainer.classList.add( 'tp-slide-behaviour' );
-			this.slidesContainer.classList.remove( 'tp-fade-behaviour' );
-
-			// Set slide width based on perView
-			this.slides.forEach( ( slide ) => {
-				slide.style.flex = `0 0 calc(100% / ${ this.perView })`;
-			} );
-
-			// Position the slides
-			this.scrollToSlide( this.currentIndex );
-		}
-
-		// Update flexible height
-		if ( this.flexibleHeight ) {
-			this.track?.classList.add( 'flexible-height' );
-		} else {
-			this.track?.classList.remove( 'flexible-height' );
-		}
-
-		// Update navigation state
-		this.updateNavigation();
-
-		// Update count
-		this.updateCount();
+		// Set current slide index.
+		this.setAttribute("current-slide", index.toString());
 	}
 
-	// Go to next slide
-	public next(): void {
-		const newIndex = this.currentIndex + this.step;
+	/**
+	 * Navigate to the next slide.
+	 */
+	next(): void {
+		// Initialize total slides variable.
+		const totalSlides: number = this.getTotalSlides();
 
-		// TODO: Add comment.
-		if ( newIndex >= this.slides.length ) {
-			if ( this.infiniteScroll ) {
-				// Loop back to the beginning
-				this.goToSlide( 0 );
-			} else {
-				// Stay at the last slide
-				this.goToSlide( this.slides.length - 1 );
+		// Check if we are at the last slide considering per view attribute.
+		if ( this.currentSlideIndex >= totalSlides + 1 ) {
+			// Check if we are in infinite mode.
+			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
+				// Yes, we are, and go back to first slide.
+				this.setCurrentSlide( 1 );
 			}
-		} else {
-			this.goToSlide( newIndex );
+
+			// Terminate.
+			return;
 		}
+
+		// Get next slide index by adding minimum of step or remaining number of slides.
+		const nextSlideIndex: number = this.currentSlideIndex + 1;
+
+		// Check if the next slide step is not taking it beyond the last slide.
+		if ( nextSlideIndex > ( totalSlides + 1 ) ) {
+			// Yes, it is.
+			return;
+		}
+
+		// Everything is good, go to next slide.
+		this.setCurrentSlide( nextSlideIndex );
 	}
 
-	// Go to previous slide
-	public prev(): void {
-		const newIndex = this.currentIndex - this.step;
-
-		// TODO: Add comment.
-		if ( newIndex < 0 ) {
-			if ( this.infiniteScroll ) {
-				// Loop to the end
-				this.goToSlide( this.slides.length - 1 );
-			} else {
-				// Stay at the first slide
-				this.goToSlide( 0 );
+	/**
+	 * Navigate to the previous slide.
+	 */
+	previous(): void {
+		// Check if we are at the first slide.
+		if ( this.currentSlideIndex <= 1 ) {
+			// Check if we are in infinite mode.
+			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
+				this.setCurrentSlide( this.getTotalSlides() + 1 );
 			}
-		} else {
-			this.goToSlide( newIndex );
-		}
-	}
 
-	// Go to specific slide
-	public goToSlide( index: number ): void {
-		// Constrain index to valid range
-		const safeIndex = Math.max( 0, Math.min( index, this.slides.length - 1 ) );
-
-		// Update current index
-		this.currentIndex = safeIndex;
-
-		// Update slides based on behaviour
-		if ( this.behaviour === 'fade' ) {
-			this.slides.forEach( ( slide, i ) => {
-				slide.classList.toggle( 'active', i === this.currentIndex );
-			} );
-		} else {
-			this.scrollToSlide( this.currentIndex );
-		}
-
-		// Update navigation
-		this.updateNavigation();
-
-		// Update count
-		this.updateCount();
-
-		// Dispatch event
-		this.dispatchEvent( new CustomEvent( 'slide-change', {
-			detail: { index: this.currentIndex },
-		} ) );
-	}
-
-	// Scroll to specific slide (for slide behaviour)
-	private scrollToSlide( index: number ): void {
-		if ( ! this.slidesContainer || ! this.slides[ index ] ) {
+			// Terminate.
 			return;
 		}
 
-		// TODO: Add comment.
-		const slideWidth = this.slides[ 0 ].offsetWidth;
-		const offset = slideWidth * index;
+		// Get previous slide index.
+		const previousSlideNumber: number = this.currentSlideIndex;
 
-		// TODO: Add comment.
-		this.slidesContainer.style.transform = `translateX(-${ offset }px)`;
-	}
-
-	// Update navigation state
-	private updateNavigation(): void {
-		if ( this.navItems ) {
-			this.navItems.forEach( ( item, index ) => {
-				item.classList.toggle( 'active', index === this.currentIndex );
-			} );
+		// Check if the previous slide step is not taking it beyond the first slide.
+		if ( previousSlideNumber > 1 ) {
+			this.setCurrentSlide( previousSlideNumber - 1 );
+		} else {
+			this.setCurrentSlide( 1 );
 		}
-	}
-
-	// Update count element
-	private updateCount(): void {
-		if ( ! this.countElement ) {
-			return;
-		}
-
-		// TODO: Add comment.
-		const current = this.currentIndex + 1;
-		const total = this.slides.length;
-
-		// Update attributes
-		this.countElement.setAttribute( 'current', current.toString() );
-		this.countElement.setAttribute( 'total', total.toString() );
-
-		// Update content based on format
-		const format = this.countElement.getAttribute( 'format' ) || '$current / $total';
-		const formattedCount = format
-			.replace( '$current', current.toString() )
-			.replace( '$total', total.toString() );
-
-		// TODO: Add comment.
-		this.countElement.textContent = formattedCount;
 	}
 }

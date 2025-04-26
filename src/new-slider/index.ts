@@ -1,18 +1,22 @@
 /**
- * index.ts - Main entry point for registering all components
+ * Styles.
  */
 import './style.scss';
 
-// Import all component classes
-import { TPSlider } from './tp-slider';
-import { TPSliderTrack, TPSliderSlides, TPSliderSlide, TPSliderArrow, TPSliderNav, TPSliderNavItem, TPSliderCount } from './slider-components';
+/**
+ * Components.
+ */
+import { TPSliderElement } from './tp-slider';
+import { TPSliderTrackElement } from './tp-slider-track';
+import { TPSliderSlidesElement } from './tp-slider-slides';
+import { TPSliderSlideElement } from './tp-slider-slide';
+import { TPSliderArrowElement } from './tp-slider-arrow';
 
-// Register all custom elements
-customElements.define( 'tp-slider', TPSlider );
-customElements.define( 'tp-slider-track', TPSliderTrack );
-customElements.define( 'tp-slider-slides', TPSliderSlides );
-customElements.define( 'tp-slider-slide', TPSliderSlide );
-customElements.define( 'tp-slider-arrow', TPSliderArrow );
-customElements.define( 'tp-slider-nav', TPSliderNav );
-customElements.define( 'tp-slider-nav-item', TPSliderNavItem );
-customElements.define( 'tp-slider-count', TPSliderCount );
+/**
+ * Register Components.
+ */
+customElements.define( 'tp-slider', TPSliderElement );
+customElements.define( 'tp-slider-track', TPSliderTrackElement );
+customElements.define( 'tp-slider-slides', TPSliderSlidesElement );
+customElements.define( 'tp-slider-slide', TPSliderSlideElement );
+customElements.define( 'tp-slider-arrow', TPSliderArrowElement );
