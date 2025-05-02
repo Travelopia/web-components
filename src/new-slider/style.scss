@@ -1,0 +1,13 @@
+
+
+tp-slider-slides {
+    overflow-y: visible;
+	overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    display: flex;
+}
+
+tp-slider-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+}
