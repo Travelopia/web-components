@@ -14,6 +14,11 @@
 			background-color: #eee
 		}
 
+		tp-slider-slide img {
+			width: 100%;
+			height: auto;
+		}
+
 		img {
 			display: block;
 		}
@@ -27,7 +32,7 @@
 </head>
 <body>
 	<main>
-		<!--Slider that slides horizontally with responsive settings.-->
+		<!--Infinite basic slider-->
 		<tp-slider infinite="yes">
 			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
 			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
@@ -36,6 +41,22 @@
 					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
 					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
 					<tp-slider-slide><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+		</tp-slider>
+		<!--Slider with per-view and step attribute-->
+		<tp-slider infinite="yes" per-view="2" step="2">
+			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button>Next &raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
+					<tp-slider-slide style="flex: calc(50% - 10px) 0 0; margin: 0 10px"><img src="https://picsum.photos/600/300" width="600" height="300" alt=""></tp-slider-slide>
 				</tp-slider-slides>
 			</tp-slider-track>
 		</tp-slider>

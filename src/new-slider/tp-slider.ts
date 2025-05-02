@@ -134,6 +134,26 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Get current step.
+	 *
+	 * @return {number} Current step.
+	 */
+	get step(): number {
+		// To get the current step.
+		return parseInt( this.getAttribute( 'step' ) ?? '1' );
+	}
+
+	/**
+	 * Set current step.
+	 *
+	 * @param {number} step Step.
+	 */
+	set step( step: number ) {
+		// Set the current step.
+		this.setAttribute( 'step', step.toString() );
+	}
+
+	/**
 	 * Get Slide Elements.
 	 */
 	getSlideElements() {
@@ -362,7 +382,7 @@ export class TPSliderElement extends HTMLElement {
 		
 		
 		// Check if we are at the last slide considering per view attribute.
-		if ( this.currentSlideIndex >= totalSlides ) {
+		if ( this.currentSlideIndex >= totalSlides - this.perView + 1 ) {
 			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
 				// Yes, we are, and go back to first slide.
@@ -374,10 +394,10 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// Get next slide index by adding minimum of step or remaining number of slides.
-		const nextSlideIndex: number = this.currentSlideIndex + 1;
+		const nextSlideIndex: number = this.currentSlideIndex + Math.min( this.step, totalSlides - this.currentSlideIndex - this.perView + 1 );
 
 		// Check if the next slide step is not taking it beyond the last slide.
-		if ( nextSlideIndex > ( totalSlides + 1 ) ) {
+		if ( nextSlideIndex > ( totalSlides - this.perView + 1 ) ) {
 			// Yes, it is.
 			return;
 		}
@@ -394,7 +414,7 @@ export class TPSliderElement extends HTMLElement {
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
-				this.setCurrentSlide( this.getTotalSlides() );
+				this.setCurrentSlide( this.getTotalSlides() - this.perView + 1 );
 			}
 
 			// Terminate.
@@ -405,8 +425,8 @@ export class TPSliderElement extends HTMLElement {
 		const previousSlideNumber: number = this.currentSlideIndex;
 
 		// Check if the previous slide step is not taking it beyond the first slide.
-		if ( previousSlideNumber > 1 ) {
-			this.setCurrentSlide( previousSlideNumber - 1 );
+		if ( previousSlideNumber > this.step ) {
+			this.setCurrentSlide( previousSlideNumber - this.step );
 		} else {
 			this.setCurrentSlide( 1 );
 		}
