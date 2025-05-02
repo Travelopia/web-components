@@ -10,6 +10,9 @@ import { TPSliderSlidesElement } from "./tp-slider-slides";
  * TP Slider.
  */
 export class TPSliderElement extends HTMLElement {
+	// protected _observer: IntersectionObserver;
+	protected slides: NodeListOf<TPSliderSlideElement> | null;
+	protected slideTrack: TPSliderSlidesElement | null;
 	/**
 	 * Constructor.
 	 */
@@ -17,6 +20,10 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
+		this.slides = this.querySelectorAll( 'tp-slider-slide' );
+		this.slideTrack = this.querySelector( 'tp-slider-slides' );
+		// this._observer = new IntersectionObserver( this.attributeChangeOnScroll?.bind( this ), { root: this.slideTrack, threshold: 0.999 } );
+	
 		// Set current slide.
 		if (!this.getAttribute("current-slide")) {
 			this.setAttribute("current-slide", "1");
@@ -25,6 +32,9 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize slider.
 		this.slide();
 		this.setAttribute( 'initialized', 'yes' );
+
+		// Observe which slide is in view.
+		// this.slides.forEach(( slide ) => this._observer.observe( slide ) );
 	}
 
 	/**
@@ -42,13 +52,27 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Change current-slide attribute on scroll.
+	 */
+	// attributeChangeOnScroll( entries: IntersectionObserverEntry[] ): void {
+	// 	entries?.forEach( ( entry ) => {
+	// 		if (entry.isIntersecting && entry.target instanceof TPSliderSlideElement && this.slides) {
+	// 			const index = Array.from(this.slides).indexOf(entry.target);
+	// 			this.currentSlideIndex = index + 1;
+	// 		  }
+	// 	} );
+		
+	// }
+	
+
+	/**
 	 * Get observed attributes.
 	 *
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'current-slide', 'infinite' ];
+		return [ 'current-slide', 'infinite', 'per-view' ];
 	}
 
 	/**
@@ -67,8 +91,6 @@ export class TPSliderElement extends HTMLElement {
 
 		// Update the component after the attribute change.
 		this.update();
-		console.log();
-		
 	}
 
 	/**
@@ -92,14 +114,32 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Get per view.
+	 *
+	 * @return {number} Current step.
+	 */
+	get perView(): number {
+		// To get number of slides per view.
+		return parseInt( this.getAttribute( 'per-view' ) ?? '1' );
+	}
+
+	/**
+	 * Set per view.
+	 *
+	 * @param {number} perView Per view.
+	 */
+	set perView( perView: number ) {
+		// Set the number of slides per view.
+		this.setAttribute( 'per-view', perView.toString() );
+	}
+
+	/**
 	 * Get Slide Elements.
 	 */
 	getSlideElements() {
 		// Get slides.
-		const slidesElement: TPSliderSlidesElement | null =
-			this.querySelector("tp-slider-slides");
-		const slides: NodeListOf<TPSliderSlideElement> | null | undefined =
-			slidesElement?.querySelectorAll(":scope > tp-slider-slide");
+		const slidesElement: TPSliderSlidesElement | null = this.querySelector("tp-slider-slides");
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = slidesElement?.querySelectorAll(":scope > tp-slider-slide");
 
 		// Return array of slides.
 		return slides;
@@ -126,7 +166,6 @@ export class TPSliderElement extends HTMLElement {
 			// No, we don't. Either one of them or both are missing. So stop.
 			return;
 		}
-		console.log(slides);
 		
 
 		// First, update the height.
@@ -157,26 +196,26 @@ export class TPSliderElement extends HTMLElement {
 		 *
 		 * @param {string} selector Selector.
 		 */
-		getArrow( selector: string ) {
-			// Get all arrows.
-			const arrows: NodeListOf<TPSliderArrowElement> | null = this.querySelectorAll( selector );
-			const parentSliderElement: TPSliderElement = this;
-			let theArrow: TPSliderArrowElement | null = this.querySelector( selector );
-	
-			// Loop through all the arrows including the one's inside nested slider.
-			arrows.forEach( ( arrow ) => {
-				/**
-				 * If the closest tp-slider is the same as the parentSliderElement, that means we have found
-				 * the correct arrow.
-				 */
-				if ( parentSliderElement === arrow.closest( 'tp-slider' ) ) {
-					theArrow = arrow;
-				}
-			} );
-	
-			// Return arrow.
-			return theArrow;
-		}
+	getArrow( selector: string ) {
+		// Get all arrows.
+		const arrows: NodeListOf<TPSliderArrowElement> | null = this.querySelectorAll( selector );
+		const parentSliderElement: TPSliderElement = this;
+		let theArrow: TPSliderArrowElement | null = this.querySelector( selector );
+
+		// Loop through all the arrows including the one's inside nested slider.
+		arrows.forEach( ( arrow ) => {
+			/**
+			 * If the closest tp-slider is the same as the parentSliderElement, that means we have found
+			 * the correct arrow.
+			 */
+			if ( parentSliderElement === arrow.closest( 'tp-slider' ) ) {
+				theArrow = arrow;
+			}
+		} );
+
+		// Return arrow.
+		return theArrow;
+	}
 
 		/**
 	 * Get current slide index.
@@ -192,82 +231,82 @@ export class TPSliderElement extends HTMLElement {
 		 * Update stuff when any attribute has changed.
 		 * Example: Update sub-components.
 		 */
-		update(): void {
-			// Get sub-components.
-			// const sliderNav: TPSliderNavElement | null = this.querySelector( 'tp-slider-nav' );
-			// const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
-			const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
-			const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
-	
-			// Set active slide.
-			const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
-	
-			// Check if slides are available.
-			if ( slides ) {
-				slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
-					// Update active attribute.
-					if ( this.currentSlideIndex - 1 === index ) {
-						slide.setAttribute( 'active', 'yes' );
-					} else {
-						slide.removeAttribute( 'active' );
-					}
-				} );
-			}
-	
-			// First, set the template for the slider nav.
-			// sliderNav?.updateNavItems();
-	
-			// Once the template has been set, query the slider nav items.
-			// const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
-	
-			// Set current slider nav item.
-			// if ( sliderNavItems ) {
-			// 	sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
-			// 		// Update current attribute after considering step.
-			// 		if ( Math.ceil( this.currentSlideIndex / this.step ) - 1 === index ) {
-			// 			navItem.setAttribute( 'current', 'yes' );
-			// 		} else {
-			// 			navItem.removeAttribute( 'current' );
-			// 		}
-			// 	} );
-			// }
-	
-			// Update slider count.
-			// if ( sliderCounts ) {
-			// 	// Set total attribute.
-			// 	this.setAttribute( 'total', this.getTotalSlides().toString() );
-	
-			// 	// Update slider counts.
-			// 	sliderCounts.forEach( ( slideCount: TPSliderCountElement ) => {
-			// 		// Check if the slideCount.update is a function.
-			// 		if ( 'function' === typeof slideCount.update ) {
-			// 			// Update slide count.
-			// 			slideCount.update();
-			// 		}
-			// 	} );
-			// }
-	
-			// Enable / disable arrows.
-			if ( 'yes' !== this.getAttribute( 'infinite' ) ) {
-				// For the last slide.
-				if ( this.getCurrentSlide() === this.getTotalSlides() + 1 ) {
-					rightArrow?.setAttribute( 'disabled', 'yes' );
+	update(): void {
+		// Get sub-components.
+		// const sliderNav: TPSliderNavElement | null = this.querySelector( 'tp-slider-nav' );
+		// const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
+		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
+		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
+
+		// Set active slide.
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
+		// Check if slides are available.
+		if ( slides ) {
+			slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
+				// Update active attribute.
+				if ( this.currentSlideIndex - 1 === index ) {
+					slide.setAttribute( 'active', 'yes' );
 				} else {
-					rightArrow?.removeAttribute( 'disabled' );
+					slide.removeAttribute( 'active' );
 				}
-	
-				// For the first slide.
-				if ( 1 === this.getCurrentSlide() ) {
-					leftArrow?.setAttribute( 'disabled', 'yes' );
-				} else {
-					leftArrow?.removeAttribute( 'disabled' );
-				}
-			} 
-			// else {
-			// 	rightArrow?.removeAttribute( 'disabled' );
-			// 	leftArrow?.removeAttribute( 'disabled' );
-			// }
+			} );
 		}
+
+		// First, set the template for the slider nav.
+		// sliderNav?.updateNavItems();
+
+		// Once the template has been set, query the slider nav items.
+		// const sliderNavItems: NodeListOf<TPSliderNavItemElement> | null = this.querySelectorAll( 'tp-slider-nav-item' );
+
+		// Set current slider nav item.
+		// if ( sliderNavItems ) {
+		// 	sliderNavItems.forEach( ( navItem: TPSliderNavItemElement, index: number ): void => {
+		// 		// Update current attribute after considering step.
+		// 		if ( Math.ceil( this.currentSlideIndex / this.step ) - 1 === index ) {
+		// 			navItem.setAttribute( 'current', 'yes' );
+		// 		} else {
+		// 			navItem.removeAttribute( 'current' );
+		// 		}
+		// 	} );
+		// }
+
+		// Update slider count.
+		// if ( sliderCounts ) {
+		// 	// Set total attribute.
+		// 	this.setAttribute( 'total', this.getTotalSlides().toString() );
+
+		// 	// Update slider counts.
+		// 	sliderCounts.forEach( ( slideCount: TPSliderCountElement ) => {
+		// 		// Check if the slideCount.update is a function.
+		// 		if ( 'function' === typeof slideCount.update ) {
+		// 			// Update slide count.
+		// 			slideCount.update();
+		// 		}
+		// 	} );
+		// }
+
+		// Enable / disable arrows.
+		if ( 'yes' !== this.getAttribute( 'infinite' ) ) {
+			// For the last slide.
+			if ( this.getCurrentSlide() === this.getTotalSlides() + 1 ) {
+				rightArrow?.setAttribute( 'disabled', 'yes' );
+			} else {
+				rightArrow?.removeAttribute( 'disabled' );
+			}
+
+			// For the first slide.
+			if ( 1 === this.getCurrentSlide() ) {
+				leftArrow?.setAttribute( 'disabled', 'yes' );
+			} else {
+				leftArrow?.removeAttribute( 'disabled' );
+			}
+		} 
+		// else {
+		// 	rightArrow?.removeAttribute( 'disabled' );
+		// 	leftArrow?.removeAttribute( 'disabled' );
+		// }
+	}
 
 	/**
 	 * Get total number of slides.
@@ -276,8 +315,7 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	getTotalSlides(): number {
 		// To get the total number of slides.
-		const slides: NodeListOf<TPSliderSlideElement> | null | undefined =
-			this.getSlideElements();
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
 
 		// Check if slides are available.
 		if (slides) {
@@ -321,9 +359,10 @@ export class TPSliderElement extends HTMLElement {
 	next(): void {
 		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
-
+		
+		
 		// Check if we are at the last slide considering per view attribute.
-		if ( this.currentSlideIndex >= totalSlides + 1 ) {
+		if ( this.currentSlideIndex >= totalSlides ) {
 			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
 				// Yes, we are, and go back to first slide.
@@ -355,7 +394,7 @@ export class TPSliderElement extends HTMLElement {
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
 			if ( 'yes' === this.getAttribute( 'infinite' ) ) {
-				this.setCurrentSlide( this.getTotalSlides() + 1 );
+				this.setCurrentSlide( this.getTotalSlides() );
 			}
 
 			// Terminate.
