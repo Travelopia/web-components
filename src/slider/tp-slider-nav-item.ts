@@ -51,11 +51,21 @@ export class TPSliderNavItemElement extends HTMLElement {
 			return parseInt( this.getAttribute( 'index' ) ?? '0' );
 		}
 
-		// No, find it in the navigation.
+		// Initialize variables.
 		const slideNav: TPSliderNavElement | null = this.closest( 'tp-slider-nav' );
-		const step = this.slider?.step;
+		const step = this.slider?.step ?? 1;
+		const perView = this.slider?.perView ?? 1;
+		const totalSlides = this.slider?.getTotalSlides() ?? 1;
+		const index = Array.from( slideNav?.children ?? [] ).indexOf( this );
 
-		// Return index of this element considering the step value.
-		return ( Array.from( slideNav?.children ?? [] ).indexOf( this ) * ( step ?? 1 ) ) + 1;
+		// Find posible position of the slide.
+		const lastItem = ( totalSlides - perView ) + 1;
+		const targetSlide = ( index * step ) + 1;
+
+		// Get the new slide number.
+		const currentSlideIndex = Math.min( lastItem, targetSlide );
+
+		// return the index.
+		return currentSlideIndex;
 	}
 }
