@@ -57,7 +57,7 @@ export class TPSliderElement extends HTMLElement {
 		// Event listeners.
 		if ( ! ( 'ResizeObserver' in window ) ) {
 			/**
-			 * We set the resize observer in `tp-slider-slide`
+			 * We set the resize observer in `tp-slider-slides`
 			 * because These are just fallbacks for browsers that don't support ResizeObserver.
 			 */
 
