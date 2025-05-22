@@ -1,13 +1,14 @@
 
 
-tp-slider-slides {
+tp-carousel-slides {
     overflow-y: visible;
 	overflow-x: auto;
     scroll-snap-type: x mandatory;
     display: flex;
+    scrollbar-width: none;
 }
 
-tp-slider-slide {
+tp-carousel-slide {
     flex: 0 0 100%;
     scroll-snap-align: start;
 }

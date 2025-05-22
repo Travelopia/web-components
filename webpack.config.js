@@ -78,7 +78,7 @@ module.exports = ( env ) => {
 		entry: {
 			modal: './src/modal/index.ts',
 			slider: './src/slider/index.ts',
-			newSlider: './src/new-slider/index.ts',
+			newSlider: './src/carousel/index.ts',
 			tabs: './src/tabs/index.ts',
 			form: './src/form/index.ts',
 			accordion: './src/accordion/index.ts',
