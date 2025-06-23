@@ -22,7 +22,7 @@ export class TPCarouselElement extends HTMLElement {
 		super();
 		this.slides = this.querySelectorAll( 'tp-carousel-slide' );
 		this.slideTrack = this.querySelector( 'tp-carousel-slides' );
-		this._observer = new IntersectionObserver( this.attributeChangeOnScroll?.bind( this ), { root: this.slideTrack, threshold: 0.999 } );
+		this._observer = new IntersectionObserver( this.attributeChangeOnScroll?.bind( this ), { root: this.slideTrack, threshold: 1 } );
 
 		// Set current slide.
 		if ( ! this.getAttribute( 'current-slide' ) ) {

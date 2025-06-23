@@ -15,9 +15,10 @@ export class TPSliderElement extends HTMLElement {
 	/**
 	 * Properties.
 	 */
-	protected touchStartX: number = 0;
-	protected touchStartY: number = 0;
-	protected swipeThreshold: number = 200;
+	protected isProgramaticScroll: boolean = false;
+	protected _observer: IntersectionObserver;
+	protected slideTrack: TPSliderSlidesElement | null;
+	protected slides: NodeListOf<TPSliderSlideElement> | null;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -36,19 +37,23 @@ export class TPSliderElement extends HTMLElement {
 	constructor() {
 		// Initialize parent.
 		super();
+		this.slides = this.querySelectorAll( 'tp-slider-slide' );
+		this.slideTrack = this.querySelector( 'tp-slider-track' );
+		this._observer = new IntersectionObserver( this.attributeChangeOnScroll?.bind( this ), { root: this.slideTrack, threshold: 1, rootMargin: '0px 0px 90% 0px' } );
+// console.log(this.slides);
 
 		// Set current slide.
 		if ( ! this.getAttribute( 'current-slide' ) ) {
 			this.setAttribute( 'current-slide', '1' );
 		}
 
-		// Threshold Setting.
-		this.swipeThreshold = Number( this?.getAttribute( 'swipe-threshold' ) ?? '200' );
-
 		// Initialize slider.
 		this.slide();
 		this.autoSlide();
 		this.setAttribute( 'initialized', 'yes' );
+
+		// Observe which slide is in view.
+		this.slides.forEach( ( slide ) => this._observer.observe( slide ) );
 
 		// Responsive Settings.
 		const responsiveSettingsJSON: string = this.getAttribute( 'responsive' ) || '';
@@ -65,10 +70,6 @@ export class TPSliderElement extends HTMLElement {
 			window.addEventListener( 'resize', this.handleResize.bind( this ) );
 			document.fonts.ready.then( () => this.handleResize() );
 		}
-
-		// Touch listeners.
-		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
-		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
 
 	/**
@@ -105,6 +106,12 @@ export class TPSliderElement extends HTMLElement {
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// Keep an eye on current slide.
 		if ( 'current-slide' === name && oldValue !== newValue ) {
+			// console.log('in attribute changed callback');
+
+			// if( ! this.isProgramaticScroll ) {
+			// 	this.updateHeight();
+			// }
+			
 			this.slide();
 			this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
 		}
@@ -208,6 +215,9 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the next slide.
 	 */
 	next(): void {
+		// Flag that it is a programatic scroll.
+		this.flagProgramaticScroll();
+
 		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
 
@@ -240,6 +250,9 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
+		// Flag that it is a programatic scroll.
+		this.flagProgramaticScroll();
+
 		// Check if we are at the first slide.
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
@@ -297,11 +310,44 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Change current-slide attribute on scroll.
+	 *
+	 * @param {IntersectionObserverEntry[]} entries slides which enter or leave on scroll.
+	 */
+	attributeChangeOnScroll( entries: IntersectionObserverEntry[] ): void {
+		console.log( 'attributeChangeOnScroll', entries );
+		
+		// If the scroll is programatic.
+		if ( this.isProgramaticScroll ) {
+			// Do nothing.
+			return;
+		}
+		
+		// Change the current slide index when slide comes into view.
+		entries?.forEach( ( entry ) => {
+			// Check if the entry is intersecting with the slide track.
+			if ( entry.isIntersecting && entry.target instanceof TPSliderSlideElement && this.slides ) {
+				const index = Array.from( this.slides ).indexOf( entry.target );
+				console.log( 'index', index, this.perView, this.currentSlideIndex );
+				
+				// Update current slide index based on if it is is right or left scroll.
+				if ( index + 1 - ( this.perView - 1 ) > this.currentSlideIndex ) {
+					this.currentSlideIndex = index + 1 - ( this.perView - 1 );
+				} else if ( index + 1 - ( this.perView - 1 ) < this.currentSlideIndex ) {
+					this.currentSlideIndex = index + 1;
+				}
+			}
+		} );
+	}
+
+	/**
 	 * Slide to the current slide.
 	 *
 	 * @protected
 	 */
 	protected slide(): void {
+		// console.log("i am in slide");
+		
 		// Check if slider is disabled.
 		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
 			// Yes, it is. So stop.
@@ -329,7 +375,10 @@ export class TPSliderElement extends HTMLElement {
 		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
 		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
 			// Yes, it is. So slide to the current slide.
-			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
+			slidesContainer.scroll( {
+				left: slides[ this.currentSlideIndex - 1 ].offsetLeft - slides[ 0 ].offsetLeft,
+				behavior: 'smooth',
+			} );
 		}
 	}
 
@@ -494,6 +543,7 @@ export class TPSliderElement extends HTMLElement {
 				// Set the height of the container to be the max height of the slides in the current view.
 				slidesContainer.style.height = `${ maxHeight }px`;
 			} else {
+				// console.log("i am in update height");
 				// Set the height of the container to be the height of the current slide.
 				const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
 				slidesContainer.style.height = `${ height }px`;
@@ -582,64 +632,6 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
-	 * Detect touch start event, and store the starting location.
-	 *
-	 * @param {Event} e Touch event.
-	 *
-	 * @protected
-	 */
-	protected handleTouchStart( e: TouchEvent ): void {
-		// initialize touch start coordinates
-		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
-			this.touchStartX = e.touches[ 0 ].clientX;
-			this.touchStartY = e.touches[ 0 ].clientY;
-		}
-	}
-
-	/**
-	 * Detect touch end event, and check if it was a left or right swipe.
-	 *
-	 * @param {Event} e Touch event.
-	 *
-	 * @protected
-	 */
-	protected handleTouchEnd( e: TouchEvent ): void {
-		// Early return if swipe is not enabled.
-		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
-			// Early return.
-			return;
-		}
-
-		// Calculate the horizontal and vertical distance moved.
-		const touchEndX: number = e.changedTouches[ 0 ].clientX;
-		const touchEndY: number = e.changedTouches[ 0 ].clientY;
-		const swipeDistanceX: number = touchEndX - this.touchStartX;
-		const swipeDistanceY: number = touchEndY - this.touchStartY;
-
-		// Determine if the swipe is predominantly horizontal or vertical.
-		const isHorizontalSwipe: boolean = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
-
-		// If it's not horizontal swipe, return
-		if ( ! isHorizontalSwipe ) {
-			// Early return.
-			return;
-		}
-
-		// Check if it's a right or left swipe.
-		if ( swipeDistanceX > 0 ) {
-			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX < this.swipeThreshold ) {
-				this.previous();
-			}
-		} else if ( swipeDistanceX < 0 ) {
-			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX > -this.swipeThreshold ) {
-				this.next();
-			}
-		}
-	}
-
-	/**
 	 * Auto slide.
 	 */
 	protected autoSlide(): void {
@@ -668,5 +660,19 @@ export class TPSliderElement extends HTMLElement {
 			this.autoSlide();
 			this.dispatchEvent( new CustomEvent( 'auto-slide-complete' ) );
 		}, interval );
+	}
+
+	/**
+	 * To set a flag if it is a programatic scroll.
+	 */
+	flagProgramaticScroll() {
+		// Set the flag to true.
+		this.isProgramaticScroll = true;
+
+		// Set the flag to false after 500ms.
+		setTimeout( () => {
+			// Set the flag to false.
+			this.isProgramaticScroll = false;
+		}, 500 );
 	}
 }
