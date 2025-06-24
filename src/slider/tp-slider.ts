@@ -16,8 +16,9 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected isProgramaticScroll: boolean = false;
-	protected _observer: IntersectionObserver;
-	protected slideTrack: TPSliderSlidesElement | null;
+	// protected _observer: IntersectionObserver;
+	protected slidesTrack: TPSliderSlidesElement | null;
+	protected slidesTrackRect: DOMRect | undefined;
 	protected slides: NodeListOf<TPSliderSlideElement> | null;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
@@ -38,9 +39,10 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize parent.
 		super();
 		this.slides = this.querySelectorAll( 'tp-slider-slide' );
-		this.slideTrack = this.querySelector( 'tp-slider-track' );
-		this._observer = new IntersectionObserver( this.attributeChangeOnScroll?.bind( this ), { root: this.slideTrack, threshold: 1, rootMargin: '0px 0px 90% 0px' } );
-// console.log(this.slides);
+		this.slidesTrack = this.querySelector( 'tp-slider-slides' );
+		this.slidesTrackRect = this.slidesTrack?.getBoundingClientRect();
+
+		this.slidesTrack?.addEventListener( 'scroll', this.handleCurrentSlideOnScroll.bind( this ) );
 
 		// Set current slide.
 		if ( ! this.getAttribute( 'current-slide' ) ) {
@@ -51,9 +53,6 @@ export class TPSliderElement extends HTMLElement {
 		this.slide();
 		this.autoSlide();
 		this.setAttribute( 'initialized', 'yes' );
-
-		// Observe which slide is in view.
-		this.slides.forEach( ( slide ) => this._observer.observe( slide ) );
 
 		// Responsive Settings.
 		const responsiveSettingsJSON: string = this.getAttribute( 'responsive' ) || '';
@@ -84,6 +83,33 @@ export class TPSliderElement extends HTMLElement {
 		 * no attributes are passed to the slider.
 		 */
 		this.update();
+	}
+
+	/**
+	 * Handle current slide attribute on scroll.
+	 *
+	 * This is to handle the case when the user scrolls the slides track
+	 * and we need to update the current slide index based on the scroll position.
+	 */
+	handleCurrentSlideOnScroll() {
+		if ( ! this.slidesTrack || ! this.slides ) {
+			return;
+		}
+
+		const isAtRightEnd = Math.abs(this.slidesTrack.scrollLeft + this.slidesTrack.clientWidth - this.slidesTrack.scrollWidth) < 1;
+
+		if (  isAtRightEnd ) {
+			// If the current slide index is equal to the total number of slides, set it to the last slide.
+			this.setCurrentSlide( this.slides.length );
+		} else {
+			this.slides?.forEach( ( slide: TPSliderSlideElement, index: number ) => {
+				const slideRect = slide.getBoundingClientRect();
+	
+				if ( this.slidesTrackRect && slideRect?.left - this.slidesTrackRect.left === 0  ) {
+					this.setCurrentSlide( index + 1 );
+				}
+			} );
+		}
 	}
 
 	/**
@@ -307,37 +333,6 @@ export class TPSliderElement extends HTMLElement {
 
 		// Set current slide index.
 		this.setAttribute( 'current-slide', index.toString() );
-	}
-
-	/**
-	 * Change current-slide attribute on scroll.
-	 *
-	 * @param {IntersectionObserverEntry[]} entries slides which enter or leave on scroll.
-	 */
-	attributeChangeOnScroll( entries: IntersectionObserverEntry[] ): void {
-		console.log( 'attributeChangeOnScroll', entries );
-		
-		// If the scroll is programatic.
-		if ( this.isProgramaticScroll ) {
-			// Do nothing.
-			return;
-		}
-		
-		// Change the current slide index when slide comes into view.
-		entries?.forEach( ( entry ) => {
-			// Check if the entry is intersecting with the slide track.
-			if ( entry.isIntersecting && entry.target instanceof TPSliderSlideElement && this.slides ) {
-				const index = Array.from( this.slides ).indexOf( entry.target );
-				console.log( 'index', index, this.perView, this.currentSlideIndex );
-				
-				// Update current slide index based on if it is is right or left scroll.
-				if ( index + 1 - ( this.perView - 1 ) > this.currentSlideIndex ) {
-					this.currentSlideIndex = index + 1 - ( this.perView - 1 );
-				} else if ( index + 1 - ( this.perView - 1 ) < this.currentSlideIndex ) {
-					this.currentSlideIndex = index + 1;
-				}
-			}
-		} );
 	}
 
 	/**
