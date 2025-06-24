@@ -15,16 +15,12 @@ export class TPSliderElement extends HTMLElement {
 	/**
 	 * Properties.
 	 */
-	protected isProgramaticScroll: boolean = false;
-	// protected _observer: IntersectionObserver;
-	protected slidesTrack: TPSliderSlidesElement | null;
-	protected slidesTrackRect: DOMRect | undefined;
-	protected slides: NodeListOf<TPSliderSlideElement> | null;
+	protected slidesScrollContainer: TPSliderSlidesElement | null;
+	protected slidesScrollContainerRect: DOMRect | undefined;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
 		'infinite',
-		'swipe',
 		'behaviour',
 		'auto-slide-interval',
 		'per-view',
@@ -38,11 +34,11 @@ export class TPSliderElement extends HTMLElement {
 	constructor() {
 		// Initialize parent.
 		super();
-		this.slides = this.querySelectorAll( 'tp-slider-slide' );
-		this.slidesTrack = this.querySelector( 'tp-slider-slides' );
-		this.slidesTrackRect = this.slidesTrack?.getBoundingClientRect();
+		this.slidesScrollContainer = this.querySelector( 'tp-slider-slides' );
+		this.slidesScrollContainerRect = this.slidesScrollContainer?.getBoundingClientRect();
 
-		this.slidesTrack?.addEventListener( 'scroll', this.handleCurrentSlideOnScroll.bind( this ) );
+		// Add event listener to handle current slide attribute on scroll.
+		this.slidesScrollContainer?.addEventListener( 'scroll', this.handleCurrentSlideOnScroll.bind( this ) );
 
 		// Set current slide.
 		if ( ! this.getAttribute( 'current-slide' ) ) {
@@ -92,20 +88,37 @@ export class TPSliderElement extends HTMLElement {
 	 * and we need to update the current slide index based on the scroll position.
 	 */
 	handleCurrentSlideOnScroll() {
-		if ( ! this.slidesTrack || ! this.slides ) {
+		// Check if we have scroll container.
+		if ( ! this.slidesScrollContainer ) {
+			// No scroll container, early return.
 			return;
 		}
 
-		const isAtRightEnd = Math.abs(this.slidesTrack.scrollLeft + this.slidesTrack.clientWidth - this.slidesTrack.scrollWidth) < 1;
+		// Get sll the slides.
+		const slides : NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
 
+		// If no slides.
+		if ( ! slides ) {
+			// Early return.
+			return;
+		}
+
+		// Check if scroll position is at right end.
+		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 1;
+
+		// Conditionally set the current slide index based on the scroll position.
 		if (  isAtRightEnd ) {
 			// If the current slide index is equal to the total number of slides, set it to the last slide.
-			this.setCurrentSlide( this.slides.length );
+			this.setCurrentSlide( slides.length );
 		} else {
-			this.slides?.forEach( ( slide: TPSliderSlideElement, index: number ) => {
+			// Loop through all slides and check which slide is intersecting with the left edge of the scroll container.
+			slides.forEach( ( slide: TPSliderSlideElement, index: number ) => {
+				// Get the bounding rectangle of the slide.
 				const slideRect = slide.getBoundingClientRect();
 	
-				if ( this.slidesTrackRect && slideRect?.left - this.slidesTrackRect.left === 0  ) {
+				// Check if the slide is intersecting with the left edge of the scroll container.
+				if ( this.slidesScrollContainerRect && slideRect?.left - this.slidesScrollContainerRect.left === 0  ) {
+					// Yes, it is. So set the current slide index.
 					this.setCurrentSlide( index + 1 );
 				}
 			} );
@@ -119,7 +132,7 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'per-view', 'step' ];
+		return [ 'current-slide', 'flexible-height', 'infinite', 'per-view', 'step' ];
 	}
 
 	/**
@@ -132,12 +145,6 @@ export class TPSliderElement extends HTMLElement {
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// Keep an eye on current slide.
 		if ( 'current-slide' === name && oldValue !== newValue ) {
-			// console.log('in attribute changed callback');
-
-			// if( ! this.isProgramaticScroll ) {
-			// 	this.updateHeight();
-			// }
-			
 			this.slide();
 			this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
 		}
@@ -241,9 +248,6 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the next slide.
 	 */
 	next(): void {
-		// Flag that it is a programatic scroll.
-		this.flagProgramaticScroll();
-
 		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
 
@@ -276,9 +280,6 @@ export class TPSliderElement extends HTMLElement {
 	 * Navigate to the previous slide.
 	 */
 	previous(): void {
-		// Flag that it is a programatic scroll.
-		this.flagProgramaticScroll();
-
 		// Check if we are at the first slide.
 		if ( this.currentSlideIndex <= 1 ) {
 			// Check if we are in infinite mode.
@@ -341,8 +342,6 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected slide(): void {
-		// console.log("i am in slide");
-		
 		// Check if slider is disabled.
 		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
 			// Yes, it is. So stop.
@@ -538,7 +537,6 @@ export class TPSliderElement extends HTMLElement {
 				// Set the height of the container to be the max height of the slides in the current view.
 				slidesContainer.style.height = `${ maxHeight }px`;
 			} else {
-				// console.log("i am in update height");
 				// Set the height of the container to be the height of the current slide.
 				const height: number = slides[ this.currentSlideIndex - 1 ].scrollHeight;
 				slidesContainer.style.height = `${ height }px`;
@@ -655,19 +653,5 @@ export class TPSliderElement extends HTMLElement {
 			this.autoSlide();
 			this.dispatchEvent( new CustomEvent( 'auto-slide-complete' ) );
 		}, interval );
-	}
-
-	/**
-	 * To set a flag if it is a programatic scroll.
-	 */
-	flagProgramaticScroll() {
-		// Set the flag to true.
-		this.isProgramaticScroll = true;
-
-		// Set the flag to false after 500ms.
-		setTimeout( () => {
-			// Set the flag to false.
-			this.isProgramaticScroll = false;
-		}, 500 );
 	}
 }

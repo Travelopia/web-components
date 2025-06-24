@@ -15,7 +15,7 @@ tp-slider-slides {
 	align-items: flex-start;
 	overflow-y: visible;
 	overflow-x: auto;
-    scroll-snap-type: x mandatory;
+	scroll-snap-type: x mandatory;
 	scrollbar-width: none;
 
 	tp-slider:not([resizing="yes"]) & {
