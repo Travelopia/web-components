@@ -15,9 +15,8 @@ export class TPSliderElement extends HTMLElement {
 	/**
 	 * Properties.
 	 */
-	protected touchStartX: number = 0;
-	protected touchStartY: number = 0;
-	protected swipeThreshold: number = 200;
+	protected slidesScrollContainer: TPSliderSlidesElement | null;
+	protected slidesScrollContainerRect: DOMRect | undefined;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -36,14 +35,16 @@ export class TPSliderElement extends HTMLElement {
 	constructor() {
 		// Initialize parent.
 		super();
+		this.slidesScrollContainer = this.querySelector( 'tp-slider-slides' );
+		this.slidesScrollContainerRect = this.slidesScrollContainer?.getBoundingClientRect();
+
+		// Add event listener to handle current slide attribute on scroll.
+		this.slidesScrollContainer?.addEventListener( 'scroll', this.handleCurrentSlideOnScroll.bind( this ) );
 
 		// Set current slide.
 		if ( ! this.getAttribute( 'current-slide' ) ) {
 			this.setAttribute( 'current-slide', '1' );
 		}
-
-		// Threshold Setting.
-		this.swipeThreshold = Number( this?.getAttribute( 'swipe-threshold' ) ?? '200' );
 
 		// Initialize slider.
 		this.slide();
@@ -65,10 +66,6 @@ export class TPSliderElement extends HTMLElement {
 			window.addEventListener( 'resize', this.handleResize.bind( this ) );
 			document.fonts.ready.then( () => this.handleResize() );
 		}
-
-		// Touch listeners.
-		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
-		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 	}
 
 	/**
@@ -92,7 +89,7 @@ export class TPSliderElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'current-slide', 'flexible-height', 'infinite', 'swipe', 'per-view', 'step' ];
+		return [ 'current-slide', 'flexible-height', 'infinite', 'per-view', 'step' ];
 	}
 
 	/**
@@ -348,7 +345,6 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// First, update the height.
-
 		// Yield to main thread to fix a bug in Safari 16.
 		setTimeout( () => this.updateHeight(), 0 );
 
@@ -358,7 +354,10 @@ export class TPSliderElement extends HTMLElement {
 		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
 		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
 			// Yes, it is. So slide to the current slide.
-			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
+			slidesContainer.scroll( {
+				left: slides[ this.currentSlideIndex - 1 ].offsetLeft - slides[ 0 ].offsetLeft,
+				behavior: 'smooth',
+			} );
 		}
 	}
 
@@ -484,6 +483,50 @@ export class TPSliderElement extends HTMLElement {
 		} else {
 			rightArrow?.removeAttribute( 'disabled' );
 			leftArrow?.removeAttribute( 'disabled' );
+		}
+	}
+
+	/**
+	 * Handle current slide attribute on scroll.
+	 *
+	 * This is to handle the case when the user scrolls the slides track
+	 * and we need to update the current slide index based on the scroll position.
+	 */
+	handleCurrentSlideOnScroll() {
+		// Check if we have scroll container.
+		if ( ! this.slidesScrollContainer ) {
+			// No scroll container, early return.
+			return;
+		}
+
+		// Get sll the slides.
+		const slides : NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
+
+		// If no slides.
+		if ( ! slides ) {
+			// Early return.
+			return;
+		}
+
+		// Check if scroll position is at right end.
+		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 1;
+
+		// Conditionally set the current slide index based on the scroll position.
+		if (  isAtRightEnd ) {
+			// If the current slide index is equal to the total number of slides, set it to the last slide.
+			this.setCurrentSlide( slides.length );
+		} else {
+			// Loop through all slides and check which slide is intersecting with the left edge of the scroll container.
+			slides.forEach( ( slide: TPSliderSlideElement, index: number ) => {
+				// Get the bounding rectangle of the slide.
+				const slideRect = slide.getBoundingClientRect();
+
+				// Check if the slide is intersecting with the left edge of the scroll container.
+				if ( this.slidesScrollContainerRect && slideRect?.left - this.slidesScrollContainerRect.left === 0  ) {
+					// Yes, it is. So set the current slide index.
+					this.setCurrentSlide( index + 1 );
+				}
+			} );
 		}
 	}
 
@@ -622,64 +665,6 @@ export class TPSliderElement extends HTMLElement {
 			// Return true so that the loop continues, if it does not break above.
 			return true;
 		} );
-	}
-
-	/**
-	 * Detect touch start event, and store the starting location.
-	 *
-	 * @param {Event} e Touch event.
-	 *
-	 * @protected
-	 */
-	protected handleTouchStart( e: TouchEvent ): void {
-		// initialize touch start coordinates
-		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
-			this.touchStartX = e.touches[ 0 ].clientX;
-			this.touchStartY = e.touches[ 0 ].clientY;
-		}
-	}
-
-	/**
-	 * Detect touch end event, and check if it was a left or right swipe.
-	 *
-	 * @param {Event} e Touch event.
-	 *
-	 * @protected
-	 */
-	protected handleTouchEnd( e: TouchEvent ): void {
-		// Early return if swipe is not enabled.
-		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
-			// Early return.
-			return;
-		}
-
-		// Calculate the horizontal and vertical distance moved.
-		const touchEndX: number = e.changedTouches[ 0 ].clientX;
-		const touchEndY: number = e.changedTouches[ 0 ].clientY;
-		const swipeDistanceX: number = touchEndX - this.touchStartX;
-		const swipeDistanceY: number = touchEndY - this.touchStartY;
-
-		// Determine if the swipe is predominantly horizontal or vertical.
-		const isHorizontalSwipe: boolean = Math.abs( swipeDistanceX ) > Math.abs( swipeDistanceY );
-
-		// If it's not horizontal swipe, return
-		if ( ! isHorizontalSwipe ) {
-			// Early return.
-			return;
-		}
-
-		// Check if it's a right or left swipe.
-		if ( swipeDistanceX > 0 ) {
-			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX < this.swipeThreshold ) {
-				this.previous();
-			}
-		} else if ( swipeDistanceX < 0 ) {
-			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX > -this.swipeThreshold ) {
-				this.next();
-			}
-		}
 	}
 
 	/**
