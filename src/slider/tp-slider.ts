@@ -345,6 +345,7 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// First, update the height.
+
 		// Yield to main thread to fix a bug in Safari 16.
 		setTimeout( () => this.updateHeight(), 0 );
 
@@ -512,7 +513,7 @@ export class TPSliderElement extends HTMLElement {
 		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 1;
 
 		// Conditionally set the current slide index based on the scroll position.
-		if (  isAtRightEnd ) {
+		if ( isAtRightEnd ) {
 			// If the current slide index is equal to the total number of slides, set it to the last slide.
 			this.setCurrentSlide( slides.length );
 		} else {
@@ -522,7 +523,7 @@ export class TPSliderElement extends HTMLElement {
 				const slideRect = slide.getBoundingClientRect();
 
 				// Check if the slide is intersecting with the left edge of the scroll container.
-				if ( this.slidesScrollContainerRect && slideRect?.left - this.slidesScrollContainerRect.left === 0  ) {
+				if ( this.slidesScrollContainerRect && slideRect?.left - this.slidesScrollContainerRect.left === 0 ) {
 					// Yes, it is. So set the current slide index.
 					this.setCurrentSlide( index + 1 );
 				}
