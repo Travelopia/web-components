@@ -16,7 +16,7 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected slidesScrollContainer: TPSliderSlidesElement | null;
-	protected slidesScrollContainerRect: DOMRect | undefined;
+	protected slidesScrollContainerRect: DOMRect | {};
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -36,7 +36,7 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize parent.
 		super();
 		this.slidesScrollContainer = this.querySelector( 'tp-slider-slides' );
-		this.slidesScrollContainerRect = this.slidesScrollContainer?.getBoundingClientRect();
+		this.slidesScrollContainerRect = this.slidesScrollContainer?.getBoundingClientRect() ?? {};
 
 		// Add event listener to handle current slide attribute on scroll.
 		this.slidesScrollContainer?.addEventListener( 'scroll', this.handleCurrentSlideOnScroll.bind( this ) );
@@ -500,17 +500,17 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Get sll the slides.
+		// Get all the slides.
 		const slides : NodeListOf<TPSliderSlideElement> | null = this.querySelectorAll( 'tp-slider-slide' );
 
 		// If no slides.
-		if ( ! slides ) {
+		if ( 0 === slides.length ) {
 			// Early return.
 			return;
 		}
 
 		// Check if scroll position is at right end.
-		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 1;
+		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 2;
 
 		// Conditionally set the current slide index based on the scroll position.
 		if ( isAtRightEnd ) {
@@ -522,8 +522,11 @@ export class TPSliderElement extends HTMLElement {
 				// Get the bounding rectangle of the slide.
 				const slideRect = slide.getBoundingClientRect();
 
+				// Check if the slide is aligned with the left edge of the scroll container.
+				const isAlignedWithLeftEdge = Math.abs( slideRect?.left - ( this.slidesScrollContainerRect as DOMRect ).left ) < 1;
+
 				// Check if the slide is intersecting with the left edge of the scroll container.
-				if ( this.slidesScrollContainerRect && slideRect?.left - this.slidesScrollContainerRect.left === 0 ) {
+				if ( isAlignedWithLeftEdge ) {
 					// Yes, it is. So set the current slide index.
 					this.setCurrentSlide( index + 1 );
 				}
