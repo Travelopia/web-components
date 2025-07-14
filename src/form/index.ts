@@ -14,6 +14,7 @@ import * as email from './validators/email';
 import * as minLength from './validators/min-length';
 import * as maxLength from './validators/max-length';
 import * as noEmptySpaces from './validators/no-empty-spaces';
+import * as zip from './validators/zip';
 
 // Prepare validators.
 const validators = [
@@ -22,6 +23,7 @@ const validators = [
 	minLength,
 	maxLength,
 	noEmptySpaces,
+	zip,
 ];
 
 /**
