@@ -20,12 +20,14 @@ export const errorMessage: string = 'Please enter a valid zip code';
  */
 export const validator: TPFormValidator = {
 	validate: ( field: TPFormFieldElement ): boolean => {
+		// Get the field value or default to empty string.
 		const value = field.getField()?.value ?? '';
-		
-		// International zip code pattern: letters, numbers, spaces, hyphens, 3-10 chars
+
+		// International zip code pattern: letters, numbers, spaces, hyphens, 3-10 chars.
 		const zipCodeRegex = /^[A-Za-z0-9][A-Za-z0-9\- ]{1,8}[A-Za-z0-9]$/;
-		
+
+		// Test the trimmed value against the regex pattern.
 		return zipCodeRegex.test( value.trim() );
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
-}; 
+};
