@@ -23,8 +23,13 @@ export const validator: TPFormValidator = {
 		// Get the field value or default to empty string.
 		const value = field.getField()?.value ?? '';
 
-		// International zip code pattern: letters, numbers, spaces, hyphens, 3-10 chars.
-		const zipCodeRegex = /^[A-Za-z0-9][A-Za-z0-9\- ]{1,8}[A-Za-z0-9]$/;
+		// Get custom regex pattern from zip-pattern attribute or use default.
+		const customPattern: string | null = field.getAttribute( 'zip-pattern' );
+		const defaultPattern: string = '^[A-Za-z0-9][A-Za-z0-9\\- ]{1,8}[A-Za-z0-9]$';
+		const pattern: string = customPattern ?? defaultPattern;
+
+		// Create regex object from pattern.
+		const zipCodeRegex: RegExp = new RegExp( pattern );
 
 		// Test the trimmed value against the regex pattern.
 		return zipCodeRegex.test( value.trim() );
