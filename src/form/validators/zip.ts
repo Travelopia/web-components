@@ -23,8 +23,8 @@ export const validator: TPFormValidator = {
 		// Get the field value or default to empty string.
 		const value = field.getField()?.value ?? '';
 
-		// Get custom regex pattern from zip-pattern attribute or use default.
-		const customPattern: string | null = field.getAttribute( 'zip-pattern' );
+		// Get custom regex pattern from regex attribute or use default.
+		const customPattern: string | null = field.getAttribute( 'regex' );
 		const defaultPattern: string = '^[A-Za-z0-9][A-Za-z0-9\\- ]{1,8}[A-Za-z0-9]$';
 		const pattern: string = customPattern ?? defaultPattern;
 
