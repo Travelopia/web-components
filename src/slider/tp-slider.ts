@@ -28,6 +28,7 @@ export class TPSliderElement extends HTMLElement {
 		'step',
 		'responsive',
 	];
+	protected isProgramaticScroll: boolean = false;
 
 	/**
 	 * Constructor.
@@ -66,6 +67,18 @@ export class TPSliderElement extends HTMLElement {
 			window.addEventListener( 'resize', this.handleResize.bind( this ) );
 			document.fonts.ready.then( () => this.handleResize() );
 		}
+	}
+
+	/**
+	 * Flag programmatic scroll to prevent scroll handling.
+	 */
+	protected flagProgramaticScroll(): void {
+		// Flag programmatic scroll.
+		this.isProgramaticScroll = true;
+		setTimeout( () => {
+			// Unflag programmatic scroll.
+			this.isProgramaticScroll = false;
+		}, 500 );
 	}
 
 	/**
@@ -328,6 +341,9 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected slide(): void {
+		// Flag programmatic scroll.
+		this.flagProgramaticScroll();
+
 		// Check if slider is disabled.
 		if ( 'yes' === this.getAttribute( 'disabled' ) ) {
 			// Yes, it is. So stop.
@@ -494,6 +510,12 @@ export class TPSliderElement extends HTMLElement {
 	 * and we need to update the current slide index based on the scroll position.
 	 */
 	handleCurrentSlideOnScroll() {
+		// Check if this is a programmatic scroll.
+		if ( this.isProgramaticScroll ) {
+			// Early return to prevent handling programmatic scroll.
+			return;
+		}
+
 		// Check if we have scroll container.
 		if ( ! this.slidesScrollContainer ) {
 			// No scroll container, early return.
@@ -510,7 +532,7 @@ export class TPSliderElement extends HTMLElement {
 		}
 
 		// Check if scroll position is at right end.
-		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 2;
+		const isAtRightEnd = Math.abs( this.slidesScrollContainer.scrollLeft + this.slidesScrollContainer.clientWidth - this.slidesScrollContainer.scrollWidth ) < 1;
 
 		// Conditionally set the current slide index based on the scroll position.
 		if ( isAtRightEnd ) {
