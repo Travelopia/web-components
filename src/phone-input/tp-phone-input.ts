@@ -1,8 +1,8 @@
 /**
  * Internal dependencies.
  */
-import { TPPhoneInputPhoneCodeElement } from './tp-phone-input-phone-code';
-import { TPPhoneInputCountryElement } from './tp-phone-input-country';
+import { TPPhoneInputCountriesElement } from './tp-phone-input-countries';
+import { TpPhoneInputSelectedFlagElement } from './tp-phone-input-selected-flag';
 
 /**
  * TP Phone Input.
@@ -11,8 +11,7 @@ export class TPPhoneInputElement extends HTMLElement {
 	/**
 	 * Properties.
 	 */
-	protected readonly countryButton: HTMLButtonElement | null;
-	protected readonly countryList: HTMLElement | null;
+	protected hiddenInput: HTMLInputElement | null = null;
 
 	/**
 	 * Constructor.
@@ -21,77 +20,8 @@ export class TPPhoneInputElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
-		// Get elements.
-		this.countryButton = this.querySelector( 'tp-phone-input-countries button' );
-		this.countryList = this.querySelector( 'tp-phone-input-country-list' );
-
-		// Add event listeners.
-		this.countryButton?.addEventListener( 'click', this.toggleDropdown.bind( this ) );
-		document.addEventListener( 'click', this.handleDocumentClick.bind( this ) );
-
 		// Initialize component.
-		this.initialize();
-	}
-
-	/**
-	 * Initialize component.
-	 */
-	protected initialize(): void {
-		// Set initial state based on attributes.
-		this.updateDisplay();
-	}
-
-	/**
-	 * Toggle dropdown.
-	 *
-	 * @param {Event} e Click event.
-	 */
-	protected toggleDropdown( e: Event ): void {
-		// Prevent default behavior and stop propagation.
-		e.preventDefault();
-		e.stopPropagation();
-
-		// Toggle open state.
-		const isOpen = this.getAttribute( 'open' ) === 'yes';
-		if ( isOpen ) {
-			this.removeAttribute( 'open' );
-		} else {
-			this.setAttribute( 'open', 'yes' );
-		}
-	}
-
-	/**
-	 * Handle document click.
-	 *
-	 * @param {Event} e Click event.
-	 */
-	protected handleDocumentClick( e: Event ): void {
-		// Close on click outside.
-		if ( this !== e.target && ! this.contains( e.target as Node ) ) {
-			this.removeAttribute( 'open' );
-		}
-	}
-
-	/**
-	 * Update display.
-	 */
-	protected updateDisplay(): void {
-		// Update button display.
-		if ( this.countryButton ) {
-			const country = this.getAttribute( 'country' );
-			const phoneCode = this.getAttribute( 'phone-code' );
-			if ( country && phoneCode ) {
-				// Find the flag for this country.
-				const countryElement: TPPhoneInputCountryElement | null = this.querySelector( `tp-phone-input-country[value="${ this.getAttribute( 'value' ) }"]` );
-				const flagElement = countryElement?.querySelector( 'tp-phone-input-flag' );
-				const flag = flagElement?.textContent || '🏳️';
-
-				this.countryButton.innerHTML = `${ flag } ▼`;
-
-				const phoneCodeElement: TPPhoneInputPhoneCodeElement | null = this.querySelector( 'tp-phone-input-phone-code' );
-				phoneCodeElement?.setAttribute( 'value', phoneCode );
-			}
-		}
+		this.update();
 	}
 
 	/**
@@ -101,7 +31,7 @@ export class TPPhoneInputElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'value', 'country', 'phone-code', 'format' ];
+		return [ 'name', 'open', 'value' ];
 	}
 
 	/**
@@ -118,6 +48,39 @@ export class TPPhoneInputElement extends HTMLElement {
 		}
 
 		// Update display when attributes change.
-		this.updateDisplay();
+		this.update();
+	}
+
+	/**
+	 * Update.
+	 */
+	protected update(): void {
+		// First, let's create the hidden input.
+		if ( ! this.hiddenInput ) {
+			this.hiddenInput = document.createElement( 'input' );
+			this.hiddenInput.setAttribute( 'type', 'hidden' );
+			this.appendChild( this.hiddenInput );
+		}
+
+		// Update input.
+		this.hiddenInput.setAttribute( 'name', this.getAttribute( 'name' ) ?? '' );
+		this.hiddenInput.value = '';
+
+		// Get elements.
+		const countries: TPPhoneInputCountriesElement | null = this.querySelector( 'tp-phone-input-countries' );
+		const selectedFlag: TpPhoneInputSelectedFlagElement | null = this.querySelector( 'tp-phone-input-selected-flag' );
+
+		// Toggle attribute.
+		if ( countries ) {
+			// Update its attribute.
+			if ( 'yes' === this.getAttribute( 'open' ) ) {
+				countries.setAttribute( 'open', 'yes' );
+			} else {
+				countries.removeAttribute( 'open' );
+			}
+		}
+
+		// Update flag.
+		selectedFlag?.setAttribute( 'flag', this.getAttribute( 'value' ) ?? '' );
 	}
 }

@@ -88,7 +88,7 @@
 			margin-right: 8px;
 		}
 
-		tp-phone-input-phone-input {
+		tp-phone-input-input {
 			display: flex;
 			align-items: center;
 			gap: 8px;
@@ -101,7 +101,7 @@
 			min-width: 40px;
 		}
 
-		tp-phone-input-phone-input input {
+		tp-phone-input-input input {
 			flex: 1;
 			padding: 8px;
 			border: 1px solid #ccc;
@@ -111,11 +111,11 @@
 </head>
 <body>
 	<main>
-		<tp-phone-input value="us" country="United States" phone-code="1" format="+$code $number">
+		<tp-phone-input value="us" country="United States" phone-code="1" format="+$code $number" name="phone">
 			<tp-phone-input-input>
 				<tp-phone-input-countries>
 					<button type="button" aria-label="Select country">
-						🇺🇸 ▼
+						<tp-phone-input-selected-flag></tp-phone-input-selected-flag> ▼
 					</button>
 
 					<tp-phone-input-country-list>
@@ -160,10 +160,10 @@
 						</tp-phone-input-country>
 					</tp-phone-input-country-list>
 				</tp-phone-input-countries>
-				<tp-phone-input-phone-input>
+				<tp-phone-input-input>
 					<tp-phone-input-phone-code>+1</tp-phone-input-phone-code>
-					<input type="tel" name="phone" placeholder="Enter phone number">
-				</tp-phone-input-phone-input>
+					<input type="tel" placeholder="Enter phone number">
+				</tp-phone-input-input>
 			</tp-phone-input-input>
 		</tp-phone-input>
 	</main>

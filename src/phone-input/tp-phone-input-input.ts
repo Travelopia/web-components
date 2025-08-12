@@ -1,7 +1,7 @@
 /**
- * TP Phone Input Phone Input.
+ * TP Phone Input Input.
  */
-export class TPPhoneInputPhoneInputElement extends HTMLElement {
+export class TPPhoneInputInputElement extends HTMLElement {
 	/**
 	 * Properties.
 	 */

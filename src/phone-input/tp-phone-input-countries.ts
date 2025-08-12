@@ -1,47 +1,57 @@
 /**
+ * Internal dependencies.
+ */
+import { TPPhoneInputElement } from './tp-phone-input';
+
+/**
  * TP Phone Input Countries.
  */
 export class TPPhoneInputCountriesElement extends HTMLElement {
+	/**
+	 * Properties.
+	 */
+	protected readonly button: HTMLButtonElement | null;
+
 	/**
 	 * Constructor.
 	 */
 	constructor() {
 		// Initialize parent.
 		super();
+
+		// Elements.
+		this.button = this.querySelector( ':scope > button' );
+
+		// Events.
+		this.button?.addEventListener( 'click', this.toggle.bind( this ) );
+		document.addEventListener( 'click', this.handleDocumentClick.bind( this ) );
 	}
 
 	/**
-	 * Get observed attributes.
-	 *
-	 * @return {Array} List of observed attributes.
+	 * Toggle component.
 	 */
-	static get observedAttributes(): string[] {
-		return [ 'open' ];
-	}
+	toggle(): void {
+		// Get parent input.
+		const input: TPPhoneInputElement | null = this.closest( 'tp-phone-input' );
 
-	/**
-	 * Attribute changed callback.
-	 *
-	 * @param {string} name     Attribute name.
-	 * @param {string} oldValue Old value.
-	 * @param {string} newValue New value.
-	 */
-	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
-		// If no changes.
-		if ( oldValue === newValue ) {
-			// Exit.
-			return;
+		// Update its attribute.
+		if ( 'yes' === this.getAttribute( 'open' ) ) {
+			input?.removeAttribute( 'open' );
+		} else {
+			input?.setAttribute( 'open', 'yes' );
 		}
+	}
 
-		// Handle open attribute changes.
-		if ( 'open' === name ) {
-			if ( 'yes' === newValue ) {
-				// Dispatch open event.
-				this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
-			} else {
-				// Dispatch close event.
-				this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
-			}
+	/**
+	 * Handle document click.
+	 *
+	 * @param {Event} e Click event.
+	 */
+	protected handleDocumentClick( e: Event ): void {
+		// Close on click outside.
+		if ( this !== e.target && ! this.contains( e.target as Node ) ) {
+			const input: TPPhoneInputElement | null = this.closest( 'tp-phone-input' );
+			input?.removeAttribute( 'open' );
 		}
 	}
 }
