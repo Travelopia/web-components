@@ -9,7 +9,7 @@ export class TPPhoneInputPhoneCodeElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'value' ];
+		return [ 'phone-code' ];
 	}
 
 	/**
@@ -19,13 +19,9 @@ export class TPPhoneInputPhoneCodeElement extends HTMLElement {
 	 * @param {string} newValue New value.
 	 */
 	attributeChangedCallback( oldValue: string = '', newValue: string = '' ): void {
-		// If no changes.
-		if ( ! newValue || oldValue === newValue ) {
-			// Exit.
-			return;
+		// Update code.
+		if ( oldValue !== newValue ) {
+			this.innerText = `+${ this.getAttribute( 'phone-code' ) }`;
 		}
-
-		// Update value.
-		this.innerText = `+${ newValue }`;
 	}
 }
