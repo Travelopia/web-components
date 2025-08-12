@@ -5,6 +5,7 @@ tp-phone-input {
 
 tp-phone-input-countries {
 	display: block;
+	position: relative;
 }
 
 tp-phone-input-country-list {
@@ -19,6 +20,7 @@ tp-phone-input-country-list {
 	z-index: 1000;
 	max-height: 200px;
 	overflow-y: auto;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 tp-phone-input[open="yes"] tp-phone-input-country-list {
