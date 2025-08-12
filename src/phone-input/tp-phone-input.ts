@@ -1,6 +1,8 @@
 /**
  * Internal dependencies.
  */
+import { TPPhoneInputPhoneCodeElement } from './tp-phone-input-phone-code';
+import { TPPhoneInputCountryElement } from './tp-phone-input-country';
 
 /**
  * TP Phone Input.
@@ -80,11 +82,14 @@ export class TPPhoneInputElement extends HTMLElement {
 			const phoneCode = this.getAttribute( 'phone-code' );
 			if ( country && phoneCode ) {
 				// Find the flag for this country.
-				const countryElement = this.querySelector( `tp-phone-input-country[value="${ this.getAttribute( 'value' ) }"]` );
+				const countryElement: TPPhoneInputCountryElement | null = this.querySelector( `tp-phone-input-country[value="${ this.getAttribute( 'value' ) }"]` );
 				const flagElement = countryElement?.querySelector( 'tp-phone-input-flag' );
 				const flag = flagElement?.textContent || '🏳️';
 
 				this.countryButton.innerHTML = `${ flag } ▼`;
+
+				const phoneCodeElement: TPPhoneInputPhoneCodeElement | null = this.querySelector( 'tp-phone-input-phone-code' );
+				phoneCodeElement?.setAttribute( 'value', phoneCode );
 			}
 		}
 	}
@@ -95,6 +100,7 @@ export class TPPhoneInputElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
+		// Observed attributes.
 		return [ 'value', 'country', 'phone-code', 'format' ];
 	}
 

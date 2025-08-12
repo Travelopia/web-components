@@ -162,13 +162,13 @@ export class TPPhoneInputPhoneInputElement extends HTMLElement {
 	/**
 	 * Attribute changed callback.
 	 *
-	 * @param {string} name     Attribute name.
+	 * @param {string} _name    Attribute name.
 	 * @param {string} oldValue Old value.
 	 * @param {string} newValue New value.
 	 */
-	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+	attributeChangedCallback( _name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// If no changes.
-		if ( oldValue === oldValue ) {
+		if ( oldValue === newValue ) {
 			// Exit.
 			return;
 		}
