@@ -31,7 +31,7 @@ export class TPPhoneInputElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'name', 'open', 'value' ];
+		return [ 'name', 'open', 'country-code' ];
 	}
 
 	/**
@@ -81,6 +81,6 @@ export class TPPhoneInputElement extends HTMLElement {
 		}
 
 		// Update flag.
-		selectedFlag?.setAttribute( 'flag', this.getAttribute( 'value' ) ?? '' );
+		selectedFlag?.setAttribute( 'flag', this.getAttribute( 'country-code' ) ?? '' );
 	}
 }

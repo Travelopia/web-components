@@ -26,9 +26,9 @@ export class TPPhoneInputCountryElement extends HTMLElement {
 		const phoneInput: TPPhoneInputElement | null = this.closest( 'tp-phone-input' );
 
 		// Validate if all attributes exist.
-		if ( this.getAttribute( 'value' ) && this.getAttribute( 'phone-code' ) && this.getAttribute( 'country' ) ) {
+		if ( this.getAttribute( 'country-code' ) && this.getAttribute( 'phone-code' ) && this.getAttribute( 'country' ) ) {
 			// Update parent's value.
-			phoneInput?.setAttribute( 'value', <string> this.getAttribute( 'value' ) );
+			phoneInput?.setAttribute( 'country-code', <string> this.getAttribute( 'country-code' ) );
 			phoneInput?.setAttribute( 'phone-code', <string> this.getAttribute( 'phone-code' ) );
 			phoneInput?.setAttribute( 'country', <string> this.getAttribute( 'country' ) );
 		}

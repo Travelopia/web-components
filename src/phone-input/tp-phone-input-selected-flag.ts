@@ -51,7 +51,7 @@ export class TpPhoneInputSelectedFlagElement extends HTMLElement {
 		const input: TPPhoneInputElement | null = this.closest( 'tp-phone-input' );
 
 		// Find the flag for this country.
-		const countryElement: TPPhoneInputCountryElement | null | undefined = input?.querySelector( `tp-phone-input-country[value="${ flag }"]` );
+		const countryElement: TPPhoneInputCountryElement | null | undefined = input?.querySelector( `tp-phone-input-country[country-code="${ flag }"]` );
 		const flagElement = countryElement?.querySelector( 'tp-phone-input-flag' );
 
 		// Check if we found a flag.
