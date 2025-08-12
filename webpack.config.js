@@ -86,6 +86,7 @@ module.exports = ( env ) => {
 			'toggle-attribute': './src/toggle-attribute/index.ts',
 			'number-spinner': './src/number-spinner/index.ts',
 			tooltip: './src/tooltip/index.ts',
+			'phone-input': './src/phone-input/index.ts',
 		},
 		module: {
 			rules: [

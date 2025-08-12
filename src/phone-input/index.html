@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Web Component: Phone Input</title>
+
+	<link rel="stylesheet" href="../../dist/phone-input/style.css" media="all">
+	<script type="module" src="../../dist/phone-input/index.js"></script>
+
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		main {
+			max-width: 600px;
+			margin: 40px auto;
+			padding: 20px;
+		}
+
+		tp-phone-input {
+			position: relative;
+			margin-bottom: 20px;
+		}
+
+		tp-phone-input-countries button {
+			background: none;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			padding: 8px 12px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			width: 100%;
+		}
+
+		tp-phone-input-countries button:hover {
+			background-color: #f0f0f0;
+		}
+
+		tp-phone-input-country-list {
+			display: none;
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			background: white;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+			z-index: 1000;
+			max-height: 200px;
+			overflow-y: auto;
+		}
+
+		tp-phone-input[open="yes"] tp-phone-input-country-list {
+			display: block;
+		}
+
+		tp-phone-input-search {
+			padding: 8px;
+			border-bottom: 1px solid #eee;
+		}
+
+		tp-phone-input-search input {
+			width: 100%;
+			border: none;
+			outline: none;
+			padding: 4px;
+		}
+
+		tp-phone-input-country {
+			display: block;
+			padding: 8px 12px;
+			cursor: pointer;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		tp-phone-input-country:hover {
+			background-color: #f0f0f0;
+		}
+
+		tp-phone-input-flag {
+			display: inline-block;
+			margin-right: 8px;
+		}
+
+		tp-phone-input-input {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-top: 8px;
+		}
+
+		tp-phone-input-phone-code {
+			font-weight: bold;
+			color: #666;
+			min-width: 40px;
+		}
+
+		tp-phone-input-input input {
+			flex: 1;
+			padding: 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<tp-phone-input value="us" country="United States" phone-code="1" format="+$code $number">
+			<tp-phone-input-input>
+				<tp-phone-input-countries>
+					<button type="button" aria-label="Select country">
+						🇺🇸 ▼
+					</button>
+
+					<tp-phone-input-country-list>
+						<tp-phone-input-search>
+							<input type="text" placeholder="Search countries...">
+						</tp-phone-input-search>
+
+						<tp-phone-input-country	value="us" country="United States" phone-code="1" min-length="10" max-length="10" format="(###) ###-####">
+							<tp-phone-input-flag>🇺🇸</tp-phone-input-flag> United States
+						</tp-phone-input-country>
+
+						<tp-phone-input-country	value="ca" country="Canada" phone-code="1" min-length="10" max-length="10" format="(###) ###-####">
+							<tp-phone-input-flag>🇨🇦</tp-phone-input-flag> Canada
+						</tp-phone-input-country>
+
+						<tp-phone-input-country	value="gb" country="United Kingdom" phone-code="44" min-length="10" max-length="11" format="#### ######">
+							<tp-phone-input-flag>🇬🇧</tp-phone-input-flag> United Kingdom
+						</tp-phone-input-country>
+
+						<tp-phone-input-country	value="de" country="Germany" phone-code="49" min-length="10" max-length="12" format="### #### ####">
+							<tp-phone-input-flag>🇩🇪</tp-phone-input-flag> Germany
+						</tp-phone-input-country>
+
+						<tp-phone-input-country	value="fr" country="France" phone-code="33" min-length="9" max-length="10" format="# ## ## ## ##">
+							<tp-phone-input-flag>🇫🇷</tp-phone-input-flag> France
+						</tp-phone-input-country>
+
+						<tp-phone-input-country	value="af" country="Afghanistan" phone-code="93" min-length="8" max-length="9" format="## ### ####">
+							<tp-phone-input-flag>🇦🇫</tp-phone-input-flag> Afghanistan
+						</tp-phone-input-country>
+					</tp-phone-input-country-list>
+				</tp-phone-input-countries>
+				<tp-phone-input-phone-code>+1</tp-phone-input-phone-code>
+				<input type="tel" name="phone" placeholder="Enter phone number">
+			</tp-phone-input-input>
+		</tp-phone-input>
+	</main>
+</body>
+</html>
