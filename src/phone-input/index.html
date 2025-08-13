@@ -88,7 +88,7 @@
 			margin-right: 8px;
 		}
 
-		tp-phone-input-input {
+		tp-phone-input-field {
 			display: flex;
 			align-items: center;
 			gap: 8px;
@@ -101,7 +101,7 @@
 			min-width: 40px;
 		}
 
-		tp-phone-input-input input {
+		tp-phone-input-field input {
 			flex: 1;
 			padding: 8px;
 			border: 1px solid #ccc;
@@ -160,10 +160,10 @@
 						</tp-phone-input-country>
 					</tp-phone-input-country-list>
 				</tp-phone-input-countries>
-				<tp-phone-input-input>
-					<tp-phone-input-phone-code>+1</tp-phone-input-phone-code>
+				<tp-phone-input-field>
+					<tp-phone-input-phone-code format="+$code">1</tp-phone-input-phone-code>
 					<input type="tel" placeholder="Enter phone number">
-				</tp-phone-input-input>
+				</tp-phone-input-field>
 			</tp-phone-input-input>
 		</tp-phone-input>
 	</main>

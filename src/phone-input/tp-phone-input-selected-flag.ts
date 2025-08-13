@@ -21,10 +21,11 @@ export class TpPhoneInputSelectedFlagElement extends HTMLElement {
 	/**
 	 * Attribute changed callback.
 	 *
+	 * @param {string} _name    Attribute name.
 	 * @param {string} oldValue Old value.
 	 * @param {string} newValue New value.
 	 */
-	attributeChangedCallback( oldValue: string = '', newValue: string = '' ): void {
+	attributeChangedCallback( _name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// Update flag.
 		if ( oldValue !== newValue ) {
 			this.update();

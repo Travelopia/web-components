@@ -9,19 +9,21 @@ export class TPPhoneInputPhoneCodeElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Observed attributes.
-		return [ 'phone-code' ];
+		return [ 'phone-code', 'format' ];
 	}
 
 	/**
 	 * Attribute changed callback.
 	 *
+	 * @param {string} _name    Attribute name.
 	 * @param {string} oldValue Old value.
 	 * @param {string} newValue New value.
 	 */
-	attributeChangedCallback( oldValue: string = '', newValue: string = '' ): void {
+	attributeChangedCallback( _name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// Update code.
 		if ( oldValue !== newValue ) {
-			this.innerText = `+${ this.getAttribute( 'phone-code' ) }`;
+			const format: string = this.getAttribute( 'format' ) ?? '';
+			this.innerText = `${ format.replace( '$code', this.getAttribute( 'phone-code' ) ?? '' ) }`;
 		}
 	}
 }

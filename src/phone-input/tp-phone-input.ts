@@ -4,6 +4,7 @@
 import { TPPhoneInputCountriesElement } from './tp-phone-input-countries';
 import { TpPhoneInputSelectedFlagElement } from './tp-phone-input-selected-flag';
 import { TPPhoneInputPhoneCodeElement } from './tp-phone-input-phone-code';
+import { TPPhoneInputFieldElement } from './tp-phone-input-field';
 
 /**
  * TP Phone Input.
@@ -38,10 +39,11 @@ export class TPPhoneInputElement extends HTMLElement {
 	/**
 	 * Attribute changed callback.
 	 *
+	 * @param {string} _name    Attribute name.
 	 * @param {string} oldValue Old value.
 	 * @param {string} newValue New value.
 	 */
-	attributeChangedCallback( oldValue: string = '', newValue: string = '' ): void {
+	attributeChangedCallback( _name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// If no changes.
 		if ( oldValue === newValue ) {
 			// Exit.
@@ -50,6 +52,26 @@ export class TPPhoneInputElement extends HTMLElement {
 
 		// Update display when attributes change.
 		this.update();
+	}
+
+	/**
+	 * Get value.
+	 */
+	get value(): string {
+		// Get value.
+		return this.hiddenInput?.value ?? '';
+	}
+
+	/**
+	 * Set value.
+	 *
+	 * @param {string} value The value.
+	 */
+	set value( value: string ) {
+		// Check if we have the hidden input.
+		if ( this.hiddenInput ) {
+			this.hiddenInput.value = value.toString();
+		}
 	}
 
 	/**
@@ -65,12 +87,12 @@ export class TPPhoneInputElement extends HTMLElement {
 
 		// Update input.
 		this.hiddenInput.setAttribute( 'name', this.getAttribute( 'name' ) ?? '' );
-		this.hiddenInput.value = '';
 
 		// Get elements.
 		const countries: TPPhoneInputCountriesElement | null = this.querySelector( 'tp-phone-input-countries' );
 		const selectedFlag: TpPhoneInputSelectedFlagElement | null = this.querySelector( 'tp-phone-input-selected-flag' );
 		const phoneCode: TPPhoneInputPhoneCodeElement | null = this.querySelector( 'tp-phone-input-phone-code' );
+		const input: TPPhoneInputFieldElement | null = this.querySelector( 'tp-phone-input-field' );
 
 		// Toggle attribute.
 		if ( countries ) {
@@ -85,5 +107,6 @@ export class TPPhoneInputElement extends HTMLElement {
 		// Update children.
 		selectedFlag?.setAttribute( 'flag', this.getAttribute( 'country-code' ) ?? '' );
 		phoneCode?.setAttribute( 'phone-code', this.getAttribute( 'phone-code' ) ?? '' );
+		input?.setAttribute( 'country-code', this.getAttribute( 'country-code' ) ?? '' );
 	}
 }
