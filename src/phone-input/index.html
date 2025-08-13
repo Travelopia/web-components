@@ -37,7 +37,8 @@
 			width: 100%;
 		}
 
-		tp-phone-input-countries button:hover {
+		tp-phone-input-countries button:hover,
+		tp-phone-input-country[focus="yes"] {
 			background-color: #f0f0f0;
 		}
 
@@ -124,37 +125,37 @@
 						</tp-phone-input-search>
 
 						<tp-phone-input-country	country-code="us" country="United States" phone-code="1" min-length="10" max-length="10" format="(###) ###-####">
-							<button>
+							<button type="button">
 								<tp-phone-input-flag>🇺🇸</tp-phone-input-flag> United States
 							</button>
 						</tp-phone-input-country>
 
 						<tp-phone-input-country	country-code="ca" country="Canada" phone-code="1" min-length="10" max-length="10" format="(###) ###-####">
-							<button>
+							<button type="button">
 								<tp-phone-input-flag>🇨🇦</tp-phone-input-flag> Canada
 							</button>
 						</tp-phone-input-country>
 
 						<tp-phone-input-country	country-code="gb" country="United Kingdom" phone-code="44" min-length="10" max-length="11" format="#### ######">
-							<button>
+							<button type="button">
 								<tp-phone-input-flag>🇬🇧</tp-phone-input-flag> United Kingdom
 							</button>
 						</tp-phone-input-country>
 
 						<tp-phone-input-country	country-code="de" country="Germany" phone-code="49" min-length="10" max-length="12" format="### #### ####">
-							<button>
+							<button type="button">
 								<tp-phone-input-flag>🇩🇪</tp-phone-input-flag> Germany
 							</button>
 						</tp-phone-input-country>
 
 						<tp-phone-input-country	country-code="fr" country="France" phone-code="33" min-length="9" max-length="10" format="# ## ## ## ##">
-							<button>
+							<button type="button">
 								<tp-phone-input-flag>🇫🇷</tp-phone-input-flag> France
 							</button>
 						</tp-phone-input-country>
 
 						<tp-phone-input-country	country-code="af" country="Afghanistan" phone-code="93" min-length="8" max-length="9" format="## ### ####">
-							<button>
+							<button type="button">
 								<tp-phone-input-flag>🇦🇫</tp-phone-input-flag> Afghanistan
 							</button>
 						</tp-phone-input-country>

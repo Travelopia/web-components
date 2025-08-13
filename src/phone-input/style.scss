@@ -33,6 +33,10 @@ tp-phone-input-search {
 
 tp-phone-input-country {
 	display: block;
+
+	&[hidden="yes"] {
+		display: none;
+	}
 }
 
 tp-phone-input-flag {

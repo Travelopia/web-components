@@ -93,6 +93,7 @@ export class TPPhoneInputElement extends HTMLElement {
 		const selectedFlag: TpPhoneInputSelectedFlagElement | null = this.querySelector( 'tp-phone-input-selected-flag' );
 		const phoneCode: TPPhoneInputPhoneCodeElement | null = this.querySelector( 'tp-phone-input-phone-code' );
 		const input: TPPhoneInputFieldElement | null = this.querySelector( 'tp-phone-input-field' );
+		const searchField: HTMLInputElement | null = this.querySelector( 'tp-phone-input-search input' );
 
 		// Toggle attribute.
 		if ( countries ) {
@@ -108,5 +109,10 @@ export class TPPhoneInputElement extends HTMLElement {
 		selectedFlag?.setAttribute( 'flag', this.getAttribute( 'country-code' ) ?? '' );
 		phoneCode?.setAttribute( 'phone-code', this.getAttribute( 'phone-code' ) ?? '' );
 		input?.setAttribute( 'country-code', this.getAttribute( 'country-code' ) ?? '' );
+
+		// Focus on search field.
+		if ( searchField && 'yes' === this.getAttribute( 'open' ) ) {
+			searchField.focus();
+		}
 	}
 }
