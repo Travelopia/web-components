@@ -15,10 +15,9 @@ export class TPSliderElement extends HTMLElement {
 	 * Properties.
 	 */
 	protected touchStartX: number = 0;
-	protected autoSlideInterval: number | undefined;
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
-	protected responsiveSettings: { [ key: string ]: any };
+	protected responsiveSettings: { [key: string]: any };
 	protected hoverSlideIntervalID: number | undefined;
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -50,7 +49,6 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize slider.
 		this.slide();
 		this.autoSlide();
-		this.autoSlideOnHover();
 		this.setAttribute( 'initialized', 'yes' );
 
 		// Responsive Settings.
@@ -72,6 +70,10 @@ export class TPSliderElement extends HTMLElement {
 		// Touch listeners.
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+
+		// Auto slide on hover listeners.
+		this.addEventListener( 'mouseenter', this.handleMouseEnter.bind( this ) );
+		this.addEventListener( 'mouseleave', this.handleMouseLeave.bind( this ) );
 	}
 
 	/**
@@ -555,7 +557,7 @@ export class TPSliderElement extends HTMLElement {
 		} );
 
 		// Step 3: Loop through responsiveSettings and check if the media query is matched.
-		this.responsiveSettings.every( ( settings: { [ key: string ]: any } ) => {
+		this.responsiveSettings.every( ( settings: { [key: string]: any } ) => {
 			// Check if media query is matched.
 			if ( window.matchMedia( settings.media ).matches ) {
 				// If yes, loop through the settings at this media breakpoint.
@@ -635,14 +637,13 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
-	 * Auto slide on hover.
+	 * Handle mouse enter event for auto slide on hover.
+	 *
+	 * @protected
 	 */
-	protected autoSlideOnHover(): void {
-		// Check if auto-slide-interval is enabled.
-		const autoSlideInterval: string | null = this.getAttribute( 'auto-slide-interval' );
-
-		// Check if we have an auto slider interval.
-		if ( autoSlideInterval ) {
+	protected handleMouseEnter(): void {
+		// Return early if we have an auto slide interval. Auto slide should take precedence over auto slide on hover.
+		if ( this.getAttribute( 'auto-slide-interval' ) ) {
 			// Early return.
 			return;
 		}
@@ -650,7 +651,7 @@ export class TPSliderElement extends HTMLElement {
 		// Auto Slide On Hover.
 		const autoSlideOnHoverInterval: string | null = this.getAttribute( 'auto-slide-on-hover-interval' );
 
-		// Check if we have an auto slider interval.
+		// Return early if we don't have an auto slide on hover interval.
 		if ( ! autoSlideOnHoverInterval ) {
 			// Early return.
 			return;
@@ -665,26 +666,29 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Add event listeners.
-		this.addEventListener( 'mouseenter', () => {
-			// Clear any existing interval to prevent stacking
-			if ( this.hoverSlideIntervalID ) {
-				// Clear the interval.
-				clearInterval( this.hoverSlideIntervalID );
-			}
-
-			// Auto Slide.
-			this.hoverSlideIntervalID = window.setInterval( () => {
-				// Run the next slide.
-				this.next();
-			}, interval );
-		} );
-
-		// Add event listeners to stop the interval.
-		this.addEventListener( 'mouseleave', () => {
+		// Clear any existing interval to prevent stacking
+		if ( this.hoverSlideIntervalID ) {
 			// Clear the interval.
 			clearInterval( this.hoverSlideIntervalID );
-		} );
+		}
+
+		// Auto Slide.
+		this.hoverSlideIntervalID = window.setInterval( () => {
+			// Run the next slide.
+			this.next();
+		}, interval );
+	}
+
+	/**
+	 * Handle mouse leave event for auto slide on hover.
+	 *
+	 * @protected
+	 */
+	protected handleMouseLeave(): void {
+		// Clear the interval.
+		if ( this.hoverSlideIntervalID ) {
+			clearInterval( this.hoverSlideIntervalID );
+		}
 	}
 
 	/**
