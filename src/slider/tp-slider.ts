@@ -676,6 +676,7 @@ export class TPSliderElement extends HTMLElement {
 		this.hoverSlideIntervalID = window.setInterval( () => {
 			// Run the next slide.
 			this.next();
+			this.dispatchEvent( new CustomEvent( 'auto-slide-on-hover-complete' ) );
 		}, interval );
 	}
 
