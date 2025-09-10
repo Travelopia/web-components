@@ -59,11 +59,22 @@ slider.setCurrentSlide( 2 );
 | infinite            | No       | `yes`                 | Go back to the first slide at the end of all slides, and open the last slide when navigating backwards          |
 | swipe               | No       | `yes`                 | Whether to add support for swiping gestures on touch devices                                                    |
 | behaviour           | No       | `fade`, `slide`       | The default behaviour is to slide between slides. This can be updated to fade.                                  |
-| auto-slide-interval | No       | <interval>            | Interval in milliseconds.                                                                                       |
+| auto-slide-interval | No       | <interval>            | Interval in milliseconds for automatic sliding.                                                                 |
+| auto-slide-on-hover-interval | No | <interval>       | Interval in milliseconds for automatic sliding when hovering. Only works when auto-slide-interval is not set.  |
 | per-view            | No       | <per-view>            | Handles slider behavior having more than 1 slides. No. of slides to show in one view. Default value is 1.       |
 | step                | No       | <step>                | Steps number of slides on next and previous transition. No. of slides to step to at a time. Default value is 1. |
 | swipe-threshold     | No       | `200`                 | It will not swipe if the swipe value is more than this number. Default value is 200.                            |
 | responsive          | No       | <responsive-settings> | Responsive settings to be passed in a JSON string format.                                                       |
+
+### Auto-slide Priority Rules
+
+When both `auto-slide-interval` and `auto-slide-on-hover-interval` attributes are present:
+- `auto-slide-interval` takes precedence and continues to auto-slide at the set interval
+- `auto-slide-on-hover-interval` is ignored and hover-based functionality is disabled
+
+When only `auto-slide-on-hover-interval` is present:
+- Auto-sliding only occurs when the user hovers over the slider
+- Auto-sliding stops when the user moves the mouse away from the slider
 
 * `responsive` attribute value data shape.
 - When passing the settings, JSON stringy it before passing it to responsive attribute.
@@ -80,6 +91,7 @@ issue if the default attributes ( e.g. flexible-height, infinite etc are not pas
         'swipe'              : 'yes',
         'behaviour'          : 'fade',
         'auto-slide-interval': 3000,
+        'auto-slide-on-hover-interval': 1500,
         'per-view'           : 2,
         'step'               : 2,
     },
@@ -90,6 +102,7 @@ issue if the default attributes ( e.g. flexible-height, infinite etc are not pas
         'swipe'              : 'yes',
         'behaviour'          : 'slide',
         'auto-slide-interval': 2000,
+        'auto-slide-on-hover-interval': 1000,
         'per-view'           : 1,
         'step'               : 1,
     },
@@ -103,6 +116,7 @@ issue if the default attributes ( e.g. flexible-height, infinite etc are not pas
 | slide-set           | When the current slide is set, but before sliding |
 | slide-complete      | After sliding is complete                        |
 | auto-slide-complete | After auto sliding is complete                   |
+| auto-slide-on-hover-complete | After auto sliding on hover is complete  |
 
 ## Methods
 
