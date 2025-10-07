@@ -397,12 +397,18 @@ export class TPSliderElement extends HTMLElement {
 	 * Update stuff when any attribute has changed.
 	 * Example: Update sub-components.
 	 */
-	update(): void {
+	async update(): Promise<void> {
 		// Get sub-components.
 		const sliderNav: TPSliderNavElement | null = this.querySelector( 'tp-slider-nav' );
 		const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
 		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
 		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
+
+		// Wait for initialization - done to avoid updateNavItems undefined error.
+		await customElements.whenDefined( 'tp-slider-nav' );
+		await customElements.whenDefined( 'tp-slider-nav-item' );
+		await customElements.whenDefined( 'tp-slider-count' );
+		await customElements.whenDefined( 'tp-slider-arrow' );
 
 		// Total slides variable and Total posible group.
 		const totalSlides: number = this.getTotalSlides();
