@@ -254,8 +254,8 @@ export class TPSliderElement extends HTMLElement {
 		// Initialize total slides variable.
 		const totalSlides: number = this.getTotalSlides();
 
-		// Total Posible groups.
-		const totalPosibleGroups: number = Math.ceil( totalSlides / this.step );
+		// Total Possible groups.
+		const totalPossibleGroups: number = Math.ceil( totalSlides / this.step );
 
 		// Initialize previous slide number.
 		let previousSlideNumber: number = 0;
@@ -267,13 +267,13 @@ export class TPSliderElement extends HTMLElement {
 
 			// Check if we are in the last group or in any other.
 			if ( this.currentSlideIndex + this.step - 1 >= totalSlides ) {
-				currentGroup = totalPosibleGroups;
+				currentGroup = totalPossibleGroups;
 			} else {
 				currentGroup = Math.ceil( this.currentSlideIndex / this.step );
 			}
 
 			// Update previous slide number based on which group we are in.
-			if ( currentGroup === totalPosibleGroups ) {
+			if ( currentGroup === totalPossibleGroups ) {
 				previousSlideNumber = this.currentSlideIndex - this.step + 1;
 			} else {
 				previousSlideNumber = this.currentSlideIndex - this.step;
@@ -397,16 +397,22 @@ export class TPSliderElement extends HTMLElement {
 	 * Update stuff when any attribute has changed.
 	 * Example: Update sub-components.
 	 */
-	update(): void {
+	async update(): Promise<void> {
 		// Get sub-components.
 		const sliderNav: TPSliderNavElement | null = this.querySelector( 'tp-slider-nav' );
 		const sliderCounts: NodeListOf<TPSliderCountElement> | null = this.querySelectorAll( 'tp-slider-count' );
 		const leftArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="previous"]' );
 		const rightArrow: TPSliderArrowElement | null = this.getArrow( 'tp-slider-arrow[direction="next"]' );
 
-		// Total slides variable and Total posible group.
+		// Wait for initialization - done to avoid updateNavItems undefined error.
+		await customElements.whenDefined( 'tp-slider-nav' );
+		await customElements.whenDefined( 'tp-slider-nav-item' );
+		await customElements.whenDefined( 'tp-slider-count' );
+		await customElements.whenDefined( 'tp-slider-arrow' );
+
+		// Total slides variable and Total possible group.
 		const totalSlides: number = this.getTotalSlides();
-		const totalPosibleGroups: number = Math.ceil( totalSlides / this.step );
+		const totalPossibleGroups: number = Math.ceil( totalSlides / this.step );
 
 		// Set active slide.
 		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
@@ -442,7 +448,7 @@ export class TPSliderElement extends HTMLElement {
 				// Check if index and groups are equal to update active dot.
 				if ( groupIndex === index ) {
 					navItem.setAttribute( 'current', 'yes' );
-				} else if ( ( index === totalPosibleGroups - 1 && this.currentSlideIndex + this.step - 1 >= totalSlides ) ) {
+				} else if ( ( index === totalPossibleGroups - 1 && this.currentSlideIndex + this.step - 1 >= totalSlides ) ) {
 					navItem.setAttribute( 'current', 'yes' );
 
 					// Remove current index from last 2nd item.
