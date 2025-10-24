@@ -18,6 +18,7 @@ export class TPSliderElement extends HTMLElement {
 	protected touchStartX: number = 0;
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
+	protected minSwipeThreshold: number = 0;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -44,6 +45,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Threshold Setting.
 		this.swipeThreshold = Number( this?.getAttribute( 'swipe-threshold' ) ?? '200' );
+		this.minSwipeThreshold = Number( this?.getAttribute( 'min-swipe-threshold' ) ?? '0' );
 
 		// Initialize slider.
 		this.slide();
@@ -674,17 +676,14 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Check if it's a right or left swipe.
-		if ( swipeDistanceX > 0 ) {
-			// Right-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX < this.swipeThreshold ) {
-				this.previous();
-			}
-		} else if ( swipeDistanceX < 0 ) {
-			// Left-Swipe: Check if horizontal swipe distance is less than the threshold.
-			if ( swipeDistanceX > -this.swipeThreshold ) {
-				this.next();
-			}
+		// Right-Swipe: Check if horizontal swipe distance is within the threshold range.
+		if ( swipeDistanceX < this.swipeThreshold && swipeDistanceX > this.minSwipeThreshold ) {
+			this.previous();
+		}
+
+		// Left-Swipe: Check if horizontal swipe distance is within the threshold range.
+		if ( swipeDistanceX > -this.swipeThreshold && swipeDistanceX < -this.minSwipeThreshold ) {
+			this.next();
 		}
 	}
 
