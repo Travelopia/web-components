@@ -37,10 +37,10 @@ export class TPMultiSelectSelectAllElement extends HTMLElement {
 		// Check if all options are selected.
 		if ( Array.from( options ).filter( ( optionNode ) => optionNode.getAttribute( 'disabled' ) !== 'yes' ).length === multiSelect.value.length ) {
 			this.setAttribute( 'selected', 'yes' );
-			this.innerHTML = this.getAttribute( 'unselect-text' ) ?? '';
+			this.textContent = this.getAttribute( 'unselect-text' ) ?? '';
 		} else {
 			this.removeAttribute( 'selected' );
-			this.innerHTML = this.getAttribute( 'select-text' ) ?? '';
+			this.textContent = this.getAttribute( 'select-text' ) ?? '';
 		}
 	}
 

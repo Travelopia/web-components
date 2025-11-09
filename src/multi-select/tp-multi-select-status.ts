@@ -38,7 +38,7 @@ export class TPMultiSelectStatusElement extends HTMLElement {
 	update(): void {
 		// Get format attribute.
 		const format: string = this.getAttribute( 'format' ) ?? '$total Selected';
-		let html: string = format.replace( '$total', this.getAttribute( 'total' ) ?? '' );
+		let text: string = format.replace( '$total', this.getAttribute( 'total' ) ?? '' );
 
 		// Format string includes $value.
 		if ( format.includes( '$value' ) ) {
@@ -63,11 +63,11 @@ export class TPMultiSelectStatusElement extends HTMLElement {
 				}
 
 				// Replace $value.
-				html = html.replace( '$value', replace );
+				text = text.replace( '$value', replace );
 			}
 		}
 
-		// Set inner HTML.
-		this.innerHTML = html;
+		// Set text content.
+		this.textContent = text;
 	}
 }

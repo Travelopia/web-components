@@ -250,12 +250,12 @@ export class TPFormFieldElement extends HTMLElement {
 		// Look for an existing tp-form-error element.
 		const error: TPFormErrorElement | null = this.querySelector( 'tp-form-error' );
 
-		// If found, update its innerHTML with the error message. Otherwise, create a new tp-form-error element and append it to the component.
+		// If found, update its textContent with the error message. Otherwise, create a new tp-form-error element and append it to the component.
 		if ( error ) {
-			error.innerHTML = message;
+			error.textContent = message;
 		} else {
 			const errorElement: TPFormErrorElement = document.createElement( 'tp-form-error' );
-			errorElement.innerHTML = message;
+			errorElement.textContent = message;
 			this.appendChild( errorElement );
 		}
 
@@ -283,12 +283,12 @@ export class TPFormFieldElement extends HTMLElement {
 		// Look for an existing tp-form-error element.
 		const suspense: TPFormSuspenseElement | null = this.querySelector( 'tp-form-suspense' );
 
-		// If found, update its innerHTML with the suspense message. Otherwise, create a new tp-form-suspense element and append it to the component.
+		// If found, update its textContent with the suspense message. Otherwise, create a new tp-form-suspense element and append it to the component.
 		if ( suspense ) {
-			suspense.innerHTML = message;
+			suspense.textContent = message;
 		} else {
 			const suspenseElement: TPFormSuspenseElement = document.createElement( 'tp-form-suspense' );
-			suspenseElement.innerHTML = message;
+			suspenseElement.textContent = message;
 			this.appendChild( suspenseElement );
 		}
 	}

@@ -63,7 +63,7 @@ export class TPLightboxCountElement extends HTMLElement {
 		const total: string = lightbox.getAttribute( 'total' ) ?? '';
 
 		// Update variables in format attribute.
-		this.innerHTML =
+		this.textContent =
 			this.format
 				.replace( '$current', current )
 				.replace( '$total', total );
