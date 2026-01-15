@@ -26,6 +26,38 @@ export class TPSliderNavItemElement extends HTMLElement {
 	}
 
 	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
+		return [ 'current' ];
+	}
+
+	/**
+	 * Attribute changed callback.
+	 *
+	 * @param {string} name     Attribute name.
+	 * @param {string} oldValue Old value.
+	 * @param {string} newValue New value.
+	 */
+	attributeChangedCallback( name: string, oldValue: string, newValue: string ): void {
+		// Update aria-current on the button when current attribute changes.
+		if ( 'current' === name && 'no' !== this.slider?.getAttribute( 'aria' ) ) {
+			const button = this.querySelector( 'button' );
+
+			// Check if button exists.
+			if ( button ) {
+				if ( 'yes' === newValue ) {
+					button.setAttribute( 'aria-current', 'true' );
+				} else {
+					button.removeAttribute( 'aria-current' );
+				}
+			}
+		}
+	}
+
+	/**
 	 * Handle when the button is clicked.
 	 */
 	handleClick(): void {
