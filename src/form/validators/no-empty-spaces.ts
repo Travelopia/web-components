@@ -3,7 +3,7 @@
  */
 import { TPFormFieldElement } from '../tp-form-field';
 import { TPFormValidator } from '../definitions';
-import { getErrorMessage } from '../utility';
+import { getErrorMessage, getSummaryErrorMessage } from '../utility';
 
 /**
  * Name.
@@ -14,6 +14,11 @@ export const name: string = 'no-empty-spaces';
  * Error message.
  */
 export const errorMessage: string = 'This field should not contain only white-spaces';
+
+/**
+ * Summary error message (supports %label% placeholder).
+ */
+export const summaryErrorMessage: string = '%label%: Should not contain only white-spaces';
 
 /**
  * Validator.
@@ -39,4 +44,5 @@ export const validator: TPFormValidator = {
 		return '' !== inputField.value.trim();
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
+	getSummaryMessage: ( field: TPFormFieldElement ): string => getSummaryErrorMessage( name, field ),
 };

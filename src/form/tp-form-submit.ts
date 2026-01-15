@@ -47,7 +47,7 @@ export class TPFormSubmitElement extends HTMLElement {
 		if ( 'yes' === this.getAttribute( 'submitting' ) ) {
 			submitButton.setAttribute( 'disabled', 'disabled' );
 			this.setAttribute( 'original-text', originalText );
-			submitButton.innerHTML = submittingText;
+			submitButton.textContent = submittingText;
 		} else {
 			submitButton.removeAttribute( 'disabled' );
 			this.removeAttribute( 'submitting' );

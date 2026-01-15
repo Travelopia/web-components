@@ -10,6 +10,7 @@ export interface TPFormValidator {
 	validate: { ( field: TPFormFieldElement ): boolean | Promise<boolean> };
 	getErrorMessage: { ( field: TPFormFieldElement ): string };
 	getSuspenseMessage?: { ( field: TPFormFieldElement ): string };
+	getSummaryMessage?: { ( field: TPFormFieldElement ): string };
 }
 
 /**
@@ -22,6 +23,9 @@ declare global {
 			[ key: string ]: TPFormValidator;
 		}
 		tpFormErrors: {
+			[ key: string ]: string;
+		};
+		tpFormSummaryErrors: {
 			[ key: string ]: string;
 		};
 		tpFormSuspenseMessages: {

@@ -3,7 +3,7 @@
  */
 import { TPFormFieldElement } from '../tp-form-field';
 import { TPFormValidator } from '../definitions';
-import { getErrorMessage } from '../utility';
+import { getErrorMessage, getSummaryErrorMessage } from '../utility';
 
 /**
  * Name.
@@ -16,6 +16,11 @@ export const name: string = 'email';
 export const errorMessage: string = 'Please enter a valid email address';
 
 /**
+ * Summary error message (supports %label% placeholder).
+ */
+export const summaryErrorMessage: string = '%label%: Please enter a valid email address';
+
+/**
  * Validator.
  */
 export const validator: TPFormValidator = {
@@ -24,4 +29,5 @@ export const validator: TPFormValidator = {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test( field.getField()?.value ?? '' );
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
+	getSummaryMessage: ( field: TPFormFieldElement ): string => getSummaryErrorMessage( name, field ),
 };

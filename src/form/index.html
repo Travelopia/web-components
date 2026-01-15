@@ -28,6 +28,44 @@
 		textarea {
 			width: 100%;
 		}
+
+		/* Error summary - hidden by default, shown when active */
+		tp-form-errors {
+			display: none;
+		}
+
+		tp-form-errors[active="yes"] {
+			display: block;
+			background: #fef2f2;
+			border: 1px solid #ef4444;
+			border-radius: 4px;
+			padding: 16px;
+			margin-bottom: 16px;
+		}
+
+		tp-form-errors[active="yes"] p {
+			color: #dc2626;
+			font-size: 1rem;
+			font-weight: bold;
+			margin: 0 0 8px 0;
+		}
+
+		tp-form-errors-list {
+			counter-reset: errors;
+		}
+
+		tp-form-errors-error {
+			display: block;
+			counter-increment: errors;
+		}
+
+		tp-form-errors-error::before {
+			content: counter(errors) ". ";
+		}
+
+		tp-form-errors[active="yes"] a {
+			color: #dc2626;
+		}
 	</style>
 
 	<script type="module">
@@ -48,7 +86,11 @@
 	<main>
 		<tp-form prevent-submit="yes">
 			<form action="#">
-				<h3>Synchronous Form</h3>
+				<h3>Synchronous Form (with visible error summary)</h3>
+				<tp-form-errors>
+					<p><tp-form-errors-heading format="$count error(s) found in the form"></tp-form-errors-heading></p>
+					<tp-form-errors-list role="list"></tp-form-errors-list>
+				</tp-form-errors>
 				<tp-form-field no-empty-spaces="yes" required="yes">
 					<label>Field 1</label>
 					<input type="text" name="field_1">

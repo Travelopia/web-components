@@ -3,6 +3,7 @@
  */
 import { TPFormFieldElement } from './tp-form-field';
 import { TPFormSubmitElement } from './tp-form-submit';
+import { TPFormErrorsElement } from './tp-form-errors';
 
 /**
  * TP Form.
@@ -109,12 +110,55 @@ export class TPFormElement extends HTMLElement {
 		// If form is valid then dispatch a custom 'validation-success' event else send a custom 'validation-error' event.
 		if ( formValid ) {
 			this.dispatchEvent( new CustomEvent( 'validation-success', { bubbles: true } ) );
+
+			// Clear error summary if it exists.
+			this.clearErrorSummary();
 		} else {
 			this.dispatchEvent( new CustomEvent( 'validation-error', { bubbles: true } ) );
+
+			// Update error summary and manage focus.
+			this.handleValidationError( fields );
 		}
 
 		// Return whether the form is valid or not.
 		return formValid;
+	}
+
+	/**
+	 * Handle validation error - update error summary and manage focus.
+	 *
+	 * @param {NodeList} fields All form fields.
+	 */
+	protected handleValidationError( fields: NodeListOf<TPFormFieldElement> ): void {
+		// Get invalid fields that are visible.
+		const invalidFields: TPFormFieldElement[] = Array.from( fields ).filter(
+			( field: TPFormFieldElement ): boolean =>
+				field.hasAttribute( 'error' ) && field.offsetWidth > 0 && field.offsetHeight > 0
+		);
+
+		// Get error summary element.
+		const errorSummary: TPFormErrorsElement | null = this.querySelector( 'tp-form-errors' );
+
+		// If error summary exists, populate it and move focus to it.
+		if ( errorSummary ) {
+			errorSummary.update( invalidFields );
+
+			// Timeout needed for Safari to focus after DOM update.
+			setTimeout( () => errorSummary.focus(), 0 );
+		} else if ( invalidFields.length > 0 ) {
+			// No error summary, move focus to first visible invalid field.
+			const firstInvalidField = invalidFields[ 0 ].getField();
+			firstInvalidField?.focus();
+		}
+	}
+
+	/**
+	 * Clear the error summary.
+	 */
+	protected clearErrorSummary(): void {
+		// Clear summary.
+		const errorSummary: TPFormErrorsElement | null = this.querySelector( 'tp-form-errors' );
+		errorSummary?.clear();
 	}
 
 	/**
@@ -159,5 +203,8 @@ export class TPFormElement extends HTMLElement {
 		// Remove 'submitting' attribute from submit button.
 		const submit: TPFormSubmitElement | null = this.querySelector( 'tp-form-submit' );
 		submit?.removeAttribute( 'submitting' );
+
+		// Clear error summary.
+		this.clearErrorSummary();
 	}
 }

@@ -3,7 +3,7 @@
  */
 import { TPFormFieldElement } from '../tp-form-field';
 import { TPFormValidator } from '../definitions';
-import { getErrorMessage } from '../utility';
+import { getErrorMessage, getSummaryErrorMessage } from '../utility';
 
 /**
  * Name.
@@ -14,6 +14,11 @@ export const name: string = 'zip';
  * Error message.
  */
 export const errorMessage: string = 'Please enter a valid zip code';
+
+/**
+ * Summary error message (supports %label% placeholder).
+ */
+export const summaryErrorMessage: string = '%label%: Please enter a valid zip code';
 
 /**
  * Validator.
@@ -35,4 +40,5 @@ export const validator: TPFormValidator = {
 		return zipCodeRegex.test( value.trim() );
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
+	getSummaryMessage: ( field: TPFormFieldElement ): string => getSummaryErrorMessage( name, field ),
 };
