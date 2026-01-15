@@ -35,14 +35,14 @@ export const getErrorMessage = ( error: string = '' ): string => {
  *
  * @param {TPFormFieldElement} field The form field element.
  *
- * @return {string} The label text or 'This field'.
+ * @return {string} The label text.
  */
 export const getFieldLabel = ( field: TPFormFieldElement ): string => {
 	// Query for the label element.
 	const label = field.querySelector( 'label' );
 
 	// Return the label text or a fallback.
-	return label?.textContent?.trim() || 'This field';
+	return label?.textContent?.trim() || '';
 };
 
 /**
