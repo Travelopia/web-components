@@ -82,11 +82,13 @@ export class TPSliderElement extends HTMLElement {
 	protected handleKeyDown( e: KeyboardEvent ): void {
 		// Only handle if arrow-navigation is enabled (disabled by default).
 		if ( 'yes' !== this.getAttribute( 'arrow-navigation' ) ) {
+			// Bail early.
 			return;
 		}
 
 		// Only handle arrow keys.
 		if ( 'ArrowLeft' !== e.key && 'ArrowRight' !== e.key ) {
+			// Bail early.
 			return;
 		}
 
@@ -456,6 +458,7 @@ export class TPSliderElement extends HTMLElement {
 			const firstVisibleIndex = this.currentSlideIndex - 1;
 			const lastVisibleIndex = firstVisibleIndex + this.perView - 1;
 
+			// Traverse slides.
 			slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
 				// Update active attribute.
 				if ( this.currentSlideIndex - 1 === index ) {
@@ -466,6 +469,7 @@ export class TPSliderElement extends HTMLElement {
 
 				// Update aria-hidden and inert for non-visible slides.
 				if ( manageAria ) {
+					// Check index.
 					if ( index >= firstVisibleIndex && index <= lastVisibleIndex ) {
 						slide.removeAttribute( 'aria-hidden' );
 						slide.removeAttribute( 'inert' );
