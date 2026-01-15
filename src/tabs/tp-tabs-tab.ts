@@ -102,13 +102,15 @@ export class TPTabsTabElement extends HTMLElement {
 			return;
 		}
 
-		// Update aria-hidden and inert based on open state.
+		// Update aria-hidden, inert, and tabindex based on open state.
 		if ( isOpen ) {
 			this.removeAttribute( 'aria-hidden' );
 			this.removeAttribute( 'inert' );
+			this.setAttribute( 'tabindex', '0' );
 		} else {
 			this.setAttribute( 'aria-hidden', 'true' );
 			this.setAttribute( 'inert', '' );
+			this.removeAttribute( 'tabindex' );
 		}
 	}
 }
