@@ -345,6 +345,7 @@ export class TPFormFieldElement extends HTMLElement {
 		} else {
 			const suspenseElement: TPFormSuspenseElement = document.createElement( 'tp-form-suspense' );
 			suspenseElement.textContent = message;
+			suspenseElement.setAttribute( 'aria-live', 'polite' );
 			this.appendChild( suspenseElement );
 		}
 	}

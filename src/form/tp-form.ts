@@ -142,7 +142,9 @@ export class TPFormElement extends HTMLElement {
 		// If error summary exists, populate it and move focus to it.
 		if ( errorSummary ) {
 			errorSummary.update( invalidFields );
-			errorSummary.focus();
+
+			// Timeout needed for Safari to focus after DOM update.
+			setTimeout( () => errorSummary.focus(), 0 );
 		} else if ( invalidFields.length > 0 ) {
 			// No error summary, move focus to first visible invalid field.
 			const firstInvalidField = invalidFields[ 0 ].getField();

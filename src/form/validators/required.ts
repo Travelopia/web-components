@@ -18,7 +18,7 @@ export const errorMessage: string = 'This field is required';
 /**
  * Summary error message (supports %label% placeholder).
  */
-export const summaryErrorMessage: string = '%label% is required';
+export const summaryErrorMessage: string = '%label%: This field is required';
 
 /**
  * Validator.
