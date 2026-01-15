@@ -69,6 +69,38 @@ export class TPSliderElement extends HTMLElement {
 		// Touch listeners.
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+
+		// Keyboard listener for arrow key navigation.
+		this.addEventListener( 'keydown', this.handleKeyDown.bind( this ) );
+	}
+
+	/**
+	 * Handle keydown events for arrow key navigation.
+	 *
+	 * @param {KeyboardEvent} e Keyboard event.
+	 */
+	protected handleKeyDown( e: KeyboardEvent ): void {
+		// Only handle if arrow-navigation is enabled (disabled by default).
+		if ( 'yes' !== this.getAttribute( 'arrow-navigation' ) ) {
+			// Bail early.
+			return;
+		}
+
+		// Only handle arrow keys.
+		if ( 'ArrowLeft' !== e.key && 'ArrowRight' !== e.key ) {
+			// Bail early.
+			return;
+		}
+
+		// Prevent default scrolling behavior.
+		e.preventDefault();
+
+		// Navigate based on arrow direction.
+		if ( 'ArrowLeft' === e.key ) {
+			this.previous();
+		} else if ( 'ArrowRight' === e.key ) {
+			this.next();
+		}
 	}
 
 	/**
@@ -419,12 +451,32 @@ export class TPSliderElement extends HTMLElement {
 
 		// Check if slides are available.
 		if ( slides ) {
+			// Check if aria management is enabled (default: yes).
+			const manageAria = 'no' !== this.getAttribute( 'aria' );
+
+			// Calculate visible slide range (0-indexed).
+			const firstVisibleIndex = this.currentSlideIndex - 1;
+			const lastVisibleIndex = firstVisibleIndex + this.perView - 1;
+
+			// Traverse slides.
 			slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
 				// Update active attribute.
 				if ( this.currentSlideIndex - 1 === index ) {
 					slide.setAttribute( 'active', 'yes' );
 				} else {
 					slide.removeAttribute( 'active' );
+				}
+
+				// Update aria-hidden and inert for non-visible slides.
+				if ( manageAria ) {
+					// Check index.
+					if ( index >= firstVisibleIndex && index <= lastVisibleIndex ) {
+						slide.removeAttribute( 'aria-hidden' );
+						slide.removeAttribute( 'inert' );
+					} else {
+						slide.setAttribute( 'aria-hidden', 'true' );
+						slide.setAttribute( 'inert', '' );
+					}
 				}
 			} );
 		}

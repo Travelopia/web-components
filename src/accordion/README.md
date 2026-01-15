@@ -1,4 +1,4 @@
-# Tabs
+# Accordion
 
 <table width="100%">
 	<tr>
@@ -68,10 +68,11 @@ accordionItem.close();
 
 ## Attributes
 
-| Attribute       | Required | Values        | Notes                                                             |
-|-----------------|----------|---------------|-------------------------------------------------------------------|
-| collapse-all    | No       | `yes` | This attribute controls if all accordion items should be closed.  |
-| collapse-all    | No       | `yes` | This attribute controls if all accordion items should be closed.  |
+| Attribute       | Required | Values     | Notes                                                            |
+|-----------------|----------|------------|------------------------------------------------------------------|
+| collapse-all    | No       | `yes`      | This attribute controls if all accordion items should be closed |
+| expand-all      | No       | `yes`      | This attribute controls if all accordion items should be opened |
+| aria            | No       | `yes`/`no` | Manages ARIA attributes automatically. Defaults to `yes`        |
 
 ## Events
 
@@ -79,6 +80,10 @@ accordionItem.close();
 |--------------|----------------------------------------|
 | collapse-all | When all accordion items are collapsed |
 | expand-all   | When all accordion items are expanded  |
+| before-open  | Immediately before an item is opened   |
+| open         | When an item is opened                 |
+| before-close | Immediately before an item is closed   |
+| close        | When an item is closed                 |
 
 ## Methods
 
@@ -87,3 +92,47 @@ Open an accordion item.
 
 ### `close`
 Close an accordion item.
+
+## Accessibility
+
+The accordion component provides mechanical accessibility features while you control the semantic markup.
+
+### What the Component Handles
+
+- **`aria-expanded`** — Sets `true`/`false` on the handle button based on open state.
+- **`aria-controls`** — Auto-generates IDs and links buttons to their content panels (if not provided).
+- **`hidden="until-found"`** — Closed content is searchable via browser find-in-page (Ctrl+F/Cmd+F). When a match is found, the panel auto-expands.
+
+### Find-in-Page Support
+
+The accordion uses `hidden="until-found"` to enable browser find-in-page functionality on collapsed panels:
+
+1. User presses Ctrl+F and searches for text
+2. Browser finds matches even in collapsed panels
+3. Panel auto-expands to reveal the match
+
+**Browser support:** Chrome, Edge, Firefox. Safari support expected by end of 2025.
+**Fallback:** Browsers without support hide content normally (not searchable, but still functional).
+
+### What You Should Provide
+
+| Attribute | Purpose |
+|-----------|---------|
+| Button labels | Descriptive text for each accordion trigger |
+
+### Example with Headings
+
+For accordions with headings, place the button inside the heading to preserve heading semantics:
+
+```html
+<tp-accordion>
+	<tp-accordion-item>
+		<tp-accordion-handle>
+			<h3><button>Section Title</button></h3>
+		</tp-accordion-handle>
+		<tp-accordion-content>
+			<p>Content here...</p>
+		</tp-accordion-content>
+	</tp-accordion-item>
+</tp-accordion>
+```

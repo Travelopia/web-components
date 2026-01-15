@@ -28,10 +28,63 @@
 			margin: 0 auto;
 			padding: 0 20px;
 		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
 	</style>
 </head>
 <body>
 	<main>
+		<h2>Accessibility Examples</h2>
+
+		<!--Slider with images as live region-->
+		<h3>1. Images as live region</h3>
+		<tp-slider role="region" aria-label="Photo gallery" flexible-height="yes" infinite="yes" swipe="yes" arrow-navigation="yes">
+			<tp-slider-arrow direction="previous"><button aria-label="Previous slide">&laquo;</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button aria-label="Next slide">&raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides aria-live="polite" aria-atomic="false">
+					<tp-slider-slide><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="Laptop on a wooden desk with coffee"></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="Surfer riding a wave at sunset"></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt="Black Labrador puppy looking at camera"></tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<tp-slider-count aria-hidden="true" current="1" total="3" format="$current / $total">1 / 3</tp-slider-count>
+		</tp-slider>
+
+		<br>
+
+		<!--Slider with counter as live region-->
+		<h3>2. Counter as live region</h3>
+		<tp-slider role="region" aria-label="Product gallery" flexible-height="yes" infinite="yes" swipe="yes" arrow-navigation="yes">
+			<tp-slider-arrow direction="previous"><button aria-label="Previous slide">&laquo;</button></tp-slider-arrow>
+			<tp-slider-arrow direction="next"><button aria-label="Next slide">&raquo;</button></tp-slider-arrow>
+			<tp-slider-track>
+				<tp-slider-slides>
+					<tp-slider-slide><img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="Laptop on a wooden desk with coffee"></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="Surfer riding a wave at sunset"></tp-slider-slide>
+					<tp-slider-slide><img src="https://picsum.photos/id/237/600/300" width="600" height="300" alt="Black Labrador puppy looking at camera"></tp-slider-slide>
+				</tp-slider-slides>
+			</tp-slider-track>
+			<!-- Visual counter (hidden from screen readers) -->
+			<tp-slider-count aria-hidden="true" current="1" total="3" format="$current / $total">1 / 3</tp-slider-count>
+			<!-- Screen reader counter (visually hidden, live region) -->
+			<tp-slider-count class="sr-only" aria-live="polite" current="1" total="3" format="Slide $current of $total">Slide 1 of 3</tp-slider-count>
+		</tp-slider>
+
+		<br>
+		<hr>
+		<h2>Other Examples</h2>
+
 		<!--Slider that slides horizontally with responsive settings.-->
 		<tp-slider swipe-threshold="210" flexible-height="yes" infinite="yes" swipe="yes" responsive='[{"media":"(min-width: 600px)","flexible-height":"yes","infinite":"no","swipe":"yes","auto-slide-interval":2000,"per-view":2,"step":2},{"media":"(min-width: 300px)","flexible-height":"yes","infinite":"no","swipe":"yes","behaviour":"fade","auto-slide-interval":2000,"per-view":1,"step":1}]'>
 			<tp-slider-arrow direction="previous"><button>&laquo; Previous</button></tp-slider-arrow>
