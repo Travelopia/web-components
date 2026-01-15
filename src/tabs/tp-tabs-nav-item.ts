@@ -120,15 +120,18 @@ export class TPTabsNavItemElement extends HTMLElement {
 	 * @return {string} The panel ID.
 	 */
 	getPanelId(): string {
+		// Get the trigger.
 		const trigger = this.getTrigger();
 
 		// Bail if no trigger.
 		if ( ! trigger ) {
+			// Bail.
 			return '';
 		}
 
-		// For anchors, get from href. For buttons, get from aria-controls or data-controls.
+		// Check if trigger is a link.
 		if ( trigger instanceof HTMLAnchorElement ) {
+			// For anchors, get from href. For buttons, get from aria-controls or data-controls.
 			return trigger.getAttribute( 'href' )?.replace( '#', '' ) ?? '';
 		}
 

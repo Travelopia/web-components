@@ -31,9 +31,8 @@ export class TPFormFieldElement extends HTMLElement {
 	 * Set up accessibility attributes (label linking, IDs).
 	 */
 	private setupAccessibility(): void {
-		// Get the field and label.
+		// Get the field.
 		const field = this.getField();
-		const label = this.querySelector( 'label' );
 
 		// Bail if no field.
 		if ( ! field ) {
@@ -45,6 +44,9 @@ export class TPFormFieldElement extends HTMLElement {
 		if ( ! field.id ) {
 			field.id = `tp-field-${ Math.random().toString( 36 ).substring( 2, 9 ) }`;
 		}
+
+		// Get label.
+		const label = this.querySelector( 'label' );
 
 		// Set for attribute on label if not present.
 		if ( label && ! label.hasAttribute( 'for' ) ) {

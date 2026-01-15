@@ -3,7 +3,7 @@
  */
 import { TPFormFieldElement } from '../tp-form-field';
 import { TPFormValidator } from '../definitions';
-import { getErrorMessage } from '../utility';
+import { getErrorMessage, getSummaryErrorMessage } from '../utility';
 
 /**
  * Name.
@@ -16,6 +16,11 @@ export const name: string = 'required';
 export const errorMessage: string = 'This field is required';
 
 /**
+ * Summary error message (supports %label% placeholder).
+ */
+export const summaryErrorMessage: string = '%label% is required';
+
+/**
  * Validator.
  */
 export const validator: TPFormValidator = {
@@ -24,7 +29,6 @@ export const validator: TPFormValidator = {
 		// Check if the field is empty.
 		return '' !== field.getField()?.value ?? '';
 	},
-
-	// Get error message.
 	getErrorMessage: (): string => getErrorMessage( name ),
+	getSummaryMessage: ( field: TPFormFieldElement ): string => getSummaryErrorMessage( name, field ),
 };
