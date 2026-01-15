@@ -22,6 +22,34 @@ export class TPFormFieldElement extends HTMLElement {
 		// Add event listeners.
 		field?.addEventListener( 'keyup', this.handleFieldChanged.bind( this ) );
 		field?.addEventListener( 'change', this.handleFieldChanged.bind( this ) );
+
+		// Set up accessibility attributes.
+		this.setupAccessibility();
+	}
+
+	/**
+	 * Set up accessibility attributes (label linking, IDs).
+	 */
+	private setupAccessibility(): void {
+		// Get the field and label.
+		const field = this.getField();
+		const label = this.querySelector( 'label' );
+
+		// Bail if no field.
+		if ( ! field ) {
+			// Early return.
+			return;
+		}
+
+		// Generate ID for the field if not present.
+		if ( ! field.id ) {
+			field.id = `tp-field-${ Math.random().toString( 36 ).substring( 2, 9 ) }`;
+		}
+
+		// Set for attribute on label if not present.
+		if ( label && ! label.hasAttribute( 'for' ) ) {
+			label.setAttribute( 'for', field.id );
+		}
 	}
 
 	/**
@@ -248,15 +276,32 @@ export class TPFormFieldElement extends HTMLElement {
 	 */
 	setErrorMessage( message: string = '' ): void {
 		// Look for an existing tp-form-error element.
-		const error: TPFormErrorElement | null = this.querySelector( 'tp-form-error' );
+		let error: TPFormErrorElement | null = this.querySelector( 'tp-form-error' );
 
-		// If found, update its innerHTML with the error message. Otherwise, create a new tp-form-error element and append it to the component.
+		// If found, update its textContent with the error message. Otherwise, create a new tp-form-error element and append it to the component.
 		if ( error ) {
-			error.innerHTML = message;
+			error.textContent = message;
 		} else {
-			const errorElement: TPFormErrorElement = document.createElement( 'tp-form-error' );
-			errorElement.innerHTML = message;
-			this.appendChild( errorElement );
+			error = document.createElement( 'tp-form-error' );
+			error.textContent = message;
+			error.setAttribute( 'role', 'alert' );
+			this.appendChild( error );
+		}
+
+		// Set up accessibility for the error message.
+		const field = this.getField();
+
+		// Set aria-invalid on the field.
+		if ( field ) {
+			field.setAttribute( 'aria-invalid', 'true' );
+
+			// Generate ID for error element if not present.
+			if ( ! error.id ) {
+				error.id = `tp-error-${ Math.random().toString( 36 ).substring( 2, 9 ) }`;
+			}
+
+			// Link field to error via aria-describedby.
+			field.setAttribute( 'aria-describedby', error.id );
 		}
 
 		// Dispatch a custom 'validation-error' event.
@@ -269,6 +314,15 @@ export class TPFormFieldElement extends HTMLElement {
 	removeErrorMessage(): void {
 		// Find and remove the tp-form-error element.
 		this.querySelector( 'tp-form-error' )?.remove();
+
+		// Remove accessibility attributes from the field.
+		const field = this.getField();
+
+		// Remove aria-invalid and aria-describedby.
+		if ( field ) {
+			field.removeAttribute( 'aria-invalid' );
+			field.removeAttribute( 'aria-describedby' );
+		}
 
 		// Dispatch a custom 'validation-success' event.
 		this.dispatchEvent( new CustomEvent( 'validation-success' ) );
@@ -283,12 +337,12 @@ export class TPFormFieldElement extends HTMLElement {
 		// Look for an existing tp-form-error element.
 		const suspense: TPFormSuspenseElement | null = this.querySelector( 'tp-form-suspense' );
 
-		// If found, update its innerHTML with the suspense message. Otherwise, create a new tp-form-suspense element and append it to the component.
+		// If found, update its textContent with the suspense message. Otherwise, create a new tp-form-suspense element and append it to the component.
 		if ( suspense ) {
-			suspense.innerHTML = message;
+			suspense.textContent = message;
 		} else {
 			const suspenseElement: TPFormSuspenseElement = document.createElement( 'tp-form-suspense' );
-			suspenseElement.innerHTML = message;
+			suspenseElement.textContent = message;
 			this.appendChild( suspenseElement );
 		}
 	}
