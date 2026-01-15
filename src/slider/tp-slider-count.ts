@@ -63,7 +63,7 @@ export class TPSliderCountElement extends HTMLElement {
 		const total: string = slider.getAttribute( 'total' ) ?? '';
 
 		// Updating variables in format attribute.
-		this.innerHTML =
+		this.textContent =
 			this.format
 				.replace( '$current', current.toString() )
 				.replace( '$total', total || '' );

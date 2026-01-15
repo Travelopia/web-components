@@ -41,18 +41,18 @@ export class TPFormSubmitElement extends HTMLElement {
 
 		// Prepare submit button text.
 		const submittingText: string = this.getAttribute( 'submitting-text' ) ?? '';
-		const originalText: string = this.getAttribute( 'original-text' ) ?? submitButton.innerHTML;
+		const originalText: string = this.getAttribute( 'original-text' ) ?? submitButton.textContent ?? '';
 
 		// Check if we are submitting.
 		if ( 'yes' === this.getAttribute( 'submitting' ) ) {
 			submitButton.setAttribute( 'disabled', 'disabled' );
 			this.setAttribute( 'original-text', originalText );
-			submitButton.innerHTML = submittingText;
+			submitButton.textContent = submittingText;
 		} else {
 			submitButton.removeAttribute( 'disabled' );
 			this.removeAttribute( 'submitting' );
 			this.removeAttribute( 'original-text' );
-			submitButton.innerHTML = originalText;
+			submitButton.textContent = originalText;
 		}
 	}
 }
