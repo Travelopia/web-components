@@ -32,10 +32,17 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 			return;
 		}
 
-		// Open on Enter, Space, or ArrowDown.
+		// Open on Enter, Space, or ArrowDown (only if dropdown is closed).
 		if ( 'Enter' === e.key || ' ' === e.key || 'ArrowDown' === e.key ) {
-			e.preventDefault();
-			multiSelect.setAttribute( 'open', 'yes' );
+			if ( 'yes' !== multiSelect.getAttribute( 'open' ) ) {
+				e.preventDefault();
+
+				// Stop propagation to prevent the multi-select's keyboard handler from
+				// processing the same ArrowDown event and advancing to the second option.
+				e.stopPropagation();
+
+				multiSelect.setAttribute( 'open', 'yes' );
+			}
 		}
 	}
 
