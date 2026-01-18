@@ -18,18 +18,6 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 		// Add event listeners.
 		this.addEventListener( 'click', this.toggleOpen.bind( this ) );
 		this.addEventListener( 'keydown', this.handleKeydown.bind( this ) );
-		this.addEventListener( 'blur', this.handleBlur.bind( this ) );
-	}
-
-	/**
-	 * Handle blur events to close the dropdown.
-	 */
-	handleBlur(): void {
-		// Get multi-select.
-		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
-		if ( multiSelect ) {
-			multiSelect.removeAttribute( 'open' );
-		}
 	}
 
 	/**

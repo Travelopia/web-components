@@ -79,6 +79,9 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 		// Set option role.
 		this.setAttribute( 'role', 'option' );
 
+		// Make focusable for relatedTarget to work on focusout.
+		this.setAttribute( 'tabindex', '-1' );
+
 		// Set initial ARIA state.
 		this.updateAriaState();
 	}

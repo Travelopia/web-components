@@ -27,6 +27,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		this.keyboardEventListener = this.handleKeyboardInputs.bind( this ) as EventListener;
 		document.addEventListener( 'click', this.handleDocumentClick.bind( this ) );
 		this.addEventListener( 'change', this.update.bind( this ) );
+		this.addEventListener( 'focusout', this.handleFocusOut.bind( this ) );
 
 		// Get options.
 		const options: TPMultiSelectOptionsElement | null = this.querySelector( 'tp-multi-select-options' );
@@ -80,6 +81,7 @@ export class TPMultiSelectElement extends HTMLElement {
 			if ( 'yes' === newValue ) {
 				document.addEventListener( 'keydown', this.keyboardEventListener );
 				this.updateAriaExpanded( true );
+				this.highlightNextOption();
 				this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
 			} else {
 				this.unHighlightAllOptions();
@@ -567,5 +569,20 @@ export class TPMultiSelectElement extends HTMLElement {
 				combobox.removeAttribute( 'aria-activedescendant' );
 			}
 		}
+	}
+
+	/**
+	 * Handle focus out events to close the dropdown.
+	 *
+	 * @param {FocusEvent} e Focus event.
+	 */
+	handleFocusOut( e: FocusEvent ): void {
+		// Don't close if focus is moving within the multi-select.
+		if ( e.relatedTarget && this.contains( e.relatedTarget as Node ) ) {
+			return;
+		}
+
+		// Close the dropdown.
+		this.removeAttribute( 'open' );
 	}
 }
