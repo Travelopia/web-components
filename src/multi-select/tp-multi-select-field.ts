@@ -80,10 +80,14 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 		this.setAttribute( 'role', 'combobox' );
 		this.setAttribute( 'aria-haspopup', 'listbox' );
 		this.setAttribute( 'aria-expanded', 'false' );
-		this.setAttribute( 'tabindex', '0' );
 
-		// Set aria-controls if options has an ID.
-		if ( options?.id ) {
+		// Set tabindex only if not already present.
+		if ( ! this.hasAttribute( 'tabindex' ) ) {
+			this.setAttribute( 'tabindex', '0' );
+		}
+
+		// Set aria-controls pointing to options ID.
+		if ( options ) {
 			this.setAttribute( 'aria-controls', options.id );
 		}
 	}

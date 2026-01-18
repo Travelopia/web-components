@@ -29,7 +29,7 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
-		return [ 'selected', 'disabled' ];
+		return [ 'selected' ];
 	}
 
 	/**
@@ -53,8 +53,8 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 			return;
 		}
 
-		// Update ARIA state when selected or disabled changes.
-		if ( 'selected' === name || 'disabled' === name ) {
+		// Update ARIA state when selected changes.
+		if ( 'selected' === name ) {
 			this.updateAriaState();
 		}
 	}
@@ -79,15 +79,17 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 		// Set option role.
 		this.setAttribute( 'role', 'option' );
 
-		// Make focusable for relatedTarget to work on focusout.
-		this.setAttribute( 'tabindex', '-1' );
+		// Set tabindex only if not already present (needed for relatedTarget to work on focusout).
+		if ( ! this.hasAttribute( 'tabindex' ) ) {
+			this.setAttribute( 'tabindex', '-1' );
+		}
 
 		// Set initial ARIA state.
 		this.updateAriaState();
 	}
 
 	/**
-	 * Update ARIA state based on selected/disabled attributes.
+	 * Update ARIA state based on selected attribute.
 	 */
 	updateAriaState(): void {
 		// Get multi-select.
@@ -101,14 +103,6 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 		// Update aria-selected.
 		const isSelected = 'yes' === this.getAttribute( 'selected' );
 		this.setAttribute( 'aria-selected', isSelected ? 'true' : 'false' );
-
-		// Update aria-disabled.
-		const isDisabled = 'yes' === this.getAttribute( 'disabled' );
-		if ( isDisabled ) {
-			this.setAttribute( 'aria-disabled', 'true' );
-		} else {
-			this.removeAttribute( 'aria-disabled' );
-		}
 	}
 
 	/**
