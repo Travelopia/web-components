@@ -97,7 +97,13 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 				e.preventDefault(); // Prevent inadvertent form submits.
 				break;
 			case 'ArrowDown':
-				multiSelect.setAttribute( 'open', 'yes' );
+				// Only handle when dropdown is closed.
+				if ( 'yes' !== multiSelect.getAttribute( 'open' ) ) {
+					// Stop propagation to prevent the multi-select's keyboard handler from
+					// processing the same ArrowDown event and advancing to the second option.
+					e.stopPropagation();
+					multiSelect.setAttribute( 'open', 'yes' );
+				}
 				break;
 			case 'Backspace': // Remove last pill if search is empty.
 				if ( 0 === search.value.length ) {

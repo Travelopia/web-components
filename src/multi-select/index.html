@@ -45,10 +45,6 @@
 			border-bottom: 1px solid #000;
 		}
 
-		tp-multi-select-option + tp-multi-select-option {
-			background-color: gainsboro;
-		}
-
 		tp-multi-select-select-all[selected="yes"]::after,
 		tp-multi-select-option[selected="yes"]::after {
 			content: " ✓";
@@ -56,6 +52,12 @@
 
 		tp-multi-select-option[highlighted="yes"] {
 			background-color: #efefef;
+		}
+
+		tp-multi-select-option[disabled="yes"] {
+			opacity: 0.5;
+			cursor: not-allowed;
+			color: #666;
 		}
 	</style>
 </head>
@@ -76,10 +78,11 @@
 			</tp-multi-select-options>
 		</tp-multi-select>
 
+		<label id="name-label">Select a name</label>
 		<tp-multi-select name="name" multiple="no" close-on-select="yes">
-			<tp-multi-select-field>
+			<tp-multi-select-field aria-labelledby="name-label">
 				<tp-multi-select-placeholder>Select...</tp-multi-select-placeholder>
-				<tp-multi-select-status format="$value"></tp-multi-select-status>
+				<tp-multi-select-status format="Selected: $value"></tp-multi-select-status>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
 				<tp-multi-select-option value="" label="">Select...</tp-multi-select-option>
@@ -90,11 +93,12 @@
 			</tp-multi-select-options>
 		</tp-multi-select>
 
+		<label id="countries-label">Select countries</label>
 		<tp-multi-select name="names2[]" close-on-select="yes">
 			<tp-multi-select-field>
-				<tp-multi-select-pills></tp-multi-select-pills>
+				<tp-multi-select-pills remove-format="Remove $label"></tp-multi-select-pills>
 				<tp-multi-select-search>
-					<input type="text" placeholder="Select...">
+					<input type="text" placeholder="Select..." aria-labelledby="countries-label">
 				</tp-multi-select-search>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
