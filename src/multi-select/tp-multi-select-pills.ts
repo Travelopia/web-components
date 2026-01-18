@@ -96,6 +96,9 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 	 * @return {TPMultiSelectPillElement} New pill.
 	 */
 	createPill( value: string, label: string ): TPMultiSelectPillElement {
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
 		// Create pill and set value attribute.
 		const newPill = document.createElement( 'tp-multi-select-pill' ) as TPMultiSelectPillElement;
 		newPill.setAttribute( 'value', value );
@@ -108,6 +111,11 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 		const pillCloseButton: HTMLElement = document.createElement( 'button' );
 		pillCloseButton.setAttribute( 'type', 'button' );
 		pillCloseButton.textContent = 'x';
+
+		// Add accessible label for screen readers.
+		if ( multiSelect?.isAriaEnabled() ) {
+			pillCloseButton.setAttribute( 'aria-label', `Remove ${ label }` );
+		}
 
 		// Add event listener.
 		pillCloseButton.addEventListener( 'click', () => {

@@ -3,6 +3,7 @@
  */
 import { TPMultiSelectElement } from './tp-multi-select';
 import { TPMultiSelectOptionElement } from './tp-multi-select-option';
+import { TPMultiSelectOptionsElement } from './tp-multi-select-options';
 import { TPMultiSelectPillElement } from './tp-multi-select-pill';
 
 /**
@@ -31,6 +32,47 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		input.addEventListener( 'input', this.handleSearchChange.bind( this ) );
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
 		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
+	}
+
+	/**
+	 * Connected callback.
+	 */
+	connectedCallback(): void {
+		// Setup ARIA attributes.
+		this.setupAriaAttributes();
+	}
+
+	/**
+	 * Setup ARIA attributes for the search input (combobox).
+	 */
+	setupAriaAttributes(): void {
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Check if ARIA is enabled.
+		if ( ! multiSelect?.isAriaEnabled() ) {
+			return;
+		}
+
+		// Get input.
+		const input: HTMLInputElement | null = this.querySelector( 'input' );
+		if ( ! input ) {
+			return;
+		}
+
+		// Get options container.
+		const options: TPMultiSelectOptionsElement | null = multiSelect.querySelector( 'tp-multi-select-options' );
+
+		// Set combobox role and attributes on the input.
+		input.setAttribute( 'role', 'combobox' );
+		input.setAttribute( 'aria-haspopup', 'listbox' );
+		input.setAttribute( 'aria-expanded', 'false' );
+		input.setAttribute( 'aria-autocomplete', 'list' );
+
+		// Set aria-controls if options has an ID.
+		if ( options?.id ) {
+			input.setAttribute( 'aria-controls', options.id );
+		}
 	}
 
 	/**

@@ -4,6 +4,11 @@
 import { TPMultiSelectElement } from './tp-multi-select';
 
 /**
+ * Counter for generating unique IDs.
+ */
+let optionIdCounter = 0;
+
+/**
  * TP Multi Select Option.
  */
 export class TPMultiSelectOptionElement extends HTMLElement {
@@ -16,6 +21,91 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 
 		// Add event listener to toggle the selected state.
 		this.addEventListener( 'click', this.toggle.bind( this ) );
+	}
+
+	/**
+	 * Get observed attributes.
+	 *
+	 * @return {Array} List of observed attributes.
+	 */
+	static get observedAttributes(): string[] {
+		return [ 'selected', 'disabled' ];
+	}
+
+	/**
+	 * Connected callback.
+	 */
+	connectedCallback(): void {
+		// Setup ARIA attributes.
+		this.setupAriaAttributes();
+	}
+
+	/**
+	 * Attribute changed callback.
+	 *
+	 * @param {string} name     Attribute name.
+	 * @param {string} oldValue Old value.
+	 * @param {string} newValue New value.
+	 */
+	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
+		// If no changes.
+		if ( oldValue === newValue ) {
+			return;
+		}
+
+		// Update ARIA state when selected or disabled changes.
+		if ( 'selected' === name || 'disabled' === name ) {
+			this.updateAriaState();
+		}
+	}
+
+	/**
+	 * Setup ARIA attributes for the option.
+	 */
+	setupAriaAttributes(): void {
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Check if ARIA is enabled.
+		if ( ! multiSelect?.isAriaEnabled() ) {
+			return;
+		}
+
+		// Auto-generate ID if not present.
+		if ( ! this.id ) {
+			this.id = `tp-multi-select-option-${ ++optionIdCounter }`;
+		}
+
+		// Set option role.
+		this.setAttribute( 'role', 'option' );
+
+		// Set initial ARIA state.
+		this.updateAriaState();
+	}
+
+	/**
+	 * Update ARIA state based on selected/disabled attributes.
+	 */
+	updateAriaState(): void {
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Check if ARIA is enabled.
+		if ( ! multiSelect?.isAriaEnabled() ) {
+			return;
+		}
+
+		// Update aria-selected.
+		const isSelected = 'yes' === this.getAttribute( 'selected' );
+		this.setAttribute( 'aria-selected', isSelected ? 'true' : 'false' );
+
+		// Update aria-disabled.
+		const isDisabled = 'yes' === this.getAttribute( 'disabled' );
+		if ( isDisabled ) {
+			this.setAttribute( 'aria-disabled', 'true' );
+		} else {
+			this.removeAttribute( 'aria-disabled' );
+		}
 	}
 
 	/**
