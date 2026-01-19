@@ -59,6 +59,33 @@
 			cursor: not-allowed;
 			color: #666;
 		}
+
+		tp-multi-select-options > div:not(:has(tp-multi-select-option:not([hidden="yes"]))) {
+			display: none;
+		}
+
+		tp-multi-select-search-status {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+
+		tp-multi-select-options:not(:has(tp-multi-select-option:not([hidden="yes"]))) tp-multi-select-search-status {
+			position: static;
+			width: auto;
+			height: auto;
+			padding: 0;
+			margin: 0;
+			overflow: visible;
+			clip: auto;
+			white-space: normal;
+		}
 	</style>
 </head>
 <body>
@@ -102,6 +129,14 @@
 				</tp-multi-select-search>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
+				<tp-multi-select-search-status
+					role="status"
+					aria-live="polite"
+					no-results-role="alert"
+					no-results-aria-live="assertive"
+					format="$count results"
+					no-results-format="No results found">
+				</tp-multi-select-search-status>
 				<div>
 					<div>Most Popular</div>
 					<tp-multi-select-option value="Japan" label="Japan">Japan</tp-multi-select-option>
