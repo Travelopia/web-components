@@ -12,33 +12,69 @@
 
 	<body>
 		<main>
-			<tp-number-spinner>
-				<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
-				<tp-number-spinner-input>
-					<input type="number" value="0" readonly />
-				</tp-number-spinner-input>
-				<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
-			</tp-number-spinner>
+			<!-- Accessible example with labels -->
+			<div style="margin-bottom: 20px;">
+				<label id="quantity-label" style="display: block; margin-bottom: 8px;">Quantity</label>
+				<tp-number-spinner min="0" max="10">
+					<tp-number-spinner-decrement>
+						<button type="button" aria-label="Decrease quantity">-</button>
+					</tp-number-spinner-decrement>
+					<tp-number-spinner-input>
+						<input type="number" value="0" readonly aria-labelledby="quantity-label" />
+					</tp-number-spinner-input>
+					<tp-number-spinner-increment>
+						<button type="button" aria-label="Increase quantity">+</button>
+					</tp-number-spinner-increment>
+				</tp-number-spinner>
+			</div>
 
-			<br><br>
+			<!-- Accessible example: Guests selector -->
+			<div style="margin-bottom: 20px;">
+				<label id="guests-label" style="display: block; margin-bottom: 8px;">Number of guests</label>
+				<tp-number-spinner min="1" max="20" step="1">
+					<tp-number-spinner-decrement>
+						<button type="button" aria-label="Remove guest">-</button>
+					</tp-number-spinner-decrement>
+					<tp-number-spinner-input>
+						<input type="number" value="1" readonly aria-labelledby="guests-label" />
+					</tp-number-spinner-input>
+					<tp-number-spinner-increment>
+						<button type="button" aria-label="Add guest">+</button>
+					</tp-number-spinner-increment>
+				</tp-number-spinner>
+			</div>
 
-			<tp-number-spinner min="0" max="10" step="1">
-				<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
-				<tp-number-spinner-input>
-					<input type="number" value="0" readonly />
-				</tp-number-spinner-input>
-				<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
-			</tp-number-spinner>
+			<!-- Example without min/max -->
+			<div style="margin-bottom: 20px;">
+				<label id="counter-label" style="display: block; margin-bottom: 8px;">Counter (no limits)</label>
+				<tp-number-spinner>
+					<tp-number-spinner-decrement>
+						<button type="button" aria-label="Decrease counter">-</button>
+					</tp-number-spinner-decrement>
+					<tp-number-spinner-input>
+						<input type="number" value="0" readonly aria-labelledby="counter-label" />
+					</tp-number-spinner-input>
+					<tp-number-spinner-increment>
+						<button type="button" aria-label="Increase counter">+</button>
+					</tp-number-spinner-increment>
+				</tp-number-spinner>
+			</div>
 
-			<br><br>
-
-			<tp-number-spinner min="2" max="10" step="2">
-				<tp-number-spinner-decrement><button type="button">-</button></tp-number-spinner-decrement>
-				<tp-number-spinner-input>
-					<input type="number" value="4" readonly />
-				</tp-number-spinner-input>
-				<tp-number-spinner-increment><button type="button">+</button></tp-number-spinner-increment>
-			</tp-number-spinner>
+			<!-- Example with step=2 -->
+			<div style="margin-bottom: 20px;">
+				<label id="even-label" style="display: block; margin-bottom: 8px;">Even numbers only (2-10)</label>
+				<tp-number-spinner min="2" max="10" step="2">
+					<tp-number-spinner-decrement>
+						<button type="button" aria-label="Decrease by 2">-</button>
+					</tp-number-spinner-decrement>
+					<tp-number-spinner-input>
+						<input type="number" value="4" readonly aria-labelledby="even-label" />
+					</tp-number-spinner-input>
+					<tp-number-spinner-increment>
+						<button type="button" aria-label="Increase by 2">+</button>
+					</tp-number-spinner-increment>
+				</tp-number-spinner>
+			</div>
 		</main>
 	</body>
 </html>
