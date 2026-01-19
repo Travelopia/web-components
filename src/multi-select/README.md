@@ -86,12 +86,30 @@ const value = multiSelect.value;
 
 ## Attributes
 
+### `tp-multi-select`
+
 | Attribute       | Required | Values                   | Notes                                                                            |
 |-----------------|----------|--------------------------|----------------------------------------------------------------------------------|
 | name            | Yes      | <name of the form field> | The name that is given to the form field                                         |
 | form            | No       | <id of the form>         | The id of the form with which the select input will be linked                    |
-| multiple        | No       | `yes`, `no`              | Whether the field needs to be a single or mult-select form field. Yes by default |
+| multiple        | No       | `yes`, `no`              | Whether the field needs to be a single or multi-select form field. Yes by default |
 | close-on-select | No       | `yes`                    | Whether to close the options when a value is selected                            |
+| aria            | No       | `yes`/`no`               | Manages ARIA attributes automatically. Defaults to `yes`                         |
+
+### `tp-multi-select-pills`
+
+| Attribute     | Required | Values                | Notes                                                                                      |
+|---------------|----------|-----------------------|--------------------------------------------------------------------------------------------|
+| remove-format | No       | Text with `$label`    | Format for remove button accessible label. Example: `Remove $label` becomes "Remove Japan" |
+
+### `tp-multi-select-search-status`
+
+| Attribute            | Required | Values             | Notes                                                        |
+|----------------------|----------|--------------------|--------------------------------------------------------------|
+| format               | No       | Text with `$count` | Format for results count. Default: `$count results`          |
+| no-results-format    | No       | Text               | Message when no results. Default: `No results found`         |
+| no-results-role      | No       | `alert`, `status`  | Role to use when no results (switches from default role)     |
+| no-results-aria-live | No       | `assertive`, `polite` | aria-live value when no results                           |
 
 ## Events
 
@@ -122,3 +140,74 @@ Selects all values.
 ### `unSelectAll`
 
 Un-select all values.
+
+## Accessibility
+
+The multi-select component implements the ARIA 1.2 combobox pattern with a listbox popup.
+
+### What the Component Handles
+
+- **`role="combobox"`** — Set on field (or search input if present).
+- **`role="listbox"`** — Set on options container.
+- **`role="option"`** — Set on each option.
+- **`aria-expanded`** — Dynamically updated when dropdown opens/closes.
+- **`aria-activedescendant`** — Updated during keyboard navigation.
+- **`aria-selected`** — Updated when options are selected/deselected.
+- **`aria-multiselectable`** — Set on listbox for multi-select mode.
+- **`aria-controls`** — Links combobox to listbox.
+- **`tabindex`** — Auto-set on field and options (only if not already present).
+- **Label click handling** — Clicking a label with matching `aria-labelledby` focuses the field.
+
+### What You Should Provide
+
+| Attribute          | Element                      | Purpose                                    |
+|--------------------|------------------------------|--------------------------------------------|
+| `aria-labelledby`  | `tp-multi-select-field` or `input` | Links to the label element ID         |
+| `id` + `for`       | `label` + `input`            | Standard label association (for search input) |
+| `role="status"`    | `tp-multi-select-status`     | Announces selection count changes          |
+| `aria-live`        | Status elements              | Controls announcement behavior             |
+| `remove-format`    | `tp-multi-select-pills`      | Accessible label for remove buttons        |
+
+### Keyboard Navigation
+
+| Key        | Action                                           |
+|------------|--------------------------------------------------|
+| Tab        | Move focus to/from the combobox                  |
+| Enter      | Open dropdown (when closed) / Select option      |
+| Space      | Open dropdown (when closed) / Select option      |
+| Arrow Down | Open dropdown / Navigate to next option          |
+| Arrow Up   | Navigate to previous option                      |
+| Escape     | Close dropdown                                   |
+
+### Example with Full Accessibility
+
+```html
+<label id="countries-label" for="countries-input">Select countries</label>
+<tp-multi-select name="countries[]" close-on-select="yes">
+	<tp-multi-select-field>
+		<tp-multi-select-pills remove-format="Remove $label"></tp-multi-select-pills>
+		<tp-multi-select-search>
+			<input id="countries-input" type="text" placeholder="Search..." aria-labelledby="countries-label">
+		</tp-multi-select-search>
+		<tp-multi-select-status class="sr-only" role="status" aria-live="polite" format="$total selected"></tp-multi-select-status>
+	</tp-multi-select-field>
+	<tp-multi-select-options>
+		<tp-multi-select-search-status
+			role="status"
+			aria-live="polite"
+			no-results-role="alert"
+			no-results-aria-live="assertive"
+			format="$count results"
+			no-results-format="No results found">
+		</tp-multi-select-search-status>
+		<tp-multi-select-option value="japan" label="Japan">Japan</tp-multi-select-option>
+		<tp-multi-select-option value="india" label="India">India</tp-multi-select-option>
+	</tp-multi-select-options>
+</tp-multi-select>
+```
+
+### Screen Reader Announcements
+
+- **Selection changes:** Add `role="status"` and `aria-live="polite"` to `tp-multi-select-status` to announce when selection count changes.
+- **Search results:** Use `tp-multi-select-search-status` with `role="status"` to announce result counts. Use `no-results-role="alert"` for more urgent "no results" announcements.
+- **Remove buttons:** Set `remove-format="Remove $label"` on `tp-multi-select-pills` so screen readers announce "Remove Japan" instead of just "x".
