@@ -52,6 +52,32 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 	connectedCallback(): void {
 		// Setup ARIA attributes.
 		this.setupAriaAttributes();
+
+		// Wire up label click.
+		this.setupLabelClick();
+	}
+
+	/**
+	 * Setup label click to focus this field.
+	 * Enables clicking the label to focus the field when aria-labelledby is present.
+	 */
+	setupLabelClick(): void {
+		// Get aria-labelledby attribute.
+		const labelledBy: string | null = this.getAttribute( 'aria-labelledby' );
+		if ( ! labelledBy ) {
+			return;
+		}
+
+		// Find the label element.
+		const label: HTMLElement | null = document.getElementById( labelledBy );
+		if ( ! label ) {
+			return;
+		}
+
+		// Add click listener to focus this field.
+		label.addEventListener( 'click', () => {
+			this.focus();
+		} );
 	}
 
 	/**

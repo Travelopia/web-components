@@ -120,12 +120,12 @@
 			</tp-multi-select-options>
 		</tp-multi-select>
 
-		<label id="countries-label">Select countries</label>
+		<label id="countries-label" for="countries-input">Select countries</label>
 		<tp-multi-select name="names2[]" close-on-select="yes">
 			<tp-multi-select-field>
 				<tp-multi-select-pills remove-format="Remove $label"></tp-multi-select-pills>
 				<tp-multi-select-search>
-					<input type="text" placeholder="Select..." aria-labelledby="countries-label">
+					<input id="countries-input" type="text" placeholder="Select..." aria-labelledby="countries-label">
 				</tp-multi-select-search>
 			</tp-multi-select-field>
 			<tp-multi-select-options>

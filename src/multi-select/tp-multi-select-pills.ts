@@ -121,6 +121,13 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 			newPill.removePill();
 		} );
 
+		// Stop propagation on keydown to prevent parent handlers from intercepting.
+		pillCloseButton.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
+			if ( 'Enter' === e.key || ' ' === e.key ) {
+				e.stopPropagation();
+			}
+		} );
+
 		// Append label and close button to pill.
 		newPill.appendChild( pillLabel );
 		newPill.appendChild( pillCloseButton );
