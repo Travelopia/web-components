@@ -28,19 +28,19 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 	handleKeydown( e: KeyboardEvent ): void {
 		// Get multi-select.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Bail if no multi-select.
 		if ( ! multiSelect ) {
+			// Early return.
 			return;
 		}
 
 		// Open on Enter, Space, or ArrowDown (only if dropdown is closed).
 		if ( 'Enter' === e.key || ' ' === e.key || 'ArrowDown' === e.key ) {
+			// Check if dropdown is currently closed.
 			if ( 'yes' !== multiSelect.getAttribute( 'open' ) ) {
 				e.preventDefault();
-
-				// Stop propagation to prevent the multi-select's keyboard handler from
-				// processing the same ArrowDown event and advancing to the second option.
 				e.stopPropagation();
-
 				multiSelect.setAttribute( 'open', 'yes' );
 			}
 		}
@@ -64,18 +64,25 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 	setupLabelClick(): void {
 		// Get aria-labelledby attribute.
 		const labelledBy: string | null = this.getAttribute( 'aria-labelledby' );
+
+		// Bail if no labelledby attribute.
 		if ( ! labelledBy ) {
+			// Early return.
 			return;
 		}
 
 		// Find the label element.
 		const label: HTMLElement | null = document.getElementById( labelledBy );
+
+		// Bail if no label found.
 		if ( ! label ) {
+			// Early return.
 			return;
 		}
 
 		// Add click listener to focus this field.
 		label.addEventListener( 'click', () => {
+			// Focus this field.
 			this.focus();
 		} );
 	}
@@ -90,12 +97,16 @@ export class TPMultiSelectFieldElement extends HTMLElement {
 
 		// Check if ARIA is enabled.
 		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
 		// If search input exists, it will be the combobox - don't set attributes on field.
 		const searchInput: HTMLInputElement | null = multiSelect.querySelector( 'tp-multi-select-search input' );
+
+		// Bail if search input exists.
 		if ( searchInput ) {
+			// Early return.
 			return;
 		}
 

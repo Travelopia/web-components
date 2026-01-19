@@ -29,6 +29,7 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 	 * @return {Array} List of observed attributes.
 	 */
 	static get observedAttributes(): string[] {
+		// Attributes to observe.
 		return [ 'selected' ];
 	}
 
@@ -50,6 +51,7 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 	attributeChangedCallback( name: string = '', oldValue: string = '', newValue: string = '' ): void {
 		// If no changes.
 		if ( oldValue === newValue ) {
+			// Early return.
 			return;
 		}
 
@@ -68,6 +70,7 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 
 		// Check if ARIA is enabled.
 		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
@@ -97,6 +100,7 @@ export class TPMultiSelectOptionElement extends HTMLElement {
 
 		// Check if ARIA is enabled.
 		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 

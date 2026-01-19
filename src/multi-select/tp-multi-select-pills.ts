@@ -120,6 +120,7 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 
 		// Stop propagation on keydown to prevent parent handlers from intercepting.
 		pillCloseButton.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
+			// Check if Enter or Space was pressed.
 			if ( 'Enter' === e.key || ' ' === e.key ) {
 				e.stopPropagation();
 			}

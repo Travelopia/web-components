@@ -58,6 +58,7 @@ export class TPMultiSelectElement extends HTMLElement {
 	 * @return {boolean} Whether ARIA is enabled.
 	 */
 	isAriaEnabled(): boolean {
+		// Return whether ARIA management is enabled (default: yes).
 		return 'no' !== this.getAttribute( 'aria' );
 	}
 
@@ -523,7 +524,10 @@ export class TPMultiSelectElement extends HTMLElement {
 	getComboboxElement(): HTMLElement | null {
 		// If search input exists, it's the combobox.
 		const searchInput: HTMLInputElement | null = this.querySelector( 'tp-multi-select-search input' );
+
+		// Return search input if it exists.
 		if ( searchInput ) {
+			// Return search input.
 			return searchInput;
 		}
 
@@ -539,11 +543,14 @@ export class TPMultiSelectElement extends HTMLElement {
 	updateAriaExpanded( isOpen: boolean ): void {
 		// Check if ARIA is enabled.
 		if ( ! this.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
 		// Get combobox element.
 		const combobox = this.getComboboxElement();
+
+		// Update aria-expanded if combobox exists.
 		if ( combobox ) {
 			combobox.setAttribute( 'aria-expanded', isOpen ? 'true' : 'false' );
 		}
@@ -557,12 +564,16 @@ export class TPMultiSelectElement extends HTMLElement {
 	updateAriaActiveDescendant( optionId: string | null ): void {
 		// Check if ARIA is enabled.
 		if ( ! this.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
 		// Get combobox element.
 		const combobox = this.getComboboxElement();
+
+		// Update aria-activedescendant if combobox exists.
 		if ( combobox ) {
+			// Set or remove aria-activedescendant based on optionId.
 			if ( optionId ) {
 				combobox.setAttribute( 'aria-activedescendant', optionId );
 			} else {
@@ -579,6 +590,7 @@ export class TPMultiSelectElement extends HTMLElement {
 	handleFocusOut( e: FocusEvent ): void {
 		// Don't close if focus is moving within the multi-select.
 		if ( e.relatedTarget && this.contains( e.relatedTarget as Node ) ) {
+			// Early return.
 			return;
 		}
 

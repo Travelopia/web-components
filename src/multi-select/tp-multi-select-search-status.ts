@@ -25,6 +25,7 @@ export class TPMultiSelectSearchStatusElement extends HTMLElement {
 		// Store the default role and aria-live from markup.
 		this.defaultRole = this.getAttribute( 'role' );
 		this.defaultAriaLive = this.getAttribute( 'aria-live' );
+
 		// Get multi-select and search input.
 		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
 		const searchInput: HTMLInputElement | null = multiSelect?.querySelector( 'tp-multi-select-search input' ) ?? null;
@@ -47,6 +48,7 @@ export class TPMultiSelectSearchStatusElement extends HTMLElement {
 
 		// Bail if no multi-select.
 		if ( ! multiSelect ) {
+			// Early return.
 			return;
 		}
 

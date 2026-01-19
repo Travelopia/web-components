@@ -51,12 +51,16 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 
 		// Check if ARIA is enabled.
 		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
 		// Get input.
 		const input: HTMLInputElement | null = this.querySelector( 'input' );
+
+		// Bail if no input.
 		if ( ! input ) {
+			// Early return.
 			return;
 		}
 
@@ -97,10 +101,9 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 				e.preventDefault(); // Prevent inadvertent form submits.
 				break;
 			case 'ArrowDown':
+
 				// Only handle when dropdown is closed.
 				if ( 'yes' !== multiSelect.getAttribute( 'open' ) ) {
-					// Stop propagation to prevent the multi-select's keyboard handler from
-					// processing the same ArrowDown event and advancing to the second option.
 					e.stopPropagation();
 					multiSelect.setAttribute( 'open', 'yes' );
 				}

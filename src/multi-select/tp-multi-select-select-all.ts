@@ -42,6 +42,7 @@ export class TPMultiSelectSelectAllElement extends HTMLElement {
 
 		// Check if ARIA is enabled.
 		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
@@ -66,6 +67,7 @@ export class TPMultiSelectSelectAllElement extends HTMLElement {
 
 		// Check if ARIA is enabled.
 		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
