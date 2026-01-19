@@ -144,3 +144,93 @@ import '@travelopia/web-components/dist/toggle-attribute/style.css';
 | toggled     | When the target is toggled                     |
 | toggled-on  | When the target is toggled on                  |
 | toggled-off | When the target is toggled off                 |
+
+## Accessibility
+
+**This component intentionally does not manage ARIA attributes.** You are fully responsible for adding appropriate accessibility markup.
+
+### Why No Built-in Accessibility?
+
+This is a low-level utility with too many variable use cases. The component cannot know:
+
+- Whether the trigger controls visibility, state, or something else entirely
+- What relationship exists between the trigger and target
+- Whether the target is a disclosure panel, a region, or decorative content
+
+Adding automatic ARIA would be wrong for many use cases and could create accessibility issues rather than solve them.
+
+### What You Must Provide
+
+The appropriate ARIA attributes depend entirely on your use case. Here are common patterns:
+
+#### Button Toggle (Show/Hide Panel)
+
+When a button toggles visibility of a related panel:
+
+```html
+<tp-toggle-attribute event="click" target="#panel">
+	<button aria-expanded="false" aria-controls="panel">Show details</button>
+</tp-toggle-attribute>
+
+<div id="panel" hidden>
+	Panel content here.
+</div>
+```
+
+**Your responsibility:** Update `aria-expanded` and the `hidden` attribute when the state changes. You can use the `toggled-on` and `toggled-off` events:
+
+```js
+const toggle = document.querySelector('tp-toggle-attribute');
+const button = toggle.querySelector('button');
+
+toggle.addEventListener('toggled-on', () => {
+	button.setAttribute('aria-expanded', 'true');
+});
+
+toggle.addEventListener('toggled-off', () => {
+	button.setAttribute('aria-expanded', 'false');
+});
+```
+
+#### Conditional Form Fields
+
+When a select or radio reveals additional form fields:
+
+```html
+<tp-toggle-attribute target="#additional-fields" value="Yes">
+	<label for="needs-assistance">Do you need assistance?</label>
+	<select id="needs-assistance">
+		<option value="">Select</option>
+		<option value="Yes">Yes</option>
+		<option value="No">No</option>
+	</select>
+</tp-toggle-attribute>
+
+<div id="additional-fields">
+	<label for="assistance-type">What type of assistance?</label>
+	<input type="text" id="assistance-type">
+</div>
+```
+
+**Your responsibility:** Native form semantics are usually sufficient here. The select already announces its options, and screen reader users will discover the revealed fields as they navigate. No additional ARIA is typically needed.
+
+#### Decorative/Visual-Only Toggles
+
+When toggling purely visual states (animations, decorative elements):
+
+```html
+<tp-toggle-attribute event="click" target=".decorative-element">
+	<button aria-label="Toggle animation">⚡</button>
+</tp-toggle-attribute>
+```
+
+**Your responsibility:** If the toggle has no functional impact for screen reader users, ensure the button has a clear label but no relationship attributes are needed.
+
+### General Guidelines
+
+| Use Case | Required ARIA |
+|----------|---------------|
+| Button shows/hides content | `aria-expanded`, `aria-controls` on button |
+| Button toggles pressed state | `aria-pressed` on button |
+| Form field reveals more fields | Usually none (native semantics suffice) |
+| Visual-only toggle | `aria-label` if button is icon-only |
