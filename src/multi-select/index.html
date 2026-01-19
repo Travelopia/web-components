@@ -45,10 +45,6 @@
 			border-bottom: 1px solid #000;
 		}
 
-		tp-multi-select-option + tp-multi-select-option {
-			background-color: gainsboro;
-		}
-
 		tp-multi-select-select-all[selected="yes"]::after,
 		tp-multi-select-option[selected="yes"]::after {
 			content: " ✓";
@@ -57,12 +53,46 @@
 		tp-multi-select-option[highlighted="yes"] {
 			background-color: #efefef;
 		}
+
+		tp-multi-select-option[disabled="yes"] {
+			opacity: 0.5;
+			cursor: not-allowed;
+			color: #666;
+		}
+
+		tp-multi-select-options > div:not(:has(tp-multi-select-option:not([hidden="yes"]))) {
+			display: none;
+		}
+
+		tp-multi-select-search-status {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+
+		tp-multi-select-options:not(:has(tp-multi-select-option:not([hidden="yes"]))) tp-multi-select-search-status {
+			position: static;
+			width: auto;
+			height: auto;
+			padding: 0;
+			margin: 0;
+			overflow: visible;
+			clip: auto;
+			white-space: normal;
+		}
 	</style>
 </head>
 <body>
 	<main>
+		<label id="names-label">Select names</label>
 		<tp-multi-select name="names[]">
-			<tp-multi-select-field>
+			<tp-multi-select-field aria-labelledby="names-label">
 				<tp-multi-select-placeholder>Select...</tp-multi-select-placeholder>
 				<tp-multi-select-status format="$total Selected"></tp-multi-select-status>
 			</tp-multi-select-field>
@@ -75,10 +105,11 @@
 			</tp-multi-select-options>
 		</tp-multi-select>
 
+		<label id="name-label">Select a name</label>
 		<tp-multi-select name="name" multiple="no" close-on-select="yes">
-			<tp-multi-select-field>
+			<tp-multi-select-field aria-labelledby="name-label">
 				<tp-multi-select-placeholder>Select...</tp-multi-select-placeholder>
-				<tp-multi-select-status format="$value"></tp-multi-select-status>
+				<tp-multi-select-status format="Selected: $value"></tp-multi-select-status>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
 				<tp-multi-select-option value="" label="">Select...</tp-multi-select-option>
@@ -89,19 +120,28 @@
 			</tp-multi-select-options>
 		</tp-multi-select>
 
+		<label id="countries-label" for="countries-input">Select countries</label>
 		<tp-multi-select name="names2[]" close-on-select="yes">
 			<tp-multi-select-field>
-				<tp-multi-select-pills></tp-multi-select-pills>
+				<tp-multi-select-pills remove-format="Remove $label"></tp-multi-select-pills>
 				<tp-multi-select-search>
-					<input type="text" placeholder="Select...">
+					<input id="countries-input" type="text" placeholder="Select..." aria-labelledby="countries-label">
 				</tp-multi-select-search>
 			</tp-multi-select-field>
 			<tp-multi-select-options>
+				<tp-multi-select-search-status
+					role="status"
+					aria-live="polite"
+					no-results-role="alert"
+					no-results-aria-live="assertive"
+					format="$count results"
+					no-results-format="No results found">
+				</tp-multi-select-search-status>
 				<div>
 					<div>Most Popular</div>
-					<tp-multi-select-option value="Japan" label="Japan">Japan</tp-multi-select-option> 
-					<tp-multi-select-option value="Maldiverna" label="Maldiverna">Maldiverna</tp-multi-select-option> 
-					<tp-multi-select-option value="USA" label="USA">USA</tp-multi-select-option> 
+					<tp-multi-select-option value="Japan" label="Japan">Japan</tp-multi-select-option>
+					<tp-multi-select-option value="Maldiverna" label="Maldiverna">Maldiverna</tp-multi-select-option>
+					<tp-multi-select-option value="USA" label="USA">USA</tp-multi-select-option>
 				</div>
 				<div>
 					<div>Asia</div>

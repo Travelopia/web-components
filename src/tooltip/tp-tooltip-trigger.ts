@@ -24,8 +24,97 @@ export class TPTooltipTrigger extends HTMLElement {
 			this.addEventListener( 'mouseleave', this.hideTooltip.bind( this ) );
 		}
 
+		// Add focus/blur for keyboard accessibility.
+		this.addEventListener( 'focusin', this.showTooltip.bind( this ) );
+		this.addEventListener( 'focusout', this.hideTooltip.bind( this ) );
+
+		// Add Escape key to dismiss.
+		this.addEventListener( 'keydown', this.handleKeyDown.bind( this ) );
+
 		// On window scroll, hide tooltip.
 		window.addEventListener( 'scroll', this.handleWindowScroll.bind( this ), true );
+	}
+
+	/**
+	 * Connected callback.
+	 */
+	connectedCallback(): void {
+		// Set up ARIA attributes.
+		this.setupAria();
+	}
+
+	/**
+	 * Check if ARIA management is enabled.
+	 *
+	 * @return {boolean} Whether ARIA is enabled.
+	 */
+	isAriaEnabled(): boolean {
+		// Get the tooltip and check its aria attribute.
+		const tooltip = this.getTooltip();
+
+		// Return whether ARIA management is enabled (default: yes).
+		return 'no' !== tooltip?.getAttribute( 'aria' );
+	}
+
+	/**
+	 * Get the tooltip element.
+	 *
+	 * @return {TPTooltip|null} The tooltip element.
+	 */
+	getTooltip(): TPTooltip | null {
+		// Get the tooltip ID from attribute.
+		const tooltipId: string = this.getAttribute( 'tooltip' ) ?? '';
+
+		// Bail if no tooltip ID.
+		if ( '' === tooltipId ) {
+			// Return null.
+			return null;
+		}
+
+		// Return the tooltip element.
+		return document.querySelector( `#${ tooltipId }` );
+	}
+
+	/**
+	 * Get the trigger element (focusable child).
+	 *
+	 * @return {HTMLElement|null} The trigger element.
+	 */
+	getTriggerElement(): HTMLElement | null {
+		// Return the first focusable element.
+		return this.querySelector( 'a, button, [tabindex]' );
+	}
+
+	/**
+	 * Set up ARIA attributes.
+	 */
+	setupAria(): void {
+		// Check if ARIA is enabled.
+		if ( ! this.isAriaEnabled() ) {
+			// Early return.
+			return;
+		}
+
+		// Get tooltip and trigger elements.
+		const tooltip = this.getTooltip();
+		const triggerElement = this.getTriggerElement();
+
+		// Set aria-describedby on the trigger element.
+		if ( tooltip && triggerElement && ! triggerElement.hasAttribute( 'aria-describedby' ) ) {
+			triggerElement.setAttribute( 'aria-describedby', tooltip.id );
+		}
+	}
+
+	/**
+	 * Handle keydown events.
+	 *
+	 * @param {KeyboardEvent} event The keyboard event.
+	 */
+	handleKeyDown( event: KeyboardEvent ): void {
+		// Escape key closes the tooltip.
+		if ( 'Escape' === event.key ) {
+			this.hideTooltip();
+		}
 	}
 
 	/**

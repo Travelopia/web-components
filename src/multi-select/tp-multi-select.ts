@@ -27,6 +27,7 @@ export class TPMultiSelectElement extends HTMLElement {
 		this.keyboardEventListener = this.handleKeyboardInputs.bind( this ) as EventListener;
 		document.addEventListener( 'click', this.handleDocumentClick.bind( this ) );
 		this.addEventListener( 'change', this.update.bind( this ) );
+		this.addEventListener( 'focusout', this.handleFocusOut.bind( this ) );
 
 		// Get options.
 		const options: TPMultiSelectOptionsElement | null = this.querySelector( 'tp-multi-select-options' );
@@ -48,7 +49,17 @@ export class TPMultiSelectElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Attributes to observe.
-		return [ 'open' ];
+		return [ 'open', 'aria' ];
+	}
+
+	/**
+	 * Check if ARIA management is enabled.
+	 *
+	 * @return {boolean} Whether ARIA is enabled.
+	 */
+	isAriaEnabled(): boolean {
+		// Return whether ARIA management is enabled (default: yes).
+		return 'no' !== this.getAttribute( 'aria' );
 	}
 
 	/**
@@ -70,10 +81,13 @@ export class TPMultiSelectElement extends HTMLElement {
 			// If new value is 'yes' then open the dropdown.
 			if ( 'yes' === newValue ) {
 				document.addEventListener( 'keydown', this.keyboardEventListener );
+				this.updateAriaExpanded( true );
+				this.highlightNextOption();
 				this.dispatchEvent( new CustomEvent( 'open', { bubbles: true } ) );
 			} else {
 				this.unHighlightAllOptions();
 				document.removeEventListener( 'keydown', this.keyboardEventListener );
+				this.updateAriaExpanded( false );
 				this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
 			}
 		}
@@ -417,6 +431,9 @@ export class TPMultiSelectElement extends HTMLElement {
 		// Scroll the highlighted option into view with smooth behavior.
 		options[ nextToBeHighlighted ].scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 
+		// Update aria-activedescendant.
+		this.updateAriaActiveDescendant( options[ nextToBeHighlighted ].id || null );
+
 		// Update the currentlyHighlightedOption for the next iteration.
 		this.currentlyHighlightedOption = nextToBeHighlighted;
 	}
@@ -461,6 +478,9 @@ export class TPMultiSelectElement extends HTMLElement {
 		// Scroll the highlighted option into view with smooth behavior.
 		options[ previousToBeHighlighted ].scrollIntoView( { behavior: 'smooth', block: 'nearest' } );
 
+		// Update aria-activedescendant.
+		this.updateAriaActiveDescendant( options[ previousToBeHighlighted ].id || null );
+
 		// Update the currentlyHighlightedOption for the next iteration.
 		this.currentlyHighlightedOption = previousToBeHighlighted;
 	}
@@ -491,5 +511,90 @@ export class TPMultiSelectElement extends HTMLElement {
 				option.removeAttribute( 'highlighted' );
 			} );
 		}
+
+		// Clear aria-activedescendant.
+		this.updateAriaActiveDescendant( null );
+	}
+
+	/**
+	 * Get the combobox element (search input or field).
+	 *
+	 * @return {HTMLElement | null} The combobox element.
+	 */
+	getComboboxElement(): HTMLElement | null {
+		// If search input exists, it's the combobox.
+		const searchInput: HTMLInputElement | null = this.querySelector( 'tp-multi-select-search input' );
+
+		// Return search input if it exists.
+		if ( searchInput ) {
+			// Return search input.
+			return searchInput;
+		}
+
+		// Otherwise, the field is the combobox.
+		return this.querySelector( 'tp-multi-select-field' );
+	}
+
+	/**
+	 * Update aria-expanded on the combobox element.
+	 *
+	 * @param {boolean} isOpen Whether the dropdown is open.
+	 */
+	updateAriaExpanded( isOpen: boolean ): void {
+		// Check if ARIA is enabled.
+		if ( ! this.isAriaEnabled() ) {
+			// Early return.
+			return;
+		}
+
+		// Get combobox element.
+		const combobox = this.getComboboxElement();
+
+		// Update aria-expanded if combobox exists.
+		if ( combobox ) {
+			combobox.setAttribute( 'aria-expanded', isOpen ? 'true' : 'false' );
+		}
+	}
+
+	/**
+	 * Update aria-activedescendant on the combobox element.
+	 *
+	 * @param {string | null} optionId The ID of the highlighted option, or null to clear.
+	 */
+	updateAriaActiveDescendant( optionId: string | null ): void {
+		// Check if ARIA is enabled.
+		if ( ! this.isAriaEnabled() ) {
+			// Early return.
+			return;
+		}
+
+		// Get combobox element.
+		const combobox = this.getComboboxElement();
+
+		// Update aria-activedescendant if combobox exists.
+		if ( combobox ) {
+			// Set or remove aria-activedescendant based on optionId.
+			if ( optionId ) {
+				combobox.setAttribute( 'aria-activedescendant', optionId );
+			} else {
+				combobox.removeAttribute( 'aria-activedescendant' );
+			}
+		}
+	}
+
+	/**
+	 * Handle focus out events to close the dropdown.
+	 *
+	 * @param {FocusEvent} e Focus event.
+	 */
+	handleFocusOut( e: FocusEvent ): void {
+		// Don't close if focus is moving within the multi-select.
+		if ( e.relatedTarget && this.contains( e.relatedTarget as Node ) ) {
+			// Early return.
+			return;
+		}
+
+		// Close the dropdown.
+		this.removeAttribute( 'open' );
 	}
 }

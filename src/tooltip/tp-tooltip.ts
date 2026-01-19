@@ -25,6 +25,45 @@ export class TPTooltip extends HTMLElement {
 	}
 
 	/**
+	 * Connected callback.
+	 */
+	connectedCallback(): void {
+		// Set up ARIA attributes.
+		this.setupAria();
+	}
+
+	/**
+	 * Check if ARIA management is enabled.
+	 *
+	 * @return {boolean} Whether ARIA is enabled.
+	 */
+	isAriaEnabled(): boolean {
+		// Return whether ARIA management is enabled (default: yes).
+		return 'no' !== this.getAttribute( 'aria' );
+	}
+
+	/**
+	 * Set up ARIA attributes.
+	 */
+	setupAria(): void {
+		// Check if ARIA is enabled.
+		if ( ! this.isAriaEnabled() ) {
+			// Early return.
+			return;
+		}
+
+		// Auto-generate ID if not present.
+		if ( ! this.id ) {
+			this.id = `tp-tooltip-${ crypto.randomUUID() }`;
+		}
+
+		// Set role="tooltip" if not already set.
+		if ( ! this.hasAttribute( 'role' ) ) {
+			this.setAttribute( 'role', 'tooltip' );
+		}
+	}
+
+	/**
 	 * Get offset.
 	 */
 	get offset(): number {

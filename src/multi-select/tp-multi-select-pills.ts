@@ -107,12 +107,23 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 		// Create pill close button.
 		const pillCloseButton: HTMLElement = document.createElement( 'button' );
 		pillCloseButton.setAttribute( 'type', 'button' );
-		pillCloseButton.textContent = 'x';
+
+		// Use remove-format for button text, falling back to 'x'.
+		const removeFormat = this.getAttribute( 'remove-format' );
+		pillCloseButton.textContent = removeFormat ? removeFormat.replace( '$label', label ) : 'x';
 
 		// Add event listener.
 		pillCloseButton.addEventListener( 'click', () => {
 			// On click, run removePill method.
 			newPill.removePill();
+		} );
+
+		// Stop propagation on keydown to prevent parent handlers from intercepting.
+		pillCloseButton.addEventListener( 'keydown', ( e: KeyboardEvent ) => {
+			// Check if Enter or Space was pressed.
+			if ( 'Enter' === e.key || ' ' === e.key ) {
+				e.stopPropagation();
+			}
 		} );
 
 		// Append label and close button to pill.

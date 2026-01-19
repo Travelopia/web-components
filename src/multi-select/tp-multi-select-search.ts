@@ -3,6 +3,7 @@
  */
 import { TPMultiSelectElement } from './tp-multi-select';
 import { TPMultiSelectOptionElement } from './tp-multi-select-option';
+import { TPMultiSelectOptionsElement } from './tp-multi-select-options';
 import { TPMultiSelectPillElement } from './tp-multi-select-pill';
 
 /**
@@ -16,21 +17,58 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
-		// get input.
-		const input: HTMLInputElement | null = this.querySelector( 'input' );
+		// Add event listeners.
+		const input = this.querySelector( 'input' );
+		input?.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
+		input?.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
+		input?.addEventListener( 'input', this.handleSearchChange.bind( this ) );
+		this.addEventListener( 'click', this.handleClick.bind( this ) );
+		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
+	}
 
-		// Check if input exists.
-		if ( ! input ) {
-			// No, its not. Exit.
+	/**
+	 * Connected callback.
+	 */
+	connectedCallback(): void {
+		// Setup ARIA attributes.
+		this.setupAriaAttributes();
+	}
+
+	/**
+	 * Setup ARIA attributes for the search input (combobox).
+	 */
+	setupAriaAttributes(): void {
+		// Get multi-select.
+		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
+
+		// Check if ARIA is enabled.
+		if ( ! multiSelect?.isAriaEnabled() ) {
+			// Early return.
 			return;
 		}
 
-		// Add event listeners.
-		input.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
-		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
-		input.addEventListener( 'input', this.handleSearchChange.bind( this ) );
-		this.addEventListener( 'click', this.handleClick.bind( this ) );
-		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
+		// Get input.
+		const input: HTMLInputElement | null = this.querySelector( 'input' );
+
+		// Bail if no input.
+		if ( ! input ) {
+			// Early return.
+			return;
+		}
+
+		// Get options container.
+		const options: TPMultiSelectOptionsElement | null = multiSelect.querySelector( 'tp-multi-select-options' );
+
+		// Set combobox role and attributes on the input.
+		input.setAttribute( 'role', 'combobox' );
+		input.setAttribute( 'aria-haspopup', 'listbox' );
+		input.setAttribute( 'aria-expanded', 'false' );
+		input.setAttribute( 'aria-autocomplete', 'list' );
+
+		// Set aria-controls if options has an ID.
+		if ( options?.id ) {
+			input.setAttribute( 'aria-controls', options.id );
+		}
 	}
 
 	/**
@@ -55,7 +93,12 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 				e.preventDefault(); // Prevent inadvertent form submits.
 				break;
 			case 'ArrowDown':
-				multiSelect.setAttribute( 'open', 'yes' );
+
+				// Only handle when dropdown is closed.
+				if ( 'yes' !== multiSelect.getAttribute( 'open' ) ) {
+					e.stopPropagation();
+					multiSelect.setAttribute( 'open', 'yes' );
+				}
 				break;
 			case 'Backspace': // Remove last pill if search is empty.
 				if ( 0 === search.value.length ) {

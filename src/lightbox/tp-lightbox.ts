@@ -23,6 +23,8 @@ export class TPLightboxElement extends HTMLElement {
 	protected swipeThreshold: number = 200;
 	protected dialogElement: HTMLDialogElement | null;
 	protected lightboxNavItems: NodeListOf<TPLightboxNavItemElement> | null;
+	protected previouslyFocusedElement: HTMLElement | null = null;
+	protected readonly boundHandleKeyDown: ( e: KeyboardEvent ) => void;
 
 	/**
 	 * Constructor.
@@ -30,6 +32,9 @@ export class TPLightboxElement extends HTMLElement {
 	constructor() {
 		// Initialize parent.
 		super();
+
+		// Bind event handlers.
+		this.boundHandleKeyDown = this.handleKeyDown.bind( this );
 
 		// Initialize
 		this.dialogElement = this.querySelector( 'dialog' );
@@ -77,6 +82,16 @@ export class TPLightboxElement extends HTMLElement {
 		if ( 'open' === name || 'index' === name ) {
 			this.updateNavCurrentItem();
 		}
+	}
+
+	/**
+	 * Check if ARIA management is enabled.
+	 *
+	 * @return {boolean} Whether ARIA is enabled.
+	 */
+	isAriaEnabled(): boolean {
+		// Return whether ARIA management is enabled (default: yes).
+		return 'no' !== this.getAttribute( 'aria' );
 	}
 
 	/**
@@ -206,6 +221,11 @@ export class TPLightboxElement extends HTMLElement {
 			return;
 		}
 
+		// Save the currently focused element to restore later (if manage-focus is enabled).
+		if ( 'no' !== this.getAttribute( 'manage-focus' ) ) {
+			this.previouslyFocusedElement = this.ownerDocument.activeElement as HTMLElement;
+		}
+
 		// First, take this opportunity to update all groups (if it wasn't set from the trigger).
 		if ( '' !== this.group && ! this.allGroups ) {
 			this.updateAllGroups();
@@ -214,16 +234,33 @@ export class TPLightboxElement extends HTMLElement {
 		// Now, show the modal.
 		dialog.showModal();
 		this.setAttribute( 'open', 'yes' );
+
+		// Add keyboard event listener for arrow navigation.
+		document.addEventListener( 'keydown', this.boundHandleKeyDown );
+
+		// Move focus into the lightbox (if manage-focus is enabled).
+		if ( 'no' !== this.getAttribute( 'manage-focus' ) ) {
+			this.setInitialFocus();
+		}
 	}
 
 	/**
 	 * Close lightbox.
 	 */
 	close(): void {
+		// Remove keyboard event listener.
+		document.removeEventListener( 'keydown', this.boundHandleKeyDown );
+
 		// Find and close the dialog.
 		const dialog: HTMLDialogElement | null = this.querySelector( 'dialog' );
 		dialog?.close();
 		this.removeAttribute( 'open' );
+
+		// Restore focus to the previously focused element (if manage-focus is enabled).
+		if ( 'no' !== this.getAttribute( 'manage-focus' ) && this.previouslyFocusedElement ) {
+			this.previouslyFocusedElement.focus();
+			this.previouslyFocusedElement = null;
+		}
 
 		// Clear groups from memory.
 		this.allGroups = null;
@@ -331,10 +368,21 @@ export class TPLightboxElement extends HTMLElement {
 			return;
 		}
 
+		// Get buttons inside prev/next for ARIA.
+		const previousButton: HTMLButtonElement | null = previous?.querySelector( 'button' ) ?? null;
+		const nextButton: HTMLButtonElement | null = next?.querySelector( 'button' ) ?? null;
+		const ariaEnabled: boolean = this.isAriaEnabled();
+
 		// Check if we have a group.
 		if ( '' === this.group ) {
 			previous?.setAttribute( 'disabled', 'yes' );
 			next?.setAttribute( 'disabled', 'yes' );
+
+			// Set aria-disabled on buttons.
+			if ( ariaEnabled ) {
+				previousButton?.setAttribute( 'aria-disabled', 'true' );
+				nextButton?.setAttribute( 'aria-disabled', 'true' );
+			}
 
 			// Exit.
 			return;
@@ -348,6 +396,12 @@ export class TPLightboxElement extends HTMLElement {
 			previous?.setAttribute( 'disabled', 'yes' );
 			next?.setAttribute( 'disabled', 'yes' );
 
+			// Set aria-disabled on buttons.
+			if ( ariaEnabled ) {
+				previousButton?.setAttribute( 'aria-disabled', 'true' );
+				nextButton?.setAttribute( 'aria-disabled', 'true' );
+			}
+
 			// Exit.
 			return;
 		}
@@ -355,15 +409,36 @@ export class TPLightboxElement extends HTMLElement {
 		// Enable / disable previous navigation.
 		if ( this.currentIndex <= 1 ) {
 			previous?.setAttribute( 'disabled', 'yes' );
+
+			// Set aria-disabled on previous button.
+			if ( ariaEnabled ) {
+				previousButton?.setAttribute( 'aria-disabled', 'true' );
+			}
 		} else {
 			previous?.removeAttribute( 'disabled' );
+
+			// Remove aria-disabled from previous button.
+			if ( ariaEnabled ) {
+				previousButton?.removeAttribute( 'aria-disabled' );
+			}
 		}
 
 		// Enable / disable next navigation.
 		if ( this.currentIndex < allGroups.length ) {
 			next?.removeAttribute( 'disabled' );
+
+			// Remove aria-disabled from next button.
+			if ( ariaEnabled ) {
+				// Next is at the end, disable it.
+				nextButton?.removeAttribute( 'aria-disabled' );
+			}
 		} else {
 			next?.setAttribute( 'disabled', 'yes' );
+
+			// Set aria-disabled on next button.
+			if ( ariaEnabled ) {
+				nextButton?.setAttribute( 'aria-disabled', 'true' );
+			}
 		}
 	}
 
@@ -508,14 +583,72 @@ export class TPLightboxElement extends HTMLElement {
 			return;
 		}
 
+		// Check if ARIA management is enabled.
+		const ariaEnabled = this.isAriaEnabled();
+
 		// Update current item.
 		this.lightboxNavItems.forEach( ( navItem: TPLightboxNavItemElement, index: number ): void => {
+			// Get the button inside the nav item.
+			const button: HTMLButtonElement | null = navItem.querySelector( 'button' );
+
 			// Update current attribute.
 			if ( this.currentIndex - 1 === index ) {
 				navItem.setAttribute( 'current', 'yes' );
+
+				// Set aria-current on the button (if ARIA is enabled).
+				if ( ariaEnabled && button ) {
+					button.setAttribute( 'aria-current', 'true' );
+				}
 			} else {
 				navItem.removeAttribute( 'current' );
+
+				// Remove aria-current from the button (if ARIA is enabled).
+				if ( ariaEnabled && button ) {
+					button.removeAttribute( 'aria-current' );
+				}
 			}
 		} );
+	}
+
+	/**
+	 * Set initial focus when lightbox opens.
+	 * Looks for [autofocus] element, otherwise focuses the dialog.
+	 */
+	private setInitialFocus(): void {
+		// Look for an element with autofocus attribute.
+		const autofocusElement = this.querySelector<HTMLElement>( '[autofocus]' );
+
+		// Do we have an autofocus element?
+		if ( autofocusElement ) {
+			autofocusElement.focus();
+
+			// Early return.
+			return;
+		}
+
+		// Otherwise, focus the dialog itself.
+		this.dialogElement?.focus();
+	}
+
+	/**
+	 * Handle keydown events for arrow navigation.
+	 *
+	 * @param {KeyboardEvent} e Keyboard event.
+	 */
+	private handleKeyDown( e: KeyboardEvent ): void {
+		// Check if arrow navigation is enabled (disabled by default).
+		if ( 'yes' !== this.getAttribute( 'arrow-navigation' ) ) {
+			// Early return.
+			return;
+		}
+
+		// Navigate on arrow keys.
+		if ( 'ArrowLeft' === e.key ) {
+			e.preventDefault();
+			this.previous();
+		} else if ( 'ArrowRight' === e.key ) {
+			e.preventDefault();
+			this.next();
+		}
 	}
 }
