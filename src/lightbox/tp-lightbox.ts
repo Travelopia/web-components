@@ -85,6 +85,16 @@ export class TPLightboxElement extends HTMLElement {
 	}
 
 	/**
+	 * Check if ARIA management is enabled.
+	 *
+	 * @return {boolean} Whether ARIA is enabled.
+	 */
+	isAriaEnabled(): boolean {
+		// Return whether ARIA management is enabled (default: yes).
+		return 'no' !== this.getAttribute( 'aria' );
+	}
+
+	/**
 	 * Get template.
 	 */
 	get template(): HTMLTemplateElement | null {
@@ -352,18 +362,16 @@ export class TPLightboxElement extends HTMLElement {
 		const previous: TPLightboxPreviousElement | null = this.querySelector( 'tp-lightbox-previous' );
 		const next: TPLightboxNextElement | null = this.querySelector( 'tp-lightbox-next' );
 
-		// Get buttons inside prev/next for ARIA.
-		const previousButton: HTMLButtonElement | null = previous?.querySelector( 'button' ) ?? null;
-		const nextButton: HTMLButtonElement | null = next?.querySelector( 'button' ) ?? null;
-
-		// Check if ARIA management is enabled.
-		const ariaEnabled = 'no' !== this.getAttribute( 'aria' );
-
 		// Bail early if we don't have either.
 		if ( ! previous && ! next ) {
 			// Exit.
 			return;
 		}
+
+		// Get buttons inside prev/next for ARIA.
+		const previousButton: HTMLButtonElement | null = previous?.querySelector( 'button' ) ?? null;
+		const nextButton: HTMLButtonElement | null = next?.querySelector( 'button' ) ?? null;
+		const ariaEnabled: boolean = this.isAriaEnabled();
 
 		// Check if we have a group.
 		if ( '' === this.group ) {
@@ -576,7 +584,7 @@ export class TPLightboxElement extends HTMLElement {
 		}
 
 		// Check if ARIA management is enabled.
-		const ariaEnabled = 'no' !== this.getAttribute( 'aria' );
+		const ariaEnabled = this.isAriaEnabled();
 
 		// Update current item.
 		this.lightboxNavItems.forEach( ( navItem: TPLightboxNavItemElement, index: number ): void => {
