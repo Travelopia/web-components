@@ -100,7 +100,7 @@ const value = multiSelect.value;
 
 | Attribute     | Required | Values                | Notes                                                                                      |
 |---------------|----------|-----------------------|--------------------------------------------------------------------------------------------|
-| remove-format | No       | Text with `$label`    | Format for remove button accessible label. Example: `Remove $label` becomes "Remove Japan" |
+| remove-format | No       | Text with `$label`    | Format for remove button text. Example: `Remove $label` becomes "Remove Japan". Defaults to `x`. |
 
 ### `tp-multi-select-search-status`
 
@@ -166,7 +166,7 @@ The multi-select component implements the ARIA 1.2 combobox pattern with a listb
 | `id` + `for`       | `label` + `input`            | Standard label association (for search input) |
 | `role="status"`    | `tp-multi-select-status`     | Announces selection count changes          |
 | `aria-live`        | Status elements              | Controls announcement behavior             |
-| `remove-format`    | `tp-multi-select-pills`      | Accessible label for remove buttons        |
+| `remove-format`    | `tp-multi-select-pills`      | Text for remove buttons (defaults to `x`)  |
 
 ### Keyboard Navigation
 
@@ -210,4 +210,4 @@ The multi-select component implements the ARIA 1.2 combobox pattern with a listb
 
 - **Selection changes:** Add `role="status"` and `aria-live="polite"` to `tp-multi-select-status` to announce when selection count changes.
 - **Search results:** Use `tp-multi-select-search-status` with `role="status"` to announce result counts. Use `no-results-role="alert"` for more urgent "no results" announcements.
-- **Remove buttons:** Set `remove-format="Remove $label"` on `tp-multi-select-pills` so screen readers announce "Remove Japan" instead of just "x".
+- **Remove buttons:** Set `remove-format="Remove $label"` on `tp-multi-select-pills` so the button text becomes "Remove Japan" instead of just "x". Use CSS to visually hide text if you want an icon-only button.

@@ -107,13 +107,10 @@ export class TPMultiSelectPillsElement extends HTMLElement {
 		// Create pill close button.
 		const pillCloseButton: HTMLElement = document.createElement( 'button' );
 		pillCloseButton.setAttribute( 'type', 'button' );
-		pillCloseButton.textContent = 'x';
 
-		// Add accessible label for screen readers using remove-format attribute.
+		// Use remove-format for button text, falling back to 'x'.
 		const removeFormat = this.getAttribute( 'remove-format' );
-		if ( removeFormat ) {
-			pillCloseButton.setAttribute( 'aria-label', removeFormat.replace( '$label', label ) );
-		}
+		pillCloseButton.textContent = removeFormat ? removeFormat.replace( '$label', label ) : 'x';
 
 		// Add event listener.
 		pillCloseButton.addEventListener( 'click', () => {
