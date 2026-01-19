@@ -13,7 +13,7 @@
 
 ## Sample Usage
 
-This is a highly customizable tooltip component.
+This is a highly customizable tooltip component with full keyboard and screen reader support.
 
 Example:
 
@@ -26,35 +26,37 @@ import '@travelopia/web-components/dist/tooltip/style.css';
 ```
 
 ```html
-<tp-tooltip id="did-you-know"> <-- Define and style the tooltip, and give it an ID
+<!-- Define the tooltip with an ID -->
+<tp-tooltip id="my-tooltip" style="width: 300px;">
 	<tp-tooltip-content>
-		<slot></slot> <-- This is where the content of the tooltip would go
+		<slot></slot>
 	</tp-tooltip-content>
-	<tp-tooltip-arrow></tp-tooltip-arrow> <-- If you want an arrow
+	<tp-tooltip-arrow></tp-tooltip-arrow>
 </tp-tooltip>
 
-<p>
-	Here is some informative content about
-
-	<tp-tooltip-trigger tooltip="did-you-know"> <-- Make any element a tooltip trigger by wrapping this component
-		<template> <-- Define and style your tooltip's content as needed. Everything inside this will go into the `slot` above
-			<p>
-				<img src="">
-				More information about interesting subject.
-			</p>
-		</template>
-		<a href="#">interesting subject</a> <-- The first direct descendant (that is not a template) is the trigger
-	</tp-tooltip-trigger>
-
-	that you may be interested in!
-</p>
+<!-- Wrap any focusable element with the trigger -->
+<tp-tooltip-trigger tooltip="my-tooltip">
+	<template>
+		<p>This is additional information about the feature.</p>
+	</template>
+	<button type="button" aria-label="More information">i</button>
+</tp-tooltip-trigger>
 ```
 
 ## Attributes
 
-| Attribute           | Required | Values   | Notes                                                                                                           |
-|---------------------|----------|----------|-----------------------------------------------------------------------------------------------------------------|
-| offset              | No       | <number> | The offset in pixels from the trigger that the tooltip should display                                           |
+### `tp-tooltip`
+
+| Attribute | Required | Values     | Notes                                                              |
+|-----------|----------|------------|--------------------------------------------------------------------|
+| offset    | No       | `<number>` | The offset in pixels from the trigger                              |
+| aria      | No       | `yes`/`no` | Enables ARIA management. Defaults to `yes`. Set `no` to disable    |
+
+### `tp-tooltip-trigger`
+
+| Attribute | Required | Values     | Notes                                                              |
+|-----------|----------|------------|--------------------------------------------------------------------|
+| tooltip   | Yes      | `<id>`     | The ID of the tooltip element to display                           |
 
 ## Events
 
@@ -62,3 +64,38 @@ import '@travelopia/web-components/dist/tooltip/style.css';
 |-------|-------------------------------|
 | show  | After the tooltip is visible  |
 | hide  | After the tooltip is hidden   |
+
+## Accessibility
+
+The tooltip component provides mechanical accessibility features, while you control the semantic markup.
+
+### What the Component Handles
+
+- **Keyboard support** — Tooltip appears on focus and disappears on blur.
+- **Escape to close** — Pressing Escape dismisses the tooltip.
+- **Auto-generated IDs** — Generates a unique ID on the tooltip if not provided.
+- **Role assignment** — Sets `role="tooltip"` on the tooltip element.
+- **ARIA linking** — Sets `aria-describedby` on the trigger element pointing to the tooltip.
+
+### What You Must Provide
+
+| Attribute | Purpose |
+|-----------|---------|
+| Focusable trigger | The element inside `tp-tooltip-trigger` must be focusable (`<button>`, `<a>`, or element with `tabindex`). |
+| `aria-label` | On the trigger element if it only contains an icon (e.g., an "i" info button). |
+
+### Screen Reader Behavior
+
+When a user focuses the trigger element, the screen reader announces:
+
+1. The trigger's accessible name (text content or `aria-label`)
+2. The trigger's role (e.g., "button")
+3. The tooltip content (via `aria-describedby`)
+
+Example announcement: *"More information, button, This is additional information about the feature."*
+
+### Important Notes
+
+- **Keep tooltips concise** — Screen readers read the entire `aria-describedby` content without pausing. Users cannot stop and resume; they must refocus to hear it again.
+- **No interactive content** — Tooltips should not contain focusable elements like links or buttons. If you need interactive content, use a modal or popover instead.
+- **Focus stays on trigger** — Focus never moves to the tooltip content, following the WAI-ARIA tooltip pattern.

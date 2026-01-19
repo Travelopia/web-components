@@ -21,6 +21,17 @@
 				</tp-tooltip-content>
 				<tp-tooltip-arrow></tp-tooltip-arrow>
 			</tp-tooltip>
+
+			<!-- Accessible tooltip example with button trigger -->
+			<p style="margin-bottom: 20px;">
+				<strong>Accessible example:</strong>
+				<tp-tooltip-trigger tooltip="anchor-tag-tooltip">
+					<template>
+						<p>This tooltip appears on hover, focus, and can be dismissed with Escape.</p>
+					</template>
+					<button type="button">Hover or focus me</button>
+				</tp-tooltip-trigger>
+			</p>
 			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero excepturi, esse aperiam omnis voluptatem
 			   et perspiciatis quas nostrum. Modi velit repellat labore illo, laudantium eaque, ea esse tempora earum
 			   natus ullam repudiandae voluptatibus ut perferendis nobis. Nesciunt, possimus accusamus sed dolor
@@ -81,19 +92,20 @@
 				<tp-tooltip-arrow></tp-tooltip-arrow>
 			</tp-tooltip>
 			<div style="display: flex; flex-wrap: wrap; justify-content: space-around; row-gap: 20px;">
+				<!-- Accessible card with icon button -->
 				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
 					<img style="width: 100%;" src="https://picsum.photos/600/300" alt="Card Image">
-					<tp-tooltip-trigger tooltip="card-tooltip">
-						<template>
-							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
-							</p>
-						</template>
-						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
-							<h2>Card Title   </h2>
-							<i style="margin-right: 20px;">i</i>
-						</div>
-					</tp-tooltip-trigger>
+					<div style="display: flex; align-items: center; justify-content: space-between;" class="card-content">
+						<h2>Card Title</h2>
+						<tp-tooltip-trigger tooltip="card-tooltip">
+							<template>
+								<p>
+									Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
+								</p>
+							</template>
+							<button type="button" aria-label="More information about this card" style="margin-right: 20px; cursor: pointer; border: none; background: none; font-style: italic;">i</button>
+						</tp-tooltip-trigger>
+					</div>
 					<p>This is a simple description for the card. It provides some basic information about the content displayed above.</p>
 				</article>
 				<article style="width: 250px; display: flex; flex-direction: column; border: 1px solid gray;">
@@ -119,8 +131,8 @@
 								Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi tempora quis aspernatur. Officiis?
 							</p>
 						</template>
-						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content">
-							<h2>Card Title   </h2>
+						<div style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;" class="card-content" tabindex="0">
+							<h2>Card Title</h2>
 							<i style="margin-right: 20px;">i</i>
 						</div>
 					</tp-tooltip-trigger>
