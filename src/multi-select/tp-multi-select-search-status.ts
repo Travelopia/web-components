@@ -19,21 +19,23 @@ export class TPMultiSelectSearchStatusElement extends HTMLElement {
 	protected defaultAriaLive: string | null = null;
 
 	/**
+	 * Constructor.
+	 */
+	constructor() {
+		// Initialize parent.
+		super();
+
+		// Listen for search input changes.
+		this.closest( 'tp-multi-select' )?.querySelector( 'tp-multi-select-search input' )?.addEventListener( 'input', this.update.bind( this ) );
+	}
+
+	/**
 	 * Connected callback.
 	 */
 	connectedCallback(): void {
 		// Store the default role and aria-live from markup.
 		this.defaultRole = this.getAttribute( 'role' );
 		this.defaultAriaLive = this.getAttribute( 'aria-live' );
-
-		// Get multi-select and search input.
-		const multiSelect: TPMultiSelectElement | null = this.closest( 'tp-multi-select' );
-		const searchInput: HTMLInputElement | null = multiSelect?.querySelector( 'tp-multi-select-search input' ) ?? null;
-
-		// Listen for search input changes.
-		if ( searchInput ) {
-			searchInput.addEventListener( 'input', this.update.bind( this ) );
-		}
 
 		// Initial update.
 		this.update();

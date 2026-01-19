@@ -17,19 +17,11 @@ export class TPMultiSelectSearchElement extends HTMLElement {
 		// Initialize parent.
 		super();
 
-		// get input.
-		const input: HTMLInputElement | null = this.querySelector( 'input' );
-
-		// Check if input exists.
-		if ( ! input ) {
-			// No, its not. Exit.
-			return;
-		}
-
 		// Add event listeners.
-		input.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
-		input.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
-		input.addEventListener( 'input', this.handleSearchChange.bind( this ) );
+		const input = this.querySelector( 'input' );
+		input?.addEventListener( 'keydown', this.handleKeyboardInputs.bind( this ) );
+		input?.addEventListener( 'keyup', this.handleSearchChange.bind( this ) );
+		input?.addEventListener( 'input', this.handleSearchChange.bind( this ) );
 		this.addEventListener( 'click', this.handleClick.bind( this ) );
 		this.closest( 'tp-multi-select' )?.addEventListener( 'open', this.focus.bind( this ) );
 	}
