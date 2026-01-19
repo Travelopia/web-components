@@ -11,18 +11,42 @@
 </head>
 <body>
 	<main>
-		<tp-lightbox id="my-lightbox" close-on-overlay-click="yes" swipe="yes" swipe-threshold="200">
-			<dialog>
+		<tp-lightbox id="my-lightbox" close-on-overlay-click="yes" swipe="yes" swipe-threshold="200" arrow-navigation="yes">
+			<dialog role="dialog" aria-label="Image gallery">
 				<tp-lightbox-close>
-					<button>Close</button>
+					<button autofocus aria-label="Close lightbox">Close</button>
 				</tp-lightbox-close>
 				<tp-lightbox-previous>
-					<button>Previous</button>
+					<button aria-label="Previous image">Previous</button>
 				</tp-lightbox-previous>
 				<tp-lightbox-next>
-					<button>Next</button>
+					<button aria-label="Next image">Next</button>
 				</tp-lightbox-next>
 				<tp-lightbox-content></tp-lightbox-content>
+				<tp-lightbox-count format="$current / $total" aria-live="polite" aria-atomic="true"></tp-lightbox-count>
+				<tp-lightbox-nav>
+					<template>
+						<tp-lightbox-nav-item>
+							<button>
+							</button>
+						</tp-lightbox-nav-item>
+					</template>
+				</tp-lightbox-nav>
+			</dialog>
+		</tp-lightbox>
+
+		<tp-lightbox id="my-lightbox-2" close-on-overlay-click="yes" swipe="yes" swipe-threshold="200" arrow-navigation="yes">
+			<dialog role="dialog" aria-label="Image gallery">
+				<tp-lightbox-close>
+					<button autofocus aria-label="Close lightbox">Close</button>
+				</tp-lightbox-close>
+				<tp-lightbox-previous>
+					<button aria-label="Previous image">Previous</button>
+				</tp-lightbox-previous>
+				<tp-lightbox-next>
+					<button aria-label="Next image">Next</button>
+				</tp-lightbox-next>
+				<tp-lightbox-content aria-live="polite" aria-atomic="true"></tp-lightbox-content>
 				<tp-lightbox-count format="$current / $total"></tp-lightbox-count>
 				<tp-lightbox-nav>
 					<template>
@@ -38,43 +62,73 @@
 		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
 			<button>Open Lightbox: Group 1</button>
 			<template>
-				<img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="">
+				<img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="Laptop on a wooden desk">
 			</template>
 		</tp-lightbox-trigger>
 
 		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
 			<button>Open Lightbox: Group 1</button>
 			<template>
-				<img src="https://picsum.photos/id/77/600/300" width="600" height="300" alt="">
+				<img src="https://picsum.photos/id/77/600/300" width="600" height="300" alt="Person typing on keyboard">
 			</template>
 		</tp-lightbox-trigger>
 
 		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
 			<button>Open Lightbox: Group 1</button>
 			<template>
-				<img src="https://picsum.photos/id/78/600/300" width="600" height="300" alt="">
+				<img src="https://picsum.photos/id/78/600/300" width="600" height="300" alt="Bicycle leaning against wall">
 			</template>
 		</tp-lightbox-trigger>
 
 		<tp-lightbox-trigger lightbox="my-lightbox" group="group-1">
 			<button>Open Lightbox: Group 1</button>
 			<template>
-				<img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="">
+				<img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="Mountain landscape view">
 			</template>
 		</tp-lightbox-trigger>
 
 		<br><br>
 
-		<tp-lightbox-trigger lightbox="my-lightbox" group="group-2">
+		<tp-lightbox-trigger lightbox="my-lightbox-2" group="group-2">
 			<button>Open Lightbox: Group 2</button>
+			<template>
+				<img src="https://picsum.photos/id/65/600/300" width="600" height="300" alt="Laptop on a wooden desk">
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox-2" group="group-2">
+			<button>Open Lightbox: Group 2</button>
+			<template>
+				<img src="https://picsum.photos/id/77/600/300" width="600" height="300" alt="Person typing on keyboard">
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox-2" group="group-2">
+			<button>Open Lightbox: Group 2</button>
+			<template>
+				<img src="https://picsum.photos/id/78/600/300" width="600" height="300" alt="Bicycle leaning against wall">
+			</template>
+		</tp-lightbox-trigger>
+
+		<tp-lightbox-trigger lightbox="my-lightbox-2" group="group-2">
+			<button>Open Lightbox: Group 2</button>
+			<template>
+				<img src="https://picsum.photos/id/76/600/300" width="600" height="300" alt="Mountain landscape view">
+			</template>
+		</tp-lightbox-trigger>
+
+		<br><br>
+
+		<tp-lightbox-trigger lightbox="my-lightbox-2" group="group-3">
+			<button>Open Lightbox: Group 3</button>
 			<template>
 				<p>Lorem ipsum.</p>
 				<p>Lorem ipsum.</p>
 			</template>
 		</tp-lightbox-trigger>
 
-		<tp-lightbox-trigger lightbox="my-lightbox" group="group-2">
-			<button>Open Lightbox: Group 2</button>
+		<tp-lightbox-trigger lightbox="my-lightbox-2" group="group-3">
+			<button>Open Lightbox: Group 3</button>
 			<template>
 				<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=ObmgotljlYd1J42S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 			</template>
