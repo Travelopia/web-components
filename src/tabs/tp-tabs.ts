@@ -29,7 +29,17 @@ export class TPTabsElement extends HTMLElement {
 	 */
 	static get observedAttributes(): string[] {
 		// Attributes observed in the TPTabsElement web-component.
-		return [ 'current-tab', 'update-url', 'overflow' ];
+		return [ 'current-tab', 'update-url', 'overflow', 'aria' ];
+	}
+
+	/**
+	 * Check if ARIA management is enabled.
+	 *
+	 * @return {boolean} Whether ARIA management is enabled.
+	 */
+	isAriaEnabled(): boolean {
+		// Return whether aria management is enabled (default: yes).
+		return 'no' !== this.getAttribute( 'aria' );
 	}
 
 	/**

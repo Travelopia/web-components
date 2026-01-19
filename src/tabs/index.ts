@@ -15,8 +15,8 @@ import { TPTabsElement } from './tp-tabs';
  * Register Components.
  */
 
-// Register components.
-customElements.define( 'tp-tabs-nav-item', TPTabsNavItemElement );
-customElements.define( 'tp-tabs-nav', TPTabsNavElement );
-customElements.define( 'tp-tabs-tab', TPTabsTabElement );
+// Register parent first so children can find it during their constructor.
 customElements.define( 'tp-tabs', TPTabsElement );
+customElements.define( 'tp-tabs-nav', TPTabsNavElement );
+customElements.define( 'tp-tabs-nav-item', TPTabsNavItemElement );
+customElements.define( 'tp-tabs-tab', TPTabsTabElement );

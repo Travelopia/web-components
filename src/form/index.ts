@@ -31,15 +31,21 @@ const validators = [
  */
 window.tpFormValidators = {};
 window.tpFormErrors = {};
+window.tpFormSummaryErrors = {};
 window.tpFormSuspenseMessages = {};
 
 // Register validators.
 validators.forEach( (
-	{ name, validator, errorMessage }: { name: string, validator: TPFormValidator, errorMessage: string }
+	{ name, validator, errorMessage, summaryErrorMessage }: { name: string, validator: TPFormValidator, errorMessage: string, summaryErrorMessage?: string }
 ): void => {
 	// Assigning validators and error messages to various fields.
 	window.tpFormValidators[ name ] = validator;
 	window.tpFormErrors[ name ] = errorMessage;
+
+	// Register summary error message if provided.
+	if ( summaryErrorMessage ) {
+		window.tpFormSummaryErrors[ name ] = summaryErrorMessage;
+	}
 } );
 
 /**
@@ -48,6 +54,10 @@ validators.forEach( (
 import { TPFormElement } from './tp-form';
 import { TPFormFieldElement } from './tp-form-field';
 import { TPFormErrorElement } from './tp-form-error';
+import { TPFormErrorsElement } from './tp-form-errors';
+import { TPFormErrorsHeadingElement } from './tp-form-errors-heading';
+import { TPFormErrorsListElement } from './tp-form-errors-list';
+import { TPFormErrorsErrorElement } from './tp-form-errors-error';
 import { TPFormSuspenseElement } from './tp-form-suspense';
 import { TPFormSubmitElement } from './tp-form-submit';
 
@@ -57,5 +67,9 @@ import { TPFormSubmitElement } from './tp-form-submit';
 customElements.define( 'tp-form', TPFormElement );
 customElements.define( 'tp-form-field', TPFormFieldElement );
 customElements.define( 'tp-form-error', TPFormErrorElement );
+customElements.define( 'tp-form-errors', TPFormErrorsElement );
+customElements.define( 'tp-form-errors-heading', TPFormErrorsHeadingElement );
+customElements.define( 'tp-form-errors-list', TPFormErrorsListElement );
+customElements.define( 'tp-form-errors-error', TPFormErrorsErrorElement );
 customElements.define( 'tp-form-suspense', TPFormSuspenseElement );
 customElements.define( 'tp-form-submit', TPFormSubmitElement );
