@@ -63,6 +63,7 @@ slider.setCurrentSlide( 2 );
 | per-view            | No       | <per-view>            | Handles slider behavior having more than 1 slides. No. of slides to show in one view. Default value is 1.       |
 | step                | No       | <step>                | Steps number of slides on next and previous transition. No. of slides to step to at a time. Default value is 1. |
 | swipe-threshold     | No       | `200`                 | It will not swipe if the swipe value is more than this number. Default value is 200.                            |
+| min-swipe-threshold     | No       | `0`                 | The minimum swipe distance required for a swipe to register. Works with swipe-threshold to define the valid swipe range. Default value is 0. |
 | responsive          | No       | <responsive-settings> | Responsive settings to be passed in a JSON string format.                                                       |
 | aria                | No       | `yes`/`no`            | Manages `aria-hidden` on non-visible slides. Defaults to `yes`. Set `no` to disable.                            |
 | arrow-navigation    | No       | `yes`                 | Enables Left/Right arrow key navigation. Disabled by default.                                                   |
