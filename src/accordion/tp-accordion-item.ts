@@ -191,9 +191,11 @@ export class TPAccordionItemElement extends HTMLElement {
 		// Close the accordion.
 		if ( content ) {
 			this.dispatchEvent( new CustomEvent( 'before-close', { bubbles: true } ) );
-			this.updateAriaState( false );
-			slideElementUp( content, 600 );
-			this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
+			slideElementUp( content, 600, () => {
+				// Update state.
+				this.updateAriaState( false );
+				this.dispatchEvent( new CustomEvent( 'close', { bubbles: true } ) );
+			} );
 		}
 	}
 }
