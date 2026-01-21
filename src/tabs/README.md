@@ -107,6 +107,8 @@ Move to the tab with the given id.
 
 The tabs component provides accessibility features while you control the semantic markup.
 
+This component follows the [WAI-ARIA Tabs with Automatic Activation Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/examples/tabs-automatic/).
+
 ### What the Component Handles
 
 - **`aria-selected`** on tab triggers — Automatically set based on active state.
