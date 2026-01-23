@@ -21,11 +21,11 @@ import '@travelopia/web-components/dist/tabs';
 import '@travelopia/web-components/dist/tabs/style.css';
 
 // TypeScript usage:
-import { TPTabs } from '@travelopia/web-components';
+import { TPTabsElement } from '@travelopia/web-components';
 
 ...
 
-const tabs: TPTabs = document.querySelector( 'tp-tabs' );
+const tabs: TPTabsElement = document.querySelector( 'tp-tabs' );
 tabs.setCurrentTab( 'overview' );
 ```
 
