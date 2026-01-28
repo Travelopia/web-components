@@ -86,6 +86,39 @@
 			<p>Button Tab 3: Both approaches work with the component's accessibility features.</p>
 		</tp-tabs-tab>
 	</tp-tabs>
+
+	<h2>3. Nested Tabs</h2>
+	<tp-tabs current-tab="parent-tab-1">
+		<tp-tabs-nav role="tablist" aria-label="Parent tabs with nested content">
+			<tp-tabs-nav-item active="yes">
+				<a href="#parent-tab-1" role="tab">Parent 1</a>
+			</tp-tabs-nav-item>
+			<tp-tabs-nav-item>
+				<a href="#parent-tab-2" role="tab">Parent 2</a>
+			</tp-tabs-nav-item>
+		</tp-tabs-nav>
+		<tp-tabs-tab id="parent-tab-1" role="tabpanel" open="yes">
+			<tp-tabs current-tab="nested-tab-1">
+				<tp-tabs-nav role="tablist" aria-label="Nested tabs">
+					<tp-tabs-nav-item active="yes">
+						<button role="tab" aria-controls="nested-tab-1">Nested 1</button>
+					</tp-tabs-nav-item>
+					<tp-tabs-nav-item>
+						<button role="tab" aria-controls="nested-tab-2">Nested 2</button>
+					</tp-tabs-nav-item>
+				</tp-tabs-nav>
+				<tp-tabs-tab id="nested-tab-1" role="tabpanel" open="yes">
+					<p>Nested Tab 1: This is content inside a nested tabs structure.</p>
+				</tp-tabs-tab>
+				<tp-tabs-tab id="nested-tab-2" role="tabpanel">
+					<p>Nested Tab 2: The navigation is flat but content is nested.</p>
+				</tp-tabs-tab>
+			</tp-tabs>
+		</tp-tabs-tab>
+		<tp-tabs-tab id="parent-tab-2" role="tabpanel">
+			<p>Parent Tab 2: This tab has no nested content.</p>
+		</tp-tabs-tab>
+	</tp-tabs>
 </main>
 </body>
 </html>

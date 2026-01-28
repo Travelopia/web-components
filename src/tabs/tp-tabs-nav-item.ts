@@ -191,6 +191,37 @@ export class TPTabsNavItemElement extends HTMLElement {
 			e.preventDefault();
 		}
 
+		// Find the target panel.
+		const targetPanel: HTMLElement | null = document.getElementById( panelId );
+
+		// Check if the target panel belongs to a nested tp-tabs.
+		if ( targetPanel ) {
+			const panelTabs: TPTabsElement | null = targetPanel.closest( 'tp-tabs' );
+
+			// If the panel belongs to a different (nested) tp-tabs, update that instead.
+			if ( panelTabs && panelTabs !== tabs ) {
+				// Update the nested tp-tabs.
+				panelTabs.setAttribute( 'current-tab', panelId );
+
+				// Also ensure the parent tab containing the nested tp-tabs is open.
+				const parentTab = panelTabs.closest( 'tp-tabs-tab' );
+
+				// Check if found a parent tab.
+				if ( parentTab && parentTab.id ) {
+					// Check if parent's current-tab is already the same value.
+					if ( tabs.getAttribute( 'current-tab' ) === parentTab.id ) {
+						// Force update since setAttribute won't trigger attributeChangedCallback.
+						tabs.update();
+					} else {
+						tabs.setAttribute( 'current-tab', parentTab.id );
+					}
+				}
+
+				// Exit early since we've handled the nested case.
+				return;
+			}
+		}
+
 		// Update the 'current-tab' attribute on the tabs component.
 		tabs.setAttribute( 'current-tab', panelId );
 	}
