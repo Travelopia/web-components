@@ -69,47 +69,50 @@ export class TPTabsElement extends HTMLElement {
 	 * Update this component.
 	 */
 	update(): void {
-		// Get current tab.
-		const currentTab: string = this.getAttribute( 'current-tab' ) ?? '';
+		// Wrap inside setTimeout to avoid high INP.
+		setTimeout( () => {
+			// Get current tab.
+			const currentTab: string = this.getAttribute( 'current-tab' ) ?? '';
 
-		// Check if current tab exists.
-		if ( ! this.querySelector( `tp-tabs-tab[id="${ currentTab }"]` ) ) {
-			// Exit if no matching tab is found.
-			return;
-		}
+			// Check if current tab exists.
+			if ( ! this.querySelector( `tp-tabs-tab[id="${ currentTab }"]` ) ) {
+				// Exit if no matching tab is found.
+				return;
+			}
 
-		// Get current nested tab if has.
-		const currentNestedTab = this.getCurrentNestedTab( currentTab );
+			// Get current nested tab if has.
+			const currentNestedTab = this.getCurrentNestedTab( currentTab );
 
-		// Update nav items.
-		const navItems: NodeListOf<TPTabsNavItemElement> = this.querySelectorAll( 'tp-tabs-nav-item' );
+			// Update nav items.
+			const navItems: NodeListOf<TPTabsNavItemElement> = this.querySelectorAll( 'tp-tabs-nav-item' );
 
-		// Update the navigation items based on the current tab.
-		if ( navItems ) {
-			navItems.forEach( ( navItem: TPTabsNavItemElement ): void => {
-				// If the nav item corresponds to the current tab or nested tab, set it as active.
-				if ( navItem.isCurrentTab( currentTab ) || ( currentNestedTab && navItem.isCurrentTab( currentNestedTab ) ) ) {
-					navItem.setAttribute( 'active', 'yes' );
-				} else {
-					navItem.removeAttribute( 'active' );
-				}
-			} );
-		}
+			// Update the navigation items based on the current tab.
+			if ( navItems ) {
+				navItems.forEach( ( navItem: TPTabsNavItemElement ): void => {
+					// If the nav item corresponds to the current tab or nested tab, set it as active.
+					if ( navItem.isCurrentTab( currentTab ) || ( currentNestedTab && navItem.isCurrentTab( currentNestedTab ) ) ) {
+						navItem.setAttribute( 'active', 'yes' );
+					} else {
+						navItem.removeAttribute( 'active' );
+					}
+				} );
+			}
 
-		// Update tabs.
-		const tabs: NodeListOf<TPTabsTabElement> = this.querySelectorAll( 'tp-tabs-tab' );
+			// Update tabs.
+			const tabs: NodeListOf<TPTabsTabElement> = this.querySelectorAll( 'tp-tabs-tab' );
 
-		// Update the tab panels based on the current tab.
-		if ( tabs ) {
-			tabs.forEach( ( tab: TPTabsTabElement ): void => {
-				// If the tab corresponds to the current tab or nested tab, open it.
-				if ( currentTab === tab.getAttribute( 'id' ) || ( currentNestedTab && currentNestedTab === tab.getAttribute( 'id' ) ) ) {
-					tab.setAttribute( 'open', 'yes' );
-				} else {
-					tab.removeAttribute( 'open' );
-				}
-			} );
-		}
+			// Update the tab panels based on the current tab.
+			if ( tabs ) {
+				tabs.forEach( ( tab: TPTabsTabElement ): void => {
+					// If the tab corresponds to the current tab or nested tab, open it.
+					if ( currentTab === tab.getAttribute( 'id' ) || ( currentNestedTab && currentNestedTab === tab.getAttribute( 'id' ) ) ) {
+						tab.setAttribute( 'open', 'yes' );
+					} else {
+						tab.removeAttribute( 'open' );
+					}
+				} );
+			}
+		}, 0 );
 	}
 
 	/**
