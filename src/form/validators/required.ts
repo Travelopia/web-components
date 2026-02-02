@@ -27,7 +27,7 @@ export const validator: TPFormValidator = {
 	// Validate.
 	validate: ( field: TPFormFieldElement ): boolean => {
 		// Check if the field is empty.
-		return '' !== field.getField()?.value ?? '';
+		return '' !== ( field.getField()?.value ?? '' );
 	},
 	getErrorMessage: (): string => getErrorMessage( name ),
 	getSummaryMessage: ( field: TPFormFieldElement ): string => getSummaryErrorMessage( name, field ),
