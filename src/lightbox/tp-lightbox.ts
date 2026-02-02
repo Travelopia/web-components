@@ -44,6 +44,7 @@ export class TPLightboxElement extends HTMLElement {
 		this.dialogElement?.addEventListener( 'click', this.handleDialogClick.bind( this ) );
 		this.dialogElement?.addEventListener( 'touchstart', this.handleTouchStart.bind( this ) );
 		this.dialogElement?.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
+		this.dialogElement?.addEventListener( 'close', this.handleDialogClose.bind( this ) );
 	}
 
 	/**
@@ -508,6 +509,17 @@ export class TPLightboxElement extends HTMLElement {
 			'yes' === this.getAttribute( 'close-on-overlay-click' ) &&
 			this.querySelector( 'dialog' ) === e.target
 		) {
+			this.close();
+		}
+	}
+
+	/**
+	 * Handle when the dialog is closed (e.g., via Escape key).
+	 * Syncs lightbox state with native dialog close behavior.
+	 */
+	handleDialogClose(): void {
+		// Only sync if the lightbox thinks it's still open.
+		if ( this.hasAttribute( 'open' ) ) {
 			this.close();
 		}
 	}
