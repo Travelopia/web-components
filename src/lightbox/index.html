@@ -8,6 +8,20 @@
 
 	<link rel="stylesheet" href="../../dist/lightbox/style.css" media="all">
 	<script type="module" src="../../dist/lightbox/index.js"></script>
+
+	<style>
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
+		}
+	</style>
 </head>
 <body>
 	<main>
@@ -23,7 +37,10 @@
 					<button aria-label="Next image">Next</button>
 				</tp-lightbox-next>
 				<tp-lightbox-content></tp-lightbox-content>
-				<tp-lightbox-count format="$current / $total" aria-live="polite" aria-atomic="true"></tp-lightbox-count>
+				<!-- Visual counter (hidden from screen readers) -->
+				<tp-lightbox-count aria-hidden="true" format="$current / $total"></tp-lightbox-count>
+				<!-- Screen reader counter (visually hidden, live region) -->
+				<tp-lightbox-count class="sr-only" aria-live="polite" aria-atomic="true" format="Image $current of $total"></tp-lightbox-count>
 				<tp-lightbox-nav>
 					<template>
 						<tp-lightbox-nav-item>

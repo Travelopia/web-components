@@ -355,9 +355,9 @@ export class TPLightboxElement extends HTMLElement {
 	 * Prepare navigation.
 	 */
 	prepareNavigation(): void {
-		// Update counter.
-		const count: TPLightboxCountElement | null = this.querySelector( 'tp-lightbox-count' );
-		count?.update();
+		// Update all counters.
+		const counts: NodeListOf<TPLightboxCountElement> = this.querySelectorAll( 'tp-lightbox-count' );
+		counts.forEach( ( count: TPLightboxCountElement ): void => count.update() );
 
 		// Get previous and next elements.
 		const previous: TPLightboxPreviousElement | null = this.querySelector( 'tp-lightbox-previous' );
