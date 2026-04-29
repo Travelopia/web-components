@@ -45,6 +45,21 @@ export class TPSliderElement extends HTMLElement {
 	 * content surfaces where the slider is one of many things on the page.
 	 */
 	protected swipeRatioVertical: number = 1.2;
+
+	/**
+	 * Stable bound reference to the touchmove handler so it can be removed later.
+	 * Re-binding inline would produce a new function each call and defeat
+	 * `removeEventListener`.
+	 */
+	protected boundHandleTouchMove?: ( e: TouchEvent ) => void;
+
+	/**
+	 * Whether the non-passive touchmove listener is currently attached. Tracked
+	 * so the listener is added/removed in lockstep with `swipe="yes"` toggles
+	 * (including ones driven by responsive settings) — non-swipe sliders should
+	 * not pay the scroll-blocking cost of a cancelable touchmove handler.
+	 */
+	protected touchMoveAttached: boolean = false;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
@@ -93,11 +108,12 @@ export class TPSliderElement extends HTMLElement {
 			document.fonts.ready.then( () => this.handleResize() );
 		}
 
-		// Touch listeners.
+		// Touch listeners — non-passive touchmove is attached lazily in syncTouchMoveListener so non-swipe sliders do not block scroll.
+		this.boundHandleTouchMove = this.handleTouchMove.bind( this );
 		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: true } );
-		this.addEventListener( 'touchmove', this.handleTouchMove.bind( this ), { passive: false } );
 		this.addEventListener( 'touchend', this.handleTouchEnd.bind( this ) );
 		this.addEventListener( 'touchcancel', this.handleTouchCancel.bind( this ) );
+		this.syncTouchMoveListener();
 
 		// Keyboard listener for arrow key navigation.
 		this.addEventListener( 'keydown', this.handleKeyDown.bind( this ) );
@@ -168,6 +184,11 @@ export class TPSliderElement extends HTMLElement {
 		if ( 'current-slide' === name && oldValue !== newValue ) {
 			this.slide();
 			this.dispatchEvent( new CustomEvent( 'slide-complete', { bubbles: true } ) );
+		}
+
+		// Sync the touchmove listener when the swipe attribute toggles (e.g. via responsive settings).
+		if ( 'swipe' === name && oldValue !== newValue ) {
+			this.syncTouchMoveListener();
 		}
 
 		// Update the component after the attribute change.
@@ -712,6 +733,36 @@ export class TPSliderElement extends HTMLElement {
 	}
 
 	/**
+	 * Attach or detach the non-passive `touchmove` listener so that it is
+	 * present only while `swipe="yes"`. Non-passive listeners force the
+	 * browser to route scrolling through JavaScript, so attaching one when
+	 * swipe is disabled would needlessly hurt scroll performance and may
+	 * trigger Chrome's "non-passive touchmove listener" warnings. Idempotent
+	 * — safe to call from both the constructor and `attributeChangedCallback`.
+	 *
+	 * @protected
+	 */
+	protected syncTouchMoveListener(): void {
+		// Determine whether a touchmove listener is desired right now.
+		const wantListener: boolean = 'yes' === this.getAttribute( 'swipe' );
+
+		// Attach if needed.
+		if ( wantListener && ! this.touchMoveAttached && this.boundHandleTouchMove ) {
+			this.addEventListener( 'touchmove', this.boundHandleTouchMove, { passive: false } );
+			this.touchMoveAttached = true;
+
+			// Done.
+			return;
+		}
+
+		// Detach if no longer needed.
+		if ( ! wantListener && this.touchMoveAttached && this.boundHandleTouchMove ) {
+			this.removeEventListener( 'touchmove', this.boundHandleTouchMove );
+			this.touchMoveAttached = false;
+		}
+	}
+
+	/**
 	 * Detect touch start event, and store the starting location.
 	 *
 	 * @param {Event} e Touch event.
@@ -721,6 +772,14 @@ export class TPSliderElement extends HTMLElement {
 	protected handleTouchStart( e: TouchEvent ): void {
 		// initialize touch start coordinates
 		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
+			// Bail on multi-touch — pinch-zoom and other system gestures stay fully browser-controlled.
+			if ( 1 !== e.touches.length ) {
+				// Release any lock so a subsequent touchend does not fire a slide change.
+				this.touchLock = null;
+
+				// Early return.
+				return;
+			}
 			this.touchStartX = e.touches[ 0 ].clientX;
 			this.touchStartY = e.touches[ 0 ].clientY;
 			this.touchLock = null;
@@ -738,9 +797,10 @@ export class TPSliderElement extends HTMLElement {
 	 *
 	 * On a horizontal lock, `preventDefault()` claims the gesture so the
 	 * browser does not simultaneously scroll the page along its remaining
-	 * (smaller) vertical component. Multi-touch gestures (e.g. pinch-zoom)
-	 * are unaffected — the browser claims them first via `touch-action`
-	 * before this handler engages.
+	 * (smaller) vertical component. As soon as a second finger joins the
+	 * gesture, the lock is released and `preventDefault` stops firing — so
+	 * pinch-zoom and other system gestures stay fully browser-controlled,
+	 * including when they start from a single-finger drag already in flight.
 	 *
 	 * @param {Event} e Touch event.
 	 *
@@ -749,6 +809,14 @@ export class TPSliderElement extends HTMLElement {
 	protected handleTouchMove( e: TouchEvent ): void {
 		// Bail early if swipe support is disabled.
 		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			// Early return.
+			return;
+		}
+
+		// Bail and release the lock if a second finger joined — preserves pinch-zoom even mid-gesture.
+		if ( 1 !== e.touches.length ) {
+			this.touchLock = null;
+
 			// Early return.
 			return;
 		}
