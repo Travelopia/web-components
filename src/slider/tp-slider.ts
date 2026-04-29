@@ -19,8 +19,31 @@ export class TPSliderElement extends HTMLElement {
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
 	protected touchLock: 'horizontal' | 'vertical' | null = null;
+
+	/**
+	 * Touch slop in pixels — the small dead zone the finger must travel before
+	 * the gesture is classified. Below this, no direction is decided and no
+	 * `preventDefault` is called, which preserves a tap-with-jitter as a tap.
+	 * 8px matches the conventional touch slop used by Chromium and Android's
+	 * ViewConfiguration.getScaledTouchSlop().
+	 */
 	protected swipeSlop: number = 8;
+
+	/**
+	 * Ratio gate for locking the gesture to the horizontal axis. The X
+	 * displacement must exceed Y by this factor before we claim the gesture
+	 * for the slider and call `preventDefault` to suppress page scroll. A
+	 * value > 1 means a 1-pixel horizontal lead is no longer enough to
+	 * classify an angled drag as a horizontal swipe.
+	 */
 	protected swipeRatioHorizontal: number = 1.5;
+
+	/**
+	 * Ratio gate for locking the gesture to the vertical axis. Lower than the
+	 * horizontal ratio so borderline diagonals bias towards "let the page
+	 * scroll" rather than "fire a slide change" — the safer default for
+	 * content surfaces where the slider is one of many things on the page.
+	 */
 	protected swipeRatioVertical: number = 1.2;
 	protected responsiveSettings: { [ key: string ]: any };
 	protected allowedResponsiveKeys: string[] = [
@@ -726,18 +749,22 @@ export class TPSliderElement extends HTMLElement {
 	protected handleTouchMove( e: TouchEvent ): void {
 		// Bail early if swipe support is disabled.
 		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			// Early return.
 			return;
 		}
 
-		// If the gesture is already locked, keep honouring that lock for the rest
-		// of the drag so a wandering finger cannot flip directions mid-swipe.
+		// Already locked horizontal — keep claiming the gesture for the rest of the drag.
 		if ( 'horizontal' === this.touchLock ) {
+			// Suppress the browser's default page scroll along the gesture's vertical component.
 			e.preventDefault();
+
+			// Early return.
 			return;
 		}
 
-		// Vertical lock: let the browser scroll the page; do not touch the event.
+		// Already locked vertical — let the browser scroll the page.
 		if ( 'vertical' === this.touchLock ) {
+			// Early return.
 			return;
 		}
 
@@ -749,6 +776,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Wait until the gesture is large enough to classify confidently.
 		if ( adx < this.swipeSlop && ady < this.swipeSlop ) {
+			// Gesture is still within tap slop — leave it alone.
 			return;
 		}
 
@@ -756,17 +784,15 @@ export class TPSliderElement extends HTMLElement {
 		if ( adx > ady * this.swipeRatioHorizontal ) {
 			this.touchLock = 'horizontal';
 			e.preventDefault();
+
+			// Early return.
 			return;
 		}
 
-		// Lock to vertical when Y clearly dominates X. The lower ratio biases
-		// borderline diagonals towards "let the page scroll", which is the
-		// safer default for content surfaces.
+		// Lock to vertical when Y clearly dominates X — borderline diagonals fall through and stay ambiguous.
 		if ( ady > adx * this.swipeRatioVertical ) {
 			this.touchLock = 'vertical';
 		}
-
-		// Otherwise the gesture is still ambiguous — wait for more movement.
 	}
 
 	/**
@@ -778,21 +804,19 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected handleTouchEnd( e: TouchEvent ): void {
-		// Capture and reset gesture state up-front so any early-return path
-		// still leaves the slider ready for the next touch.
+		// Capture and reset gesture state up-front so any early-return path leaves the slider ready for the next touch.
 		const wasHorizontalLock: boolean = 'horizontal' === this.touchLock;
 		this.touchLock = null;
 
 		// Early return if swipe is not enabled.
 		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
+			// Early return.
 			return;
 		}
 
-		// Only commit a slide change when the gesture was confidently horizontal.
-		// Below-slop, ambiguous, or vertical-locked gestures fall through here —
-		// preventing the historical "angled swipe changes a slide AND scrolls
-		// the page" double-action.
+		// Only commit a slide change when the gesture was confidently locked horizontal.
 		if ( ! wasHorizontalLock ) {
+			// Below-slop, ambiguous, or vertical-locked gestures fall through here.
 			return;
 		}
 
@@ -821,6 +845,7 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected handleTouchCancel(): void {
+		// Reset gesture state.
 		this.touchLock = null;
 	}
 
