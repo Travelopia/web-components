@@ -118,8 +118,10 @@ export class TPSliderElement extends HTMLElement {
 		 */
 		this.update();
 
-		// Listen for native scroll on the slides container, used in `behaviour="scroll"` mode
-		// to keep `current-slide` in sync with the user's scroll position.
+		/**
+		 * Listen for native scroll on the slides container, used in `behaviour="scroll"` mode
+		 * to keep `current-slide` in sync with the user's scroll position.
+		 */
 		const slidesContainer: HTMLElement | null = this.querySelector( 'tp-slider-slides' );
 
 		// Add scroll listener.
@@ -408,8 +410,10 @@ export class TPSliderElement extends HTMLElement {
 			// Drop any leftover left offset from a previous non-scroll mode (responsive switch).
 			slidesContainer.style.removeProperty( 'left' );
 
-			// Skip the scrollTo when this `slide()` was triggered by our own scroll-position sync,
-			// otherwise we'd fight the native scroll the user just produced.
+			/**
+			 * Skip the scrollTo when this `slide()` was triggered by our own scroll-position sync,
+			 * otherwise we'd fight the native scroll the user just produced.
+			 */
 			if ( ! this.isSyncingFromScroll ) {
 				this.scrollToCurrentSlide();
 			}
@@ -477,6 +481,7 @@ export class TPSliderElement extends HTMLElement {
 
 		// Sync after settle.
 		this.scrollSyncTimer = window.setTimeout( (): void => {
+			// Sync.
 			this.syncCurrentSlideFromScroll();
 			this.scrollSyncTimer = null;
 		}, 100 );
