@@ -82,10 +82,4 @@ Tradeoffs:
 | SCSS | `src/slider/style.scss` | Add `tp-slider[behaviour="scroll"]` rules: `overflow-x: auto`, `scroll-snap-type: x mandatory` on the slides container, hide native scrollbar. |
 | HTML | `src/slider/index.html` | Add demo example of `behaviour="scroll"` for manual testing. |
 
-## Affected Files
-
-| Layer | File | Change |
-|-------|------|--------|
-| | | |
-
 ## Next Steps

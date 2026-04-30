@@ -21,6 +21,7 @@ export class TPSliderElement extends HTMLElement {
 	protected responsiveSettings: { [ key: string ]: any };
 	protected scrollSyncTimer: number | null = null;
 	protected isSyncingFromScroll: boolean = false;
+	protected hasInitializedScroll: boolean = false;
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
 		'infinite',
@@ -129,9 +130,13 @@ export class TPSliderElement extends HTMLElement {
 			slidesContainer.addEventListener( 'scroll', this.handleScroll.bind( this ), { passive: true } );
 		}
 
-		// Honour an initial `current-slide` other than 1 in scroll mode by jumping to it without animation.
-		if ( 'scroll' === this.getAttribute( 'behaviour' ) && this.currentSlideIndex > 1 ) {
-			this.scrollToCurrentSlide( false );
+		/**
+		 * In scroll mode, ensure the initial scroll position is set even if the constructor's
+		 * `slide()` ran before children were in the DOM. The first `slide()` in scroll mode is
+		 * non-animated; subsequent calls animate.
+		 */
+		if ( 'scroll' === this.getAttribute( 'behaviour' ) && ! this.hasInitializedScroll ) {
+			this.slide();
 		}
 	}
 
@@ -415,7 +420,12 @@ export class TPSliderElement extends HTMLElement {
 			 * otherwise we'd fight the native scroll the user just produced.
 			 */
 			if ( ! this.isSyncingFromScroll ) {
-				this.scrollToCurrentSlide();
+				/**
+				 * First sync after entering scroll mode is instant — we're establishing position,
+				 * not animating from anywhere. Subsequent sync calls animate.
+				 */
+				this.scrollToCurrentSlide( this.hasInitializedScroll );
+				this.hasInitializedScroll = true;
 			}
 
 			// Done.
@@ -457,7 +467,7 @@ export class TPSliderElement extends HTMLElement {
 		// Scroll to target.
 		slidesContainer.scrollTo( {
 			left: target.offsetLeft,
-			behavior: smooth ? 'smooth' : 'instant',
+			behavior: smooth ? 'smooth' : 'auto',
 		} );
 	}
 

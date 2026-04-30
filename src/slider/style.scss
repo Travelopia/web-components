@@ -37,7 +37,7 @@ tp-slider-nav {
 // Native horizontal scroll mode.
 tp-slider[behaviour="scroll"] {
 
-	tp-slider-slides:first-of-type {
+	> tp-slider-track > tp-slider-slides {
 		overflow-x: auto;
 		overflow-y: hidden;
 		scroll-snap-type: x mandatory;
