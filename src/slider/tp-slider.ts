@@ -19,6 +19,8 @@ export class TPSliderElement extends HTMLElement {
 	protected touchStartY: number = 0;
 	protected swipeThreshold: number = 200;
 	protected responsiveSettings: { [ key: string ]: any };
+	protected scrollSyncTimer: number | null = null;
+	protected isSyncingFromScroll: boolean = false;
 	protected allowedResponsiveKeys: string[] = [
 		'flexible-height',
 		'infinite',
@@ -115,6 +117,20 @@ export class TPSliderElement extends HTMLElement {
 		 * no attributes are passed to the slider.
 		 */
 		this.update();
+
+		// Listen for native scroll on the slides container, used in `behaviour="scroll"` mode
+		// to keep `current-slide` in sync with the user's scroll position.
+		const slidesContainer: HTMLElement | null = this.querySelector( 'tp-slider-slides' );
+
+		// Add scroll listener.
+		if ( slidesContainer ) {
+			slidesContainer.addEventListener( 'scroll', this.handleScroll.bind( this ), { passive: true } );
+		}
+
+		// Honour an initial `current-slide` other than 1 in scroll mode by jumping to it without animation.
+		if ( 'scroll' === this.getAttribute( 'behaviour' ) && this.currentSlideIndex > 1 ) {
+			this.scrollToCurrentSlide( false );
+		}
 	}
 
 	/**
@@ -387,11 +403,130 @@ export class TPSliderElement extends HTMLElement {
 		// Now lets slide!
 		const behaviour: string = this.getAttribute( 'behaviour' ) || '';
 
+		// Native horizontal scroll mode: scroll the slides container instead of translating it.
+		if ( 'scroll' === behaviour ) {
+			// Drop any leftover left offset from a previous non-scroll mode (responsive switch).
+			slidesContainer.style.removeProperty( 'left' );
+
+			// Skip the scrollTo when this `slide()` was triggered by our own scroll-position sync,
+			// otherwise we'd fight the native scroll the user just produced.
+			if ( ! this.isSyncingFromScroll ) {
+				this.scrollToCurrentSlide();
+			}
+
+			// Done.
+			return;
+		}
+
 		// Check if behaviour is set to fade and slide on the current slide index is present in the slides array.
 		if ( 'fade' !== behaviour && slides[ this.currentSlideIndex - 1 ] ) {
 			// Yes, it is. So slide to the current slide.
 			slidesContainer.style.left = `-${ slides[ this.currentSlideIndex - 1 ].offsetLeft }px`;
 		}
+	}
+
+	/**
+	 * Scroll the slides container so the current slide is at the start edge.
+	 *
+	 * @param {boolean} smooth Whether to animate the scroll.
+	 */
+	protected scrollToCurrentSlide( smooth: boolean = true ): void {
+		// Get slides container and slides.
+		const slidesContainer: HTMLElement | null = this.querySelector( 'tp-slider-slides' );
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
+		// Bail if either is missing.
+		if ( ! slidesContainer || ! slides ) {
+			// Early return.
+			return;
+		}
+
+		// Get target slide.
+		const target: TPSliderSlideElement | undefined = slides[ this.currentSlideIndex - 1 ];
+
+		// Bail if target is missing.
+		if ( ! target ) {
+			// Early return.
+			return;
+		}
+
+		// Scroll to target.
+		slidesContainer.scrollTo( {
+			left: target.offsetLeft,
+			behavior: smooth ? 'smooth' : 'instant',
+		} );
+	}
+
+	/**
+	 * Handle native scroll on the slides container.
+	 *
+	 * Debounced so we only sync `current-slide` once the user has settled on a slide,
+	 * not on every intermediate scroll frame.
+	 */
+	protected handleScroll(): void {
+		// Only relevant in scroll mode.
+		if ( 'scroll' !== this.getAttribute( 'behaviour' ) ) {
+			// Early return.
+			return;
+		}
+
+		// Debounce.
+		if ( null !== this.scrollSyncTimer ) {
+			clearTimeout( this.scrollSyncTimer );
+		}
+
+		// Sync after settle.
+		this.scrollSyncTimer = window.setTimeout( (): void => {
+			this.syncCurrentSlideFromScroll();
+			this.scrollSyncTimer = null;
+		}, 100 );
+	}
+
+	/**
+	 * Pick the slide whose left edge is closest to the current scroll position
+	 * and update `current-slide` to match.
+	 */
+	protected syncCurrentSlideFromScroll(): void {
+		// Get slides container and slides.
+		const slidesContainer: HTMLElement | null = this.querySelector( 'tp-slider-slides' );
+		const slides: NodeListOf<TPSliderSlideElement> | null | undefined = this.getSlideElements();
+
+		// Bail if either is missing.
+		if ( ! slidesContainer || ! slides || 0 === slides.length ) {
+			// Early return.
+			return;
+		}
+
+		// Find slide closest to current scroll position.
+		const scrollLeft: number = slidesContainer.scrollLeft;
+		let closestIndex: number = 0;
+		let smallestDistance: number = Infinity;
+
+		// Loop through slides.
+		slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
+			// Calculate distance.
+			const distance: number = Math.abs( slide.offsetLeft - scrollLeft );
+
+			// Update closest.
+			if ( distance < smallestDistance ) {
+				smallestDistance = distance;
+				closestIndex = index;
+			}
+		} );
+
+		// Convert to 1-based index.
+		const newSlide: number = closestIndex + 1;
+
+		// Bail if no change.
+		if ( newSlide === this.currentSlideIndex ) {
+			// Early return.
+			return;
+		}
+
+		// Set the flag so `slide()` skips the redundant scrollTo.
+		this.isSyncingFromScroll = true;
+		this.setCurrentSlide( newSlide );
+		this.isSyncingFromScroll = false;
 	}
 
 	/**
@@ -690,6 +825,12 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected handleTouchStart( e: TouchEvent ): void {
+		// In scroll mode, native horizontal scroll already handles touch.
+		if ( 'scroll' === this.getAttribute( 'behaviour' ) ) {
+			// Early return.
+			return;
+		}
+
 		// initialize touch start coordinates
 		if ( 'yes' === this.getAttribute( 'swipe' ) ) {
 			this.touchStartX = e.touches[ 0 ].clientX;
@@ -705,6 +846,12 @@ export class TPSliderElement extends HTMLElement {
 	 * @protected
 	 */
 	protected handleTouchEnd( e: TouchEvent ): void {
+		// In scroll mode, native horizontal scroll already handles touch.
+		if ( 'scroll' === this.getAttribute( 'behaviour' ) ) {
+			// Early return.
+			return;
+		}
+
 		// Early return if swipe is not enabled.
 		if ( 'yes' !== this.getAttribute( 'swipe' ) ) {
 			// Early return.
