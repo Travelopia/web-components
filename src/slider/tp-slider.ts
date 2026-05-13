@@ -134,9 +134,39 @@ export class TPSliderElement extends HTMLElement {
 		 * In scroll mode, ensure the initial scroll position is set even if the constructor's
 		 * `slide()` ran before children were in the DOM. The first `slide()` in scroll mode is
 		 * non-animated; subsequent calls animate.
+		 *
+		 * The first `slide()` reads `getComputedStyle` and `offsetLeft` to compute the scroll
+		 * target — if it ran before stylesheets, fonts, or images finished loading (common on
+		 * hard-reloads), padding-based layouts (centered-bleed, peek patterns) land on the wrong
+		 * pixel. Re-snap on `load` to correct, resetting `hasInitializedScroll` so the re-snap
+		 * is instant rather than smooth.
 		 */
-		if ( 'scroll' === this.getAttribute( 'behaviour' ) && ! this.hasInitializedScroll ) {
-			this.slide();
+		if ( 'scroll' === this.getAttribute( 'behaviour' ) ) {
+			// Initial slide if not already done.
+			if ( ! this.hasInitializedScroll ) {
+				this.slide();
+			}
+
+			/**
+			 * If document is still loading, wait for `load` and re-snap with final layout
+			 * (stylesheets/fonts/images all settled). Reset `hasInitializedScroll` so the
+			 * re-snap is instant — same intent as the first sync (see `slide()` comment).
+			 * If the document is already `complete`, the initial slide above already had
+			 * final layout, so no re-snap is needed.
+			 */
+			if ( 'complete' !== document.readyState ) {
+				window.addEventListener( 'load', (): void => {
+					// Bail if behaviour changed in the meantime.
+					if ( 'scroll' !== this.getAttribute( 'behaviour' ) ) {
+						// Early return.
+						return;
+					}
+
+					// Reset flag so `slide()` issues a non-animated scroll.
+					this.hasInitializedScroll = false;
+					this.slide();
+				}, { once: true } );
+			}
 		}
 	}
 
@@ -464,9 +494,19 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
+		/**
+		 * Subtract `scroll-padding-inline-start` from the target. `offsetLeft` is measured
+		 * from the parent's padding edge, so it includes any inline-start padding on the
+		 * scroll container. Without this correction, consumers using `padding-inline` +
+		 * `scroll-padding-inline` (e.g. centered-bleed or peek patterns) overshoot by
+		 * exactly the padding amount and land cards at the container edge instead of the
+		 * intended snap position. When `scroll-padding-inline-start` is 0, this is a no-op.
+		 */
+		const scrollPaddingStart: number = parseFloat( getComputedStyle( slidesContainer ).scrollPaddingInlineStart ) || 0;
+
 		// Scroll to target.
 		slidesContainer.scrollTo( {
-			left: target.offsetLeft,
+			left: target.offsetLeft - scrollPaddingStart,
 			behavior: smooth ? 'smooth' : 'auto',
 		} );
 	}
@@ -512,15 +552,20 @@ export class TPSliderElement extends HTMLElement {
 			return;
 		}
 
-		// Find slide closest to current scroll position.
+		/**
+		 * Find slide closest to current scroll position. Mirror the `scrollToCurrentSlide`
+		 * correction so detection agrees with where snap actually landed when consumers
+		 * use `scroll-padding-inline-start`.
+		 */
 		const scrollLeft: number = slidesContainer.scrollLeft;
+		const scrollPaddingStart: number = parseFloat( getComputedStyle( slidesContainer ).scrollPaddingInlineStart ) || 0;
 		let closestIndex: number = 0;
 		let smallestDistance: number = Infinity;
 
 		// Loop through slides.
 		slides.forEach( ( slide: TPSliderSlideElement, index: number ): void => {
 			// Calculate distance.
-			const distance: number = Math.abs( slide.offsetLeft - scrollLeft );
+			const distance: number = Math.abs( slide.offsetLeft - scrollPaddingStart - scrollLeft );
 
 			// Update closest.
 			if ( distance < smallestDistance ) {
