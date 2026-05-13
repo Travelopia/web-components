@@ -22,7 +22,6 @@ vendor
 !README.md
 !tsconfig.json
 !webpack.config.js
-!.specs
 
 # --- Components
 !src
