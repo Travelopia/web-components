@@ -34,6 +34,22 @@ tp-slider-nav {
 	gap: 10px;
 }
 
+// Native horizontal scroll mode.
+tp-slider[behaviour="scroll"] {
+
+	> tp-slider-track > tp-slider-slides {
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+}
+
 // Fade in Styles.
 tp-slider[behaviour="fade"] {
 
